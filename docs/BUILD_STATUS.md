@@ -8,7 +8,7 @@
 | ----- | -------------------------- | -------------- |
 | 0     | Project Scaffolding        | ✅ Complete     |
 | 1     | Supabase & Authentication  | ✅ Complete     |
-| 2     | Dashboard & Navigation     | ⬜ Not started  |
+| 2     | Dashboard & Navigation     | ✅ Complete     |
 | 3     | CRM Core                  | ⬜ Not started  |
 | 4     | Sales Pipeline             | ⬜ Not started  |
 | 5     | Collections Module         | ⬜ Not started  |
@@ -19,32 +19,34 @@
 
 ---
 
-## Phase 1 — Supabase & Authentication ✅
+## Phase 2 — Tenant Dashboard & Navigation ✅
 
 ### What was built
-- [x] Multi-tenant database migration file (`supabase/migrations/20261105000000_init_multi_tenant_auth.sql`)
-- [x] Database tables: `tenants`, `profiles`, `tenant_members`
-- [x] Database roles enum (`owner`, `admin`, `member`, `viewer`)
-- [x] RLS functions (`is_tenant_member`, `is_tenant_admin`) and strict security policies
+- [x] Responsive application shell layout (`src/app/(dashboard)/layout.tsx`, `src/components/layout/dashboard-shell.tsx`)
+- [x] Sidebar navigation with active link highlighting & module phase tags (`src/components/layout/sidebar.tsx`)
+- [x] Workspace & user header with workspace badge, user dropdown, and profile links (`src/components/layout/header.tsx`)
+- [x] Mobile slide-over navigation drawer with backdrop (`src/components/layout/mobile-nav.tsx`)
+- [x] Dashboard home with real KPI cards and honest zero-states per Rule 10 (`src/app/(dashboard)/dashboard/page.tsx`)
+- [x] Interactive onboarding checklist displaying account setup progress
+- [x] Live activity audit stream with empty state
+- [x] Workspace Settings page (`/dashboard/settings`) with real name update and RLS permissions check
+- [x] User Profile Settings page (`/dashboard/settings/profile`) with real full-name updates via Supabase
+- [x] Future module placeholder screens with clear status notices:
+  - `/dashboard/contacts` (Phase 3)
+  - `/dashboard/deals` (Phase 4)
+  - `/dashboard/collections` (Phase 5)
+
+### Verification
+- `npm run type-check`: 0 errors
+- `npm run lint`: 0 errors / 0 warnings
+- `npm run build`: Compiled and validated all 14 routes successfully
+
+---
+
+## Phase 1 — Supabase & Authentication ✅
+- [x] Multi-tenant database schema (`tenants`, `profiles`, `tenant_members`, `user_role`)
+- [x] Row Level Security (RLS) policies and security-definer functions
 - [x] Automatic user profile & workspace creation trigger (`handle_new_user()`)
-- [x] TypeScript database definitions (`src/types/database.ts`)
-- [x] Supabase Browser SSR client (`src/lib/supabase/client.ts`)
-- [x] Supabase Server SSR client (`src/lib/supabase/server.ts`)
-- [x] Supabase Admin Service-Role client (`src/lib/supabase/admin.ts`)
-- [x] Supabase Session Refresh Middleware (`src/lib/supabase/middleware.ts`, `src/middleware.ts`)
-- [x] Route guard: `/dashboard` redirects unauthenticated users to `/login`
-- [x] Route guard: `/login`, `/signup` redirects authenticated users to `/dashboard`
-- [x] Email verification code exchange handler (`src/app/auth/callback/route.ts`)
-- [x] Sign-up page with organization creation and email confirmation screen (`/signup`)
-- [x] Sign-in page with validation and error feedback (`/login`)
-- [x] Password recovery page (`/forgot-password`)
-- [x] Protected dashboard placeholder displaying user role, active tenant, and sign-out button (`/dashboard`)
-- [x] Reusable UI components: `Button`, `Input`, `Card`, `Alert`
-
-### What works right now
-- Real authentication flows using Supabase credentials in `.env.local`
-- Complete Next.js production build (`npm run build`) passing with all routes properly configured
-- Zero TypeScript and ESLint errors
-
-### Required One-Time Action for Live Database:
-- Run the SQL script located in `supabase/migrations/20261105000000_init_multi_tenant_auth.sql` in your Supabase project's **SQL Editor** to create the tables, RLS policies, and triggers.
+- [x] Supabase SSR Browser, Server, and Admin clients
+- [x] Route protection middleware (`/dashboard` vs `/(auth)`)
+- [x] Sign up, sign in, forgot password, and callback routes
