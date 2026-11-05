@@ -1,48 +1,60 @@
-import Link from "next/link";
-import { Users } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { ContactsClient } from "./contacts-client";
+import type { Company, Contact } from "@/types/database";
 
-export default function ContactsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Contacts & Accounts
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Manage your leads, prospects, and customer relationships.
-          </p>
-        </div>
+interface ContactWithCompany extends Contact {
+  companies?: Company | null;
+}
+
+export default async function ContactsPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  // Get active tenant membership
+  const { data: membership } = await supabase
+    .from("tenant_members")
+    .select("tenant_id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!membership?.tenant_id) {
+    return (
+      <div className="p-8 text-center text-slate-400">
+        No active tenant workspace found for your account.
       </div>
+    );
+  }
 
-      {/* Empty State Card */}
-      <Card className="border-slate-800 bg-slate-900/40">
-        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-950/60 text-blue-400 mb-4 border border-blue-900/50">
-            <Users className="h-8 w-8" />
-          </div>
-          <CardTitle className="text-xl">CRM Module — Phase 3</CardTitle>
-          <CardDescription className="mt-2 max-w-md text-sm text-slate-400">
-            Contacts, companies, search filtering, tags, and CSV import will be implemented in <strong>Phase 3 (CRM Core)</strong>.
-          </CardDescription>
+  const tenantId = membership.tenant_id;
 
-          <div className="mt-6 flex flex-wrap gap-3 justify-center">
-            <Link
-              href="/dashboard"
-              className={buttonVariants({ variant: "outline", size: "sm" })}
-            >
-              Back to Overview
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+  // Fetch contacts belonging to this tenant with company relations
+  const { data: contacts } = await supabase
+    .from("contacts")
+    .select("*, companies(*)")
+    .eq("tenant_id", tenantId)
+    .order("created_at", { ascending: false });
+
+  // Fetch companies belonging to this tenant
+  const { data: companies } = await supabase
+    .from("companies")
+    .select("*")
+    .eq("tenant_id", tenantId)
+    .order("name", { ascending: true });
+
+  return (
+    <ContactsClient
+      key={`${tenantId}-${contacts?.length ?? 0}`}
+      tenantId={tenantId}
+      initialContacts={(contacts as unknown as ContactWithCompany[]) || []}
+      initialCompanies={(companies as Company[]) || []}
+    />
   );
 }

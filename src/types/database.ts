@@ -7,6 +7,7 @@ export type Json =
   | Json[];
 
 export type UserRole = "owner" | "admin" | "member" | "viewer";
+export type ContactStatus = "lead" | "prospect" | "customer" | "churned";
 
 export interface Database {
   public: {
@@ -104,6 +105,110 @@ export interface Database {
           },
         ];
       };
+      companies: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          name: string;
+          domain: string | null;
+          industry: string | null;
+          phone: string | null;
+          address: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          name: string;
+          domain?: string | null;
+          industry?: string | null;
+          phone?: string | null;
+          address?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          tenant_id?: string;
+          name?: string;
+          domain?: string | null;
+          industry?: string | null;
+          phone?: string | null;
+          address?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "companies_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      contacts: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          company_id: string | null;
+          first_name: string;
+          last_name: string;
+          email: string;
+          phone: string | null;
+          job_title: string | null;
+          status: ContactStatus;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          company_id?: string | null;
+          first_name: string;
+          last_name: string;
+          email: string;
+          phone?: string | null;
+          job_title?: string | null;
+          status?: ContactStatus;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          tenant_id?: string;
+          company_id?: string | null;
+          first_name?: string;
+          last_name?: string;
+          email?: string;
+          phone?: string | null;
+          job_title?: string | null;
+          status?: ContactStatus;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "contacts_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "contacts_company_id_fkey";
+            columns: ["company_id"];
+            isOneToOne: false;
+            referencedRelation: "companies";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -124,6 +229,7 @@ export interface Database {
     };
     Enums: {
       user_role: UserRole;
+      contact_status: ContactStatus;
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -134,3 +240,5 @@ export interface Database {
 export type Tenant = Database["public"]["Tables"]["tenants"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type TenantMember = Database["public"]["Tables"]["tenant_members"]["Row"];
+export type Company = Database["public"]["Tables"]["companies"]["Row"];
+export type Contact = Database["public"]["Tables"]["contacts"]["Row"];

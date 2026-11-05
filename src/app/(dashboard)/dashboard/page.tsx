@@ -34,6 +34,29 @@ export default async function DashboardPage() {
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
 
+  // Fetch active tenant ID
+  const { data: membership } = await supabase
+    .from("tenant_members")
+    .select("tenant_id")
+    .eq("user_id", user?.id ?? "")
+    .single();
+
+  const tenantId = membership?.tenant_id;
+
+  // Real Contacts Count (Live from Supabase)
+  let contactsCount = 0;
+  if (tenantId) {
+    const { count } = await supabase
+      .from("contacts")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenantId);
+    contactsCount = count ?? 0;
+  }
+
+  // Calculate onboarding progress
+  const hasContacts = contactsCount > 0;
+  const completedSteps = 2 + (hasContacts ? 1 : 0);
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
@@ -73,9 +96,11 @@ export default async function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
+            <div className="text-2xl font-bold text-white">{contactsCount}</div>
             <p className="mt-1 text-xs text-slate-500">
-              No contacts created yet • Coming in Phase 3
+              {contactsCount === 0
+                ? "No contacts yet • Start by adding one"
+                : `${contactsCount} ${contactsCount === 1 ? "contact" : "contacts"} recorded in CRM`}
             </p>
           </CardContent>
         </Card>
@@ -128,7 +153,7 @@ export default async function DashboardPage() {
                 </CardDescription>
               </div>
               <span className="rounded-full bg-blue-950 px-2.5 py-1 text-xs font-semibold text-blue-400 border border-blue-800">
-                1 of 3 Complete
+                {completedSteps} of 3 Complete
               </span>
             </div>
           </CardHeader>
@@ -145,46 +170,49 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            <div className="flex items-start justify-between rounded-lg border border-slate-800 bg-slate-900/80 p-3.5">
-              <div className="flex items-start space-x-3">
-                <Circle className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    2. Customize Workspace Profile
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    Set up your team profile and organization details in settings.
-                  </p>
-                </div>
+            <div className="flex items-start space-x-3 rounded-lg border border-slate-800 bg-slate-900/40 p-3.5">
+              <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-white line-through opacity-75">
+                  2. Customize Workspace Profile
+                </p>
+                <p className="text-xs text-slate-400">
+                  Team profile and organization settings configured.
+                </p>
               </div>
-              <Link
-                href="/dashboard/settings"
-                className={buttonVariants({
-                  variant: "outline",
-                  size: "sm",
-                  className: "shrink-0 ml-2 text-xs",
-                })}
-              >
-                Configure
-                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-              </Link>
             </div>
 
-            <div className="flex items-start justify-between rounded-lg border border-slate-800/60 bg-slate-950/40 p-3.5 opacity-70">
+            <div className="flex items-start justify-between rounded-lg border border-slate-800 bg-slate-900/80 p-3.5">
               <div className="flex items-start space-x-3">
-                <Circle className="h-5 w-5 text-slate-600 shrink-0 mt-0.5" />
+                {hasContacts ? (
+                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+                ) : (
+                  <Circle className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
+                )}
                 <div>
-                  <p className="text-sm font-medium text-slate-300">
+                  <p className={`text-sm font-medium ${hasContacts ? "line-through opacity-75 text-white" : "text-white"}`}>
                     3. Add Your First Contact
                   </p>
-                  <p className="text-xs text-slate-500">
-                    Import or create leads and customer accounts (Phase 3).
+                  <p className="text-xs text-slate-400">
+                    {hasContacts
+                      ? "Great job! Contacts recorded in CRM."
+                      : "Create leads and customer accounts to track sales conversations."}
                   </p>
                 </div>
               </div>
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                Phase 3
-              </span>
+              {!hasContacts && (
+                <Link
+                  href="/dashboard/contacts"
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "sm",
+                    className: "shrink-0 ml-2 text-xs",
+                  })}
+                >
+                  Add Contact
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -201,7 +229,7 @@ export default async function DashboardPage() {
             </div>
             <p className="text-sm font-medium text-slate-300">No activity yet</p>
             <p className="mt-1 text-xs text-slate-500 max-w-[200px]">
-              When you or your team create contacts, log notes, or advance deals, events will appear here.
+              When you advance deals or log collection milestones, events will appear here.
             </p>
           </CardContent>
         </Card>
