@@ -1,6 +1,6 @@
 # OmniSales AI — Architecture
 
-> Last updated: 2026-11-05 | Phase: 0 (Scaffolding)
+> Last updated: 2026-11-05 | Phase: 1 (Supabase & Authentication)
 
 ## Overview
 
@@ -13,11 +13,11 @@ incremental development.
 | Layer          | Technology                              | Status       |
 | -------------- | --------------------------------------- | ------------ |
 | Frontend       | Next.js 16 (App Router), React 19, TypeScript | ✅ Configured |
-| Styling        | Tailwind CSS v4 + shadcn/ui            | ✅ Configured |
-| Auth           | Supabase Auth                          | ⬜ Phase 1    |
-| Database       | Supabase PostgreSQL + RLS              | ⬜ Phase 1    |
-| API            | Next.js Route Handlers                 | ⬜ Phase 1    |
-| State          | React Context + TanStack Query         | ⬜ Phase 2    |
+| Styling        | Tailwind CSS v4 + Custom Tokens        | ✅ Configured |
+| Auth           | Supabase Auth (SSR Cookies)             | ✅ Configured |
+| Database       | Supabase PostgreSQL + RLS              | ✅ Configured |
+| API            | Next.js Route Handlers + Server Actions | ✅ Configured |
+| State          | React Context + Server State            | ⬜ Phase 2    |
 | AI             | Gemini API                             | ⬜ Phase 6    |
 | Payments       | Stripe                                 | ⬜ Phase 8    |
 
@@ -28,22 +28,27 @@ omnisales-ai/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── (auth)/             # Auth route group (login, signup, forgot-password)
+│   │   │   ├── login/page.tsx
+│   │   │   ├── signup/page.tsx
+│   │   │   └── forgot-password/page.tsx
 │   │   ├── (dashboard)/        # Protected dashboard routes
-│   │   ├── api/                # API route handlers
+│   │   │   └── dashboard/page.tsx
+│   │   ├── auth/callback/      # OAuth & email verification handler
 │   │   ├── layout.tsx          # Root layout
 │   │   └── page.tsx            # Public landing page
 │   ├── components/
-│   │   ├── ui/                 # shadcn/ui primitive components
-│   │   ├── layout/             # Shell, sidebar, header components
-│   │   └── shared/             # Reusable business components
+│   │   ├── ui/                 # Reusable UI primitives (Button, Input, Card, Alert)
+│   │   ├── layout/             # Shell, sidebar, header components (Phase 2)
+│   │   └── shared/             # Shared components (SignOutButton, etc.)
 │   ├── lib/
-│   │   ├── supabase/           # Supabase client configuration
-│   │   ├── utils/              # Utility functions (cn, formatters, etc.)
-│   │   └── constants/          # App-wide constants and route paths
-│   ├── types/                  # Global TypeScript type definitions
-│   └── hooks/                  # Custom React hooks
+│   │   ├── supabase/           # Browser, Server, Admin clients & SSR Middleware
+│   │   ├── utils/              # cn() Tailwind merger
+│   │   └── constants/          # App constants and route paths
+│   ├── types/                  # Global and database TypeScript definitions
+│   ├── hooks/                  # Custom React hooks
+│   └── middleware.ts           # Next.js request interceptor & session refresh
 ├── supabase/
-│   └── migrations/             # SQL migration files
+│   └── migrations/             # SQL migrations (multi-tenant schema, RLS, triggers)
 ├── docs/                       # Project documentation
 ├── public/                     # Static assets
 └── [config files]              # next.config.ts, tsconfig.json, etc.
@@ -51,21 +56,12 @@ omnisales-ai/
 
 ## Architecture Principles
 
-1. **Multi-tenancy** — Every data table includes `tenant_id`. Row Level Security
-   enforces isolation at the database level.
-2. **Modular components** — UI is built from small, reusable components. Business
-   logic lives in hooks and server actions, not in components.
-3. **Type safety** — TypeScript strict mode. No `any` unless absolutely necessary.
-4. **Server-first** — Default to Server Components. Use Client Components (`"use client"`)
-   only when interactivity is required.
-5. **Secure by default** — API keys stay server-side. RLS policies on every table.
-   Auth middleware protects routes.
-
-## Data Flow (planned)
-
-```
-Browser → Next.js App Router → Supabase Auth → PostgreSQL (RLS)
-                              → Route Handlers → Supabase Admin
-                              → Gemini API (Phase 6)
-                              → Stripe API (Phase 8)
-```
+1. **Multi-tenancy** — Every business entity has a `tenant_id`. PostgreSQL Row Level
+   Security (RLS) ensures tenant isolation at the database level.
+2. **Modular UI** — Built using reusable primitives (`Button`, `Input`, `Card`, `Alert`)
+   with explicit loading, error, and success states.
+3. **Strict Type Safety** — TypeScript strict mode. Database types are defined in `src/types/database.ts`.
+4. **Server-First Security** — Auth tokens are managed through secure HTTP-only cookies
+   refreshed via Next.js middleware. The service-role key is isolated to `src/lib/supabase/admin.ts`
+   and never accessible to the browser.
+5. **No Mock Data** — Connected directly to live PostgreSQL on Supabase.

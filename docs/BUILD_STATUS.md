@@ -7,7 +7,7 @@
 | Phase | Name                       | Status         |
 | ----- | -------------------------- | -------------- |
 | 0     | Project Scaffolding        | ✅ Complete     |
-| 1     | Supabase & Authentication  | ⬜ Not started  |
+| 1     | Supabase & Authentication  | ✅ Complete     |
 | 2     | Dashboard & Navigation     | ⬜ Not started  |
 | 3     | CRM Core                  | ⬜ Not started  |
 | 4     | Sales Pipeline             | ⬜ Not started  |
@@ -17,31 +17,34 @@
 | 8     | Billing & Subscription     | ⬜ Not started  |
 | 9     | Production Hardening       | ⬜ Not started  |
 
-## Phase 0 — Scaffolding ✅
+---
+
+## Phase 1 — Supabase & Authentication ✅
 
 ### What was built
-- [x] Next.js 16 project with TypeScript strict mode
-- [x] Tailwind CSS v4 configured
-- [x] ESLint configured
-- [x] Prettier configured
-- [x] Modular folder structure created
-- [x] Utility functions (`cn` helper)
-- [x] Global TypeScript types (ApiResponse, PaginatedResponse)
-- [x] Constants module (app info, routes)
-- [x] Landing page with navigation to auth (placeholder routes)
-- [x] Environment variables template (`.env.local.example`)
-- [x] Documentation files created
-- [x] Supabase client placeholder (not connected)
-- [x] Git repository initialised
+- [x] Multi-tenant database migration file (`supabase/migrations/20261105000000_init_multi_tenant_auth.sql`)
+- [x] Database tables: `tenants`, `profiles`, `tenant_members`
+- [x] Database roles enum (`owner`, `admin`, `member`, `viewer`)
+- [x] RLS functions (`is_tenant_member`, `is_tenant_admin`) and strict security policies
+- [x] Automatic user profile & workspace creation trigger (`handle_new_user()`)
+- [x] TypeScript database definitions (`src/types/database.ts`)
+- [x] Supabase Browser SSR client (`src/lib/supabase/client.ts`)
+- [x] Supabase Server SSR client (`src/lib/supabase/server.ts`)
+- [x] Supabase Admin Service-Role client (`src/lib/supabase/admin.ts`)
+- [x] Supabase Session Refresh Middleware (`src/lib/supabase/middleware.ts`, `src/middleware.ts`)
+- [x] Route guard: `/dashboard` redirects unauthenticated users to `/login`
+- [x] Route guard: `/login`, `/signup` redirects authenticated users to `/dashboard`
+- [x] Email verification code exchange handler (`src/app/auth/callback/route.ts`)
+- [x] Sign-up page with organization creation and email confirmation screen (`/signup`)
+- [x] Sign-in page with validation and error feedback (`/login`)
+- [x] Password recovery page (`/forgot-password`)
+- [x] Protected dashboard placeholder displaying user role, active tenant, and sign-out button (`/dashboard`)
+- [x] Reusable UI components: `Button`, `Input`, `Card`, `Alert`
 
-### What does NOT work yet
-- Authentication (Phase 1)
-- Database connection (Phase 1)
-- Login / Signup pages (Phase 1 — routes exist but no page components)
-- Dashboard (Phase 2)
-- All business features (Phase 3+)
+### What works right now
+- Real authentication flows using Supabase credentials in `.env.local`
+- Complete Next.js production build (`npm run build`) passing with all routes properly configured
+- Zero TypeScript and ESLint errors
 
-### External services required
-- Supabase project (Phase 1)
-- Gemini API key (Phase 6)
-- Stripe account (Phase 8)
+### Required One-Time Action for Live Database:
+- Run the SQL script located in `supabase/migrations/20261105000000_init_multi_tenant_auth.sql` in your Supabase project's **SQL Editor** to create the tables, RLS policies, and triggers.
