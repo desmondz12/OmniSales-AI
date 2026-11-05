@@ -4,27 +4,27 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:pointer-events-none disabled:opacity-50 select-none",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-blue-600 text-white shadow hover:bg-blue-500 active:bg-blue-700",
+          "bg-blue-600 text-white shadow-sm hover:bg-blue-700 active:bg-blue-800",
         destructive:
-          "bg-red-600 text-white shadow-sm hover:bg-red-500 active:bg-red-700",
+          "bg-rose-600 text-white shadow-sm hover:bg-rose-700 active:bg-rose-800",
         outline:
-          "border border-slate-700 bg-transparent text-slate-200 hover:bg-slate-800 hover:text-white",
+          "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 shadow-xs",
         secondary:
-          "bg-slate-800 text-slate-100 shadow-sm hover:bg-slate-700 active:bg-slate-800",
+          "bg-slate-100 text-slate-800 border border-slate-200/80 hover:bg-slate-200 active:bg-slate-200",
         ghost:
-          "text-slate-300 hover:bg-slate-800 hover:text-white",
-        link: "text-blue-400 underline-offset-4 hover:underline",
+          "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+        link: "text-blue-600 underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-lg px-8 text-base",
-        icon: "h-10 w-10",
+        default: "h-9.5 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-11 rounded-lg px-6 text-base font-semibold",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {

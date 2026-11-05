@@ -2,55 +2,38 @@
 
 > Last updated: 2026-11-05
 
-## Phase Status
+## Master Phased Roadmap
 
-| Phase | Name                       | Status         |
-| ----- | -------------------------- | -------------- |
-| 0     | Project Scaffolding        | ✅ Complete     |
-| 1     | Supabase & Authentication  | ✅ Complete     |
-| 2     | Dashboard & Navigation     | ✅ Complete     |
-| 3     | CRM Core                  | ✅ Complete     |
-| 4     | Sales Pipeline             | ⬜ Not started  |
-| 5     | Collections Module         | ⬜ Not started  |
-| 6     | AI Features                | ⬜ Not started  |
-| 7     | Notifications & Integrations | ⬜ Not started |
-| 8     | Billing & Subscription     | ⬜ Not started  |
-| 9     | Production Hardening       | ⬜ Not started  |
+| Phase | Description | Status |
+|---|---|---|
+| **Phase A** | **Design System, Master PostgreSQL Schema & Role-Based Auth** | ✅ Complete |
+| **Phase B** | **Business Client Dashboard (`/dashboard`)** (Money Brief, Handoff Queue, Collections, AI Co-Pilot) | ⬜ Next Up |
+| **Phase C** | **Unified 5-Channel Inbox & Slide-Over Drawer (`/dashboard/inbox`)** | ⬜ Pending |
+| **Phase D** | **Channels Hub & AI Agent Training (`/dashboard/channels` & `/dashboard/agent`)** | ⬜ Pending |
+| **Phase E** | **Super Admin Command Center (`/admin/*`)** (Health monitor, tenant manager, impersonate) | ⬜ Pending |
+| **Phase F** | **Backend API Webhooks & Gemini AI Processing Engine** | ⬜ Pending |
 
 ---
 
-## Phase 3 — CRM Core (Contacts & Companies) ✅
+## Phase A Summary ✅
 
 ### What was built
-- [x] CRM database migration file (`supabase/migrations/20261105000001_create_contacts_and_companies.sql`)
-- [x] Database tables: `companies` and `contacts` with RLS policies, foreign keys, and indexes
-- [x] Contact status enum (`lead`, `prospect`, `customer`, `churned`)
-- [x] TypeScript database definitions (`src/types/database.ts`) for `Company`, `Contact`, `ContactStatus`
-- [x] Reusable status badge component (`src/components/ui/badge.tsx`)
-- [x] Accessible modal dialog primitive (`src/components/ui/dialog.tsx`)
-- [x] Full Contacts & Accounts client table (`src/app/(dashboard)/dashboard/contacts/contacts-client.tsx`)
-- [x] Real-time search by name, email, or company name
-- [x] Status filter buttons (`All`, `Leads`, `Prospects`, `Customers`, `Churned`)
-- [x] New Contact creation modal with validation and company association
-- [x] New Company creation modal
-- [x] Contact editing modal
-- [x] Contact deletion with safety confirmation dialog
-- [x] Complete loading, error, success, and empty states
-- [x] Main Dashboard KPI card live sync: "Total Contacts" displays real count from Supabase
+- [x] **Linear/Stripe Light-Mode Executive Theme**: Pure white cards (`#FFFFFF`), soft slate background (`#F8FAFC`), subtle borders (`#E2E8F0`), electric royal blue (`#2563EB`), emerald green (`#10B981`), amber (`#F59E0B`), and rose red (`#EF4444`).
+- [x] **Master PostgreSQL Migration (`supabase/migrations/20261105000002_omnisales_master_schema.sql`)**:
+  - `workspaces` (with token usage, limits, and MRR)
+  - `channels` (WhatsApp, Instagram, Messenger, TikTok, Telegram)
+  - `customers` (with structured `ai_memory` facts and preferences)
+  - `conversations` (triage tags: `ready_to_pay`, `upset`, `asked_for_person`, `promise_due`, `paid`)
+  - `messages` (sender types: `customer`, `ai`, `human`)
+  - `invoices` (amounts, due dates, payment links)
+  - `system_logs` (webhook events and API latencies)
+- [x] **TypeScript Domain Model (`src/types/database.ts`)**: Complete end-to-end typing with zero `any`.
+- [x] **Rich Seed State (`src/lib/data/seed-data.ts`)**: Realistic scenarios (Femi 550k deposit on WhatsApp, Obinna upset on Instagram, Amaka wholesale on Telegram, Dele Akin 300k paid, etc.).
+- [x] **Role Switcher & Demo Login on `/login`**: One-click "Login as Business Owner" and "Login as Super Admin" for instant preview and role verification.
+- [x] **Role-Based Auth Middleware (`src/middleware.ts`)**: Session refresh + access guards for `/admin` vs `/dashboard`.
+- [x] **Executive Landing Page (`src/app/page.tsx`)**: Linear/Stripe aesthetic highlighting 5-channel AI agent capabilities.
 
 ### Verification
 - `npm run type-check`: 0 errors
 - `npm run lint`: 0 errors / 0 warnings
-- `npm run build`: All 14 static and dynamic routes compiled successfully
-
----
-
-## Phase 2 — Tenant Dashboard & Navigation ✅
-- [x] Application shell layout and responsive sidebar
-- [x] Header with workspace badge, user dropdown, and Sign Out
-- [x] Workspace & Profile settings
-
-## Phase 1 — Supabase & Authentication ✅
-- [x] Multi-tenant database schema (`tenants`, `profiles`, `tenant_members`)
-- [x] SSR Browser, Server, and Admin clients
-- [x] Route protection middleware
+- `npm run build`: 15 routes compiled and validated successfully

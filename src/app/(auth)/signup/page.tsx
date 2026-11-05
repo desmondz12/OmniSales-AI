@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Building2, CheckCircle2, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { Bot, Building2, CheckCircle2, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,15 +107,12 @@ export default function SignUpPage() {
         return;
       }
 
-      // Check if email confirmation is required or session was auto-created
       if (data.session) {
-        // Auto confirmed (e.g. email confirmations disabled in local dev)
         router.push("/dashboard");
         router.refresh();
         return;
       }
 
-      // Supabase requires email confirmation
       setIsSuccess(true);
     } catch {
       setErrorMessage("An unexpected error occurred during signup. Please try again.");
@@ -124,39 +121,35 @@ export default function SignUpPage() {
     }
   };
 
-  // SUCCESS STATE
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <Link
-              href={ROUTES.HOME}
-              className="inline-block text-2xl font-bold tracking-tight text-white hover:text-blue-400 transition-colors"
-            >
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+              <Bot className="h-6 w-6" />
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
               {APP_NAME}
-            </Link>
+            </h2>
           </div>
 
-          <Card className="border-emerald-900/40 bg-emerald-950/20">
+          <Card className="border border-emerald-200 bg-white shadow-sm">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-900/50 text-emerald-400">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <CardTitle className="text-xl">Check your inbox</CardTitle>
-              <CardDescription className="text-slate-300">
+              <CardDescription className="text-slate-500">
                 We sent a confirmation link to:
               </CardDescription>
-              <p className="mt-1 font-semibold text-white">{email}</p>
+              <p className="mt-1 font-semibold text-slate-900">{email}</p>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4 text-sm text-slate-400 text-center">
+            <CardContent className="space-y-4 pt-4 text-xs text-slate-600 text-center">
               <p>
                 Click the verification link in the email to activate your account
                 and complete setting up <strong>{companyName}</strong>.
               </p>
-              <div className="rounded-lg bg-slate-900/80 p-3 text-xs text-slate-400 border border-slate-800">
-                Did not receive the email? Check your spam folder or try signing in to resend.
-              </div>
             </CardContent>
             <CardFooter>
               <Link
@@ -172,32 +165,31 @@ export default function SignUpPage() {
     );
   }
 
-  // STANDARD SIGN UP FORM
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <Link
-            href={ROUTES.HOME}
-            className="inline-block text-2xl font-bold tracking-tight text-white hover:text-blue-400 transition-colors"
-          >
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+            <Bot className="h-6 w-6" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             {APP_NAME}
-          </Link>
-          <p className="text-sm text-slate-400">
-            Create your account and workspace
+          </h1>
+          <p className="text-xs text-slate-500">
+            Create your sales workspace across 5 channels
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Get started</CardTitle>
+        <Card className="border border-slate-200 bg-white shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl">Create a workspace</CardTitle>
             <CardDescription>
-              Enter your details to create your organization workspace
+              Enter your business details to launch your AI sales agent
             </CardDescription>
           </CardHeader>
 
           <form onSubmit={handleSignUp} noValidate>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3.5">
               {errorMessage && (
                 <Alert variant="destructive">
                   <AlertTitle>Sign-up Failed</AlertTitle>
@@ -217,21 +209,21 @@ export default function SignUpPage() {
                   disabled={isLoading}
                   required
                 />
-                <User className="pointer-events-none absolute right-3 top-8.5 h-4 w-4 text-slate-500" />
+                <User className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <Input
                   label="Company / Workspace Name"
                   type="text"
-                  placeholder="Acme Corp"
+                  placeholder="Acme Retail"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   error={fieldErrors.companyName}
                   disabled={isLoading}
                   required
                 />
-                <Building2 className="pointer-events-none absolute right-3 top-8.5 h-4 w-4 text-slate-500" />
+                <Building2 className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
@@ -246,17 +238,17 @@ export default function SignUpPage() {
                   disabled={isLoading}
                   required
                 />
-                <Mail className="pointer-events-none absolute right-3 top-8.5 h-4 w-4 text-slate-500" />
+                <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-slate-300"
+                  className="block text-xs font-semibold text-slate-700 mb-1"
                 >
                   Password (min. 8 characters)
                 </label>
-                <div className="relative mt-1.5">
+                <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -272,7 +264,7 @@ export default function SignUpPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     tabIndex={-1}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 transition-colors"
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -299,7 +291,7 @@ export default function SignUpPage() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className="flex flex-col space-y-3 pt-2">
               <Button
                 type="submit"
                 className="w-full"
@@ -307,14 +299,14 @@ export default function SignUpPage() {
                 disabled={isLoading}
               >
                 <Lock className="mr-2 h-4 w-4" />
-                Create Account & Workspace
+                Create Workspace
               </Button>
 
-              <div className="text-center text-sm text-slate-400">
+              <div className="text-center text-xs text-slate-500">
                 Already have an account?{" "}
                 <Link
                   href={ROUTES.LOGIN}
-                  className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                  className="font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Sign in
                 </Link>

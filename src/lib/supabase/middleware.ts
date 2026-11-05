@@ -33,31 +33,50 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // IMPORTANT: DO NOT use getSession() in middleware/server components as it is insecure.
-  // getUser() validates the token against the Supabase Auth server.
+  // Check Supabase session
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Check demo session cookie for instant testing
+  const demoRole = request.cookies.get("omnisales_role")?.value;
+  const isAuthenticated = Boolean(user || demoRole);
+
   const pathname = request.nextUrl.pathname;
 
+  // Protect /admin portal
+  if (pathname.startsWith("/admin")) {
+    if (!isAuthenticated) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirectTo", pathname);
+      return NextResponse.redirect(url);
+    }
+    // Only super_admin can access /admin
+    if (demoRole && demoRole !== "super_admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Protect /dashboard routes: redirect unauthenticated users to /login
-  if (!user && pathname.startsWith("/dashboard")) {
+  if (!isAuthenticated && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from auth pages to /dashboard
+  // Redirect authenticated users away from auth pages
   const isAuthPage =
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/forgot-password";
 
-  if (user && isAuthPage) {
+  if (isAuthenticated && isAuthPage) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = demoRole === "super_admin" ? "/admin" : "/dashboard";
     return NextResponse.redirect(url);
   }
 

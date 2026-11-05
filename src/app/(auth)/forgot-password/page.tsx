@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
+import { ArrowLeft, Bot, CheckCircle2, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,31 +70,28 @@ export default function ForgotPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <Link
-              href={ROUTES.HOME}
-              className="inline-block text-2xl font-bold tracking-tight text-white hover:text-blue-400 transition-colors"
-            >
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+              <Bot className="h-6 w-6" />
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
               {APP_NAME}
-            </Link>
+            </h2>
           </div>
 
-          <Card className="border-emerald-900/40 bg-emerald-950/20">
+          <Card className="border border-emerald-200 bg-white shadow-sm">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-900/50 text-emerald-400">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <CardTitle className="text-xl">Check your inbox</CardTitle>
-              <CardDescription className="text-slate-300">
-                If an account exists for <strong>{email}</strong>, you will receive a password reset link shortly.
+              <CardDescription className="text-slate-500">
+                If an account exists for <strong>{email}</strong>, you will receive a reset link shortly.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4 text-center text-xs text-slate-400">
-              <p>Be sure to check your spam or junk folder if it doesn&apos;t arrive within a few minutes.</p>
-            </CardContent>
-            <CardFooter>
+            <CardFooter className="pt-4">
               <Link
                 href={ROUTES.LOGIN}
                 className={buttonVariants({ variant: "outline", className: "w-full" })}
@@ -110,25 +107,25 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <Link
-            href={ROUTES.HOME}
-            className="inline-block text-2xl font-bold tracking-tight text-white hover:text-blue-400 transition-colors"
-          >
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+            <Bot className="h-6 w-6" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             {APP_NAME}
-          </Link>
-          <p className="text-sm text-slate-400">
+          </h1>
+          <p className="text-xs text-slate-500">
             Reset your account password
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Forgot password?</CardTitle>
+        <Card className="border border-slate-200 bg-white shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl">Forgot password?</CardTitle>
             <CardDescription>
-              Enter your email address and we will send you a link to reset your password
+              Enter your email address and we will send you a password recovery link
             </CardDescription>
           </CardHeader>
 
@@ -143,7 +140,7 @@ export default function ForgotPasswordPage() {
 
               <div className="relative">
                 <Input
-                  label="Email address"
+                  label="Work Email"
                   type="email"
                   autoComplete="email"
                   placeholder="name@company.com"
@@ -153,11 +150,11 @@ export default function ForgotPasswordPage() {
                   disabled={isLoading}
                   required
                 />
-                <Mail className="pointer-events-none absolute right-3 top-8.5 h-4 w-4 text-slate-500" />
+                <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
             </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className="flex flex-col space-y-3 pt-2">
               <Button
                 type="submit"
                 className="w-full"
@@ -167,12 +164,12 @@ export default function ForgotPasswordPage() {
                 Send Reset Link
               </Button>
 
-              <div className="text-center text-sm text-slate-400">
+              <div className="text-center text-xs text-slate-500">
                 <Link
                   href={ROUTES.LOGIN}
-                  className="inline-flex items-center font-medium text-slate-300 hover:text-white transition-colors"
+                  className="inline-flex items-center font-semibold text-slate-600 hover:text-slate-900"
                 >
-                  <ArrowLeft className="mr-1.5 h-4 w-4" />
+                  <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
                   Back to Sign In
                 </Link>
               </div>
