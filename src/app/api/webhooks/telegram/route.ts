@@ -1,7 +1,34 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { checkRateLimit, verifyTelegramSecret } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Rate Limiting Protection (120 requests/minute)
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "telegram-webhook";
+    const rateLimit = checkRateLimit(`telegram:${clientIp}`, 120, 60);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      );
+    }
+
+    // 2. Secret Token Verification (X-Telegram-Bot-Api-Secret-Token)
+    const telegramBotSecret = process.env.TELEGRAM_BOT_SECRET;
+    const incomingSecret = request.headers.get(
+      "x-telegram-bot-api-secret-token"
+    );
+
+    if (telegramBotSecret) {
+      if (!verifyTelegramSecret(incomingSecret, telegramBotSecret)) {
+        console.warn("Telegram Webhook: Invalid secret token");
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    }
+
     const update = await request.json();
 
     const message = update.message || update.edited_message || update.channel_post;
@@ -13,34 +40,18 @@ export async function POST(request: NextRequest) {
     const senderName =
       [message.from?.first_name, message.from?.last_name].filter(Boolean).join(" ") ||
       message.from?.username ||
-      "Telegram User";
+      "Client Telegram";
     const senderHandle = message.from?.username ? `@${message.from.username}` : `tg_${chatId}`;
     const messageText = message.text || message.caption || "";
 
-    // Forward to unified AI processing route
-    const host = request.headers.get("host") || "localhost:3000";
-    const protocol = request.headers.get("x-forwarded-proto") || "http";
-    const aiProcessUrl = `${protocol}://${host}/api/ai/process-message`;
-
-    let aiResult = null;
-    try {
-      const aiResponse = await fetch(aiProcessUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          channel: "telegram",
-          messageText,
-          customerName: senderName,
-          customerHandle: senderHandle,
-          workspaceId: "ws-fotso-douala",
-        }),
-      });
-      if (aiResponse.ok) {
-        aiResult = await aiResponse.json();
-      }
-    } catch (err) {
-      console.warn("AI pipeline call skipped or local fallback:", err);
-    }
+    // 3. In-process AI processing
+    const aiResult = await processCustomerMessage({
+      channel: "telegram",
+      messageText,
+      customerName: senderName,
+      customerHandle: senderHandle,
+      workspaceId: "ws-fotso-douala",
+    });
 
     return NextResponse.json({
       ok: true,
@@ -48,8 +59,8 @@ export async function POST(request: NextRequest) {
       chatId,
       senderName,
       senderHandle,
-      aiTriage: aiResult?.triageTag || "processed",
-      replyText: aiResult?.replyText,
+      aiTriage: aiResult.triageTag,
+      replyText: aiResult.replyText,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

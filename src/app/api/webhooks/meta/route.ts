@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { checkRateLimit, verifyMetaSignature } from "@/lib/security";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -16,25 +18,56 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({ error: "Verification token mismatch" }, { status: 403 });
+  return NextResponse.json(
+    { error: "Verification token mismatch" },
+    { status: 403 }
+  );
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // 1. Rate Limiting Protection (120 requests/minute per client IP)
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "meta-webhook";
+    const rateLimit = checkRateLimit(`meta:${clientIp}`, 120, 60);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      );
+    }
 
-    // Check if it's a WhatsApp webhook
+    // 2. Read raw payload for HMAC verification
+    const rawBody = await request.text();
+
+    // 3. Signature verification (X-Hub-Signature-256)
+    const appSecret = process.env.META_APP_SECRET;
+    const signature = request.headers.get("x-hub-signature-256");
+
+    if (appSecret) {
+      if (!signature || !verifyMetaSignature(rawBody, signature, appSecret)) {
+        console.warn("Meta Webhook: Invalid or missing X-Hub-Signature-256");
+        return NextResponse.json(
+          { error: "Invalid signature" },
+          { status: 401 }
+        );
+      }
+    }
+
+    const body = rawBody ? JSON.parse(rawBody) : {};
+
+    // 4. Determine channel type
     const isWhatsApp =
       body.object === "whatsapp_business_account" ||
       Boolean(body.entry?.[0]?.changes?.[0]?.value?.messages);
 
-    // Check if it's an Instagram or Messenger webhook
     const isInstagram = body.object === "instagram";
     const isMessenger = body.object === "page";
 
     let channel = "whatsapp";
     let senderId = "";
-    let senderName = "Customer";
+    let senderName = "Client";
     let messageText = "";
 
     if (isWhatsApp) {
@@ -42,55 +75,41 @@ export async function POST(request: NextRequest) {
       const messageObj = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
       const contactObj = body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0];
       senderId = messageObj?.from || "+237 671 23 45 67";
-      senderName = contactObj?.profile?.name || "WhatsApp Client";
+      senderName = contactObj?.profile?.name || "Client WhatsApp";
       messageText = messageObj?.text?.body || messageObj?.caption || "";
     } else if (isInstagram) {
       channel = "instagram";
       const messaging = body.entry?.[0]?.messaging?.[0];
       senderId = messaging?.sender?.id || "@instagram_user";
-      senderName = "Instagram User";
+      senderName = "Client Instagram";
       messageText = messaging?.message?.text || "";
     } else if (isMessenger) {
       channel = "messenger";
       const messaging = body.entry?.[0]?.messaging?.[0];
       senderId = messaging?.sender?.id || "fb_user_101";
-      senderName = "Messenger Client";
+      senderName = "Client Messenger";
       messageText = messaging?.message?.text || "";
     }
 
-    // Call unified AI process message route
-    const host = request.headers.get("host") || "localhost:3000";
-    const protocol = request.headers.get("x-forwarded-proto") || "http";
-    const aiProcessUrl = `${protocol}://${host}/api/ai/process-message`;
-
-    let aiResult = null;
-    try {
-      const aiResponse = await fetch(aiProcessUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          channel,
-          messageText,
-          customerName: senderName,
-          customerHandle: senderId,
-          customerPhone: senderId.startsWith("+") ? senderId : undefined,
-          workspaceId: "ws-fotso-douala",
-        }),
-      });
-      if (aiResponse.ok) {
-        aiResult = await aiResponse.json();
-      }
-    } catch (err) {
-      console.warn("AI pipeline call skipped or local fallback:", err);
-    }
+    // 5. In-process AI processing (Safe, high-performance, no deadlock)
+    const aiResult = await processCustomerMessage({
+      channel,
+      messageText,
+      customerName: senderName,
+      customerHandle: senderId,
+      customerPhone: senderId.startsWith("+") ? senderId : undefined,
+      workspaceId: "ws-fotso-douala",
+    });
 
     return NextResponse.json({
       success: true,
       channel,
       senderId,
       messageText,
-      aiTriage: aiResult?.triageTag || "processed",
-      replyGenerated: Boolean(aiResult?.replyText),
+      aiTriage: aiResult.triageTag,
+      replyGenerated: Boolean(aiResult.replyText),
+      replyText: aiResult.replyText,
+      sentiment: aiResult.sentiment,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

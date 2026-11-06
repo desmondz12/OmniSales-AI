@@ -34,9 +34,13 @@ export async function updateSession(request: NextRequest) {
   });
 
   // Check Supabase session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const authResult = await supabase.auth.getUser();
+    user = authResult.data?.user;
+  } catch {
+    // If Supabase connection fails, continue safely
+  }
 
   // Check demo session cookie for instant testing
   const demoRole = request.cookies.get("omnisales_role")?.value;
@@ -49,6 +53,7 @@ export async function updateSession(request: NextRequest) {
     if (!isAuthenticated) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
+      url.search = "";
       url.searchParams.set("redirectTo", pathname);
       return NextResponse.redirect(url);
     }
@@ -56,6 +61,7 @@ export async function updateSession(request: NextRequest) {
     if (demoRole && demoRole !== "super_admin") {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
+      url.search = "";
       return NextResponse.redirect(url);
     }
   }
@@ -64,6 +70,7 @@ export async function updateSession(request: NextRequest) {
   if (!isAuthenticated && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    url.search = "";
     url.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(url);
   }
@@ -75,8 +82,18 @@ export async function updateSession(request: NextRequest) {
     pathname === "/forgot-password";
 
   if (isAuthenticated && isAuthPage) {
-    const url = request.nextUrl.clone();
-    url.pathname = demoRole === "super_admin" ? "/admin" : "/dashboard";
+    const rawRedirect = request.nextUrl.searchParams.get("redirectTo");
+    const targetPath =
+      rawRedirect &&
+      rawRedirect.startsWith("/") &&
+      !rawRedirect.startsWith("/login") &&
+      !(rawRedirect.startsWith("/admin") && demoRole !== "super_admin")
+        ? rawRedirect
+        : demoRole === "super_admin"
+        ? "/admin"
+        : "/dashboard";
+
+    const url = new URL(targetPath, request.url);
     return NextResponse.redirect(url);
   }
 

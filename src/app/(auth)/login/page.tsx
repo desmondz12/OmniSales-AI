@@ -108,8 +108,7 @@ function LoginForm() {
 
       const data = await res.json();
       if (data.redirectUrl) {
-        router.push(data.redirectUrl);
-        router.refresh();
+        window.location.href = data.redirectUrl;
       }
     } catch {
       setErrorMessage("Failed to initiate demo session.");

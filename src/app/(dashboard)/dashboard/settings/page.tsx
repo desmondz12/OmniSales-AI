@@ -1,80 +1,83 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { WorkspaceForm } from "./workspace-form";
 import type { Tenant, TenantMember } from "@/types/database";
 
 export default async function SettingsPage() {
+  const cookieStore = await cookies();
+  const demoRole = cookieStore.get("omnisales_role")?.value;
+
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
+  if (!user && !demoRole) {
+    redirect("/login?redirectTo=/dashboard/settings");
   }
 
-  const { data: membershipData } = await supabase
-    .from("tenant_members")
-    .select("role, tenants(*)")
-    .eq("user_id", user.id);
+  let activeTenant: Tenant | null = null;
+  let role: TenantMember["role"] = demoRole === "super_admin" ? "owner" : "admin";
 
-  const activeRow = membershipData?.[0];
-  const activeTenant = activeRow?.tenants as unknown as Tenant | null;
-  const role = (activeRow?.role as TenantMember["role"]) ?? "member";
+  if (user) {
+    try {
+      const { data: membershipData } = await supabase
+        .from("tenant_members")
+        .select("role, tenants(*)")
+        .eq("user_id", user.id);
+
+      const activeRow = membershipData?.[0];
+      if (activeRow?.tenants) {
+        activeTenant = activeRow.tenants as unknown as Tenant;
+      }
+      if (activeRow?.role) {
+        role = activeRow.role as TenantMember["role"];
+      }
+    } catch {
+      // Fallback below
+    }
+  }
+
+  if (!activeTenant) {
+    activeTenant = {
+      id: "demo-tenant-fotso",
+      name: "Fotso Distribution Douala",
+      slug: "fotso-distribution",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+  }
+
   const canEdit = role === "owner" || role === "admin";
 
   return (
     <div className="space-y-6">
       {/* Settings Navigation Tabs */}
-      <div className="flex border-b border-slate-800 pb-3 space-x-6 text-sm">
-        <span className="font-semibold text-blue-400 border-b-2 border-blue-400 pb-3 -mb-3.5">
-          Workspace Settings
+      <div className="flex border-b border-slate-200 pb-3 space-x-6 text-sm">
+        <span className="font-semibold text-blue-600 border-b-2 border-blue-600 pb-3 -mb-3.5">
+          Paramètres Espace Client
         </span>
         <Link
           href="/dashboard/settings/profile"
-          className="font-medium text-slate-400 hover:text-slate-200 transition-colors"
+          className="font-medium text-slate-500 hover:text-slate-800 transition-colors"
         >
-          My Profile
+          Profil Utilisateur
         </Link>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">
-          Workspace Settings
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          Paramètres Espace Client (Workspace)
         </h1>
-        <p className="mt-1 text-sm text-slate-400">
-          Manage your organization name and general settings.
+        <p className="mt-1 text-sm text-slate-500">
+          Gérez l&apos;identité commerciale de votre entreprise, vos canaux connectés et les permissions.
         </p>
       </div>
 
-      <div className="max-w-2xl">
-        <Card className="border-slate-800 bg-slate-900/60">
-          <CardHeader>
-            <CardTitle className="text-lg">General Information</CardTitle>
-            <CardDescription>
-              Your organization details visible to team members.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {activeTenant ? (
-              <WorkspaceForm tenant={activeTenant} canEdit={canEdit} />
-            ) : (
-              <p className="text-sm text-slate-400">
-                No active workspace attached to this account.
-              </p>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      <WorkspaceForm tenant={activeTenant} canEdit={canEdit} />
     </div>
   );
 }

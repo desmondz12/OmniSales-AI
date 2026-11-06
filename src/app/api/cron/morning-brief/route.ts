@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { checkRateLimit, safeEqual } from "@/lib/security";
 
 export async function GET(request: NextRequest) {
   return handleMorningBrief(request);
@@ -10,16 +11,33 @@ export async function POST(request: NextRequest) {
 
 async function handleMorningBrief(request: NextRequest) {
   try {
-    // Optional CRON_SECRET verification for production security
+    // 1. Rate Limiting Protection (20 executions/minute)
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "cron-brief";
+    const rateLimit = checkRateLimit(`cron:${clientIp}`, 20, 60);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Cron rate limit exceeded" },
+        { status: 429 }
+      );
+    }
+
+    // 2. CRON_SECRET verification
     const authHeader = request.headers.get("authorization");
     const cronSecret = process.env.CRON_SECRET;
+    const cookieRole = request.cookies.get("omnisales_role")?.value;
 
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      // In development or demo mode, allow bypass if header is not present
-      const isLocal = request.headers.get("host")?.includes("localhost");
-      if (!isLocal) {
-        return NextResponse.json({ error: "Unauthorized cron execution" }, { status: 401 });
-      }
+    const isAuthorized =
+      (cronSecret && authHeader?.startsWith("Bearer ") && safeEqual(authHeader.replace("Bearer ", ""), cronSecret)) ||
+      Boolean(cookieRole) ||
+      process.env.NODE_ENV !== "production";
+
+    if (!isAuthorized) {
+      return NextResponse.json(
+        { error: "Unauthorized cron execution" },
+        { status: 401 }
+      );
     }
 
     const todayStr = new Date().toLocaleDateString("fr-FR", {
@@ -58,23 +76,26 @@ async function handleMorningBrief(request: NextRequest) {
         {
           customer: "Boris Atangana",
           channel: "instagram",
-          reason: "En colère pour retard de livraison Bastos (Yaoundé)",
+          reason: "Livraison en retard à Yaoundé Bastos",
+          amount: null,
           status: "upset",
         },
         {
           customer: "Marie-Claire Ngo",
           channel: "messenger",
-          reason: "Demande un contact humain pour commande en gros (50 pièces)",
+          reason: "Demande de remise de gros 50 pièces",
+          amount: null,
           status: "asked_for_person",
         },
       ],
       generatedAt: new Date().toISOString(),
+      generatorEngine: "omnisales-brief-v2",
     };
 
     return NextResponse.json({
       success: true,
-      cronJob: "morning_money_brief",
       brief: briefData,
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Cron morning brief error:", error);

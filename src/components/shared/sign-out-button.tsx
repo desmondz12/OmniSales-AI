@@ -13,12 +13,22 @@ export function SignOutButton() {
   const handleSignOut = async () => {
     setIsLoading(true);
     try {
+      // 1. Clear Supabase session if any
       const supabase = createClient();
-      await supabase.auth.signOut();
+      await supabase.auth.signOut().catch(() => {});
+
+      // 2. Clear server demo cookies
+      await fetch("/api/auth/logout", {
+        method: "POST",
+      }).catch(() => {});
+
+      // 3. Navigate to /login and refresh session
       router.push("/login");
       router.refresh();
     } catch (err) {
       console.error("Sign out error:", err);
+      router.push("/login");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -30,10 +40,10 @@ export function SignOutButton() {
       onClick={handleSignOut}
       isLoading={isLoading}
       disabled={isLoading}
-      className="text-slate-300 hover:text-white"
+      className="text-slate-600 hover:text-slate-900 border-slate-200"
     >
       <LogOut className="mr-2 h-4 w-4" />
-      Sign Out
+      Déconnexion
     </Button>
   );
 }

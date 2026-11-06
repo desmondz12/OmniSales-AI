@@ -1,7 +1,33 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { checkRateLimit, safeEqual } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Rate Limiting Protection (120 requests/minute)
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "tiktok-webhook";
+    const rateLimit = checkRateLimit(`tiktok:${clientIp}`, 120, 60);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      );
+    }
+
+    // 2. Secret Verification (optional header validation)
+    const tiktokSecret = process.env.TIKTOK_WEBHOOK_SECRET;
+    const incomingSecret =
+      request.headers.get("x-tiktok-signature") ||
+      request.headers.get("authorization")?.replace("Bearer ", "");
+
+    if (tiktokSecret && incomingSecret) {
+      if (!safeEqual(incomingSecret, tiktokSecret)) {
+        return NextResponse.json({ error: "Invalid TikTok signature" }, { status: 401 });
+      }
+    }
+
     const body = await request.json();
 
     const event = body.event || "direct_message.receive";
@@ -12,30 +38,14 @@ export async function POST(request: NextRequest) {
       body.text ||
       "";
 
-    // Call unified AI processing pipeline
-    const host = request.headers.get("host") || "localhost:3000";
-    const protocol = request.headers.get("x-forwarded-proto") || "http";
-    const aiProcessUrl = `${protocol}://${host}/api/ai/process-message`;
-
-    let aiResult = null;
-    try {
-      const aiResponse = await fetch(aiProcessUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          channel: "tiktok",
-          messageText: messageContent,
-          customerName: "TikTok Buyer",
-          customerHandle: `@${senderId}`,
-          workspaceId: "ws-fotso-douala",
-        }),
-      });
-      if (aiResponse.ok) {
-        aiResult = await aiResponse.json();
-      }
-    } catch (err) {
-      console.warn("AI pipeline call skipped or local fallback:", err);
-    }
+    // 3. In-process AI processing
+    const aiResult = await processCustomerMessage({
+      channel: "tiktok",
+      messageText: messageContent,
+      customerName: "Acheteur TikTok",
+      customerHandle: `@${senderId}`,
+      workspaceId: "ws-fotso-douala",
+    });
 
     return NextResponse.json({
       code: 0,
@@ -43,8 +53,8 @@ export async function POST(request: NextRequest) {
       event,
       channel: "tiktok",
       senderId,
-      aiTriage: aiResult?.triageTag || "processed",
-      replyText: aiResult?.replyText,
+      aiTriage: aiResult.triageTag,
+      replyText: aiResult.replyText,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

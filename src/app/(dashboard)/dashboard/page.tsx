@@ -22,7 +22,9 @@ export default async function DashboardPage() {
     .eq("id", user?.id ?? "")
     .single();
 
-  const rawName = profile?.full_name || user?.email?.split("@")[0] || "Musa";
+  const rawName =
+    profile?.full_name ||
+    (user?.email ? user.email.split("@")[0] : "Jean-Luc Fotso");
   const ownerFirstName = rawName.split(" ")[0];
 
   // Try to fetch live conversations from Supabase
