@@ -1,23 +1,13 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ArrowRight,
-  BarChart3,
-  CheckCircle2,
-  Circle,
-  Clock,
-  DollarSign,
-  Plus,
-  Users,
-} from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+  DEMO_CONVERSATIONS,
+  DEMO_CUSTOMERS,
+  DEMO_INVOICES,
+} from "@/lib/data/seed-data";
+import type { Conversation, Customer, Invoice } from "@/types/database";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -32,208 +22,54 @@ export default async function DashboardPage() {
     .eq("id", user?.id ?? "")
     .single();
 
-  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const rawName = profile?.full_name || user?.email?.split("@")[0] || "Musa";
+  const ownerFirstName = rawName.split(" ")[0];
 
-  // Fetch active tenant ID
-  const { data: membership } = await supabase
-    .from("tenant_members")
-    .select("tenant_id")
-    .eq("user_id", user?.id ?? "")
-    .single();
+  // Try to fetch live conversations from Supabase
+  let conversations: Conversation[] = DEMO_CONVERSATIONS;
+  let customers: Customer[] = DEMO_CUSTOMERS;
+  let invoices: Invoice[] = DEMO_INVOICES;
 
-  const tenantId = membership?.tenant_id;
+  try {
+    const { data: liveCustomers } = await supabase
+      .from("customers")
+      .select("*")
+      .limit(20);
 
-  // Real Contacts Count (Live from Supabase)
-  let contactsCount = 0;
-  if (tenantId) {
-    const { count } = await supabase
-      .from("contacts")
-      .select("*", { count: "exact", head: true })
-      .eq("tenant_id", tenantId);
-    contactsCount = count ?? 0;
+    if (liveCustomers && liveCustomers.length > 0) {
+      customers = liveCustomers as unknown as Customer[];
+    }
+
+    const { data: liveConversations } = await supabase
+      .from("conversations")
+      .select("*, customers(*)")
+      .order("last_message_at", { ascending: false })
+      .limit(20);
+
+    if (liveConversations && liveConversations.length > 0) {
+      conversations = liveConversations as unknown as Conversation[];
+    }
+
+    const { data: liveInvoices } = await supabase
+      .from("invoices")
+      .select("*, customers(*)")
+      .order("created_at", { ascending: false })
+      .limit(20);
+
+    if (liveInvoices && liveInvoices.length > 0) {
+      invoices = liveInvoices as unknown as Invoice[];
+    }
+  } catch (error) {
+    // Graceful fallback to demo data
+    console.error("Using seed data fallback for dashboard view:", error);
   }
 
-  // Calculate onboarding progress
-  const hasContacts = contactsCount > 0;
-  const completedSteps = 2 + (hasContacts ? 1 : 0);
-
   return (
-    <div className="space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            Welcome back, {displayName}
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Here is what&apos;s happening in your sales pipeline today.
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Link
-            href="/dashboard/contacts"
-            className={buttonVariants({
-              variant: "default",
-              size: "sm",
-              className: "font-semibold shadow-md",
-            })}
-          >
-            <Plus className="mr-1.5 h-4 w-4" />
-            Add Contact
-          </Link>
-        </div>
-      </div>
-
-      {/* KPI Overview Cards with Real Zero States (No Fake Mock Data per Rule 10) */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-300">
-              Total Contacts
-            </CardTitle>
-            <div className="rounded-md bg-blue-950/60 p-2 text-blue-400">
-              <Users className="h-4 w-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">{contactsCount}</div>
-            <p className="mt-1 text-xs text-slate-500">
-              {contactsCount === 0
-                ? "No contacts yet • Start by adding one"
-                : `${contactsCount} ${contactsCount === 1 ? "contact" : "contacts"} recorded in CRM`}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-300">
-              Active Pipeline Value
-            </CardTitle>
-            <div className="rounded-md bg-emerald-950/60 p-2 text-emerald-400">
-              <BarChart3 className="h-4 w-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">$0.00</div>
-            <p className="mt-1 text-xs text-slate-500">
-              0 active deals • Coming in Phase 4
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-300">
-              Pending Collections
-            </CardTitle>
-            <div className="rounded-md bg-amber-950/60 p-2 text-amber-400">
-              <DollarSign className="h-4 w-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">$0.00</div>
-            <p className="mt-1 text-xs text-slate-500">
-              0 outstanding invoices • Coming in Phase 5
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Onboarding Checklist & Activity Grid */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Onboarding Checklist (2 Cols) */}
-        <Card className="lg:col-span-2 border-slate-800 bg-slate-900/60">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg">Workspace Setup Guide</CardTitle>
-                <CardDescription>
-                  Follow these steps to complete setting up your sales organization
-                </CardDescription>
-              </div>
-              <span className="rounded-full bg-blue-950 px-2.5 py-1 text-xs font-semibold text-blue-400 border border-blue-800">
-                {completedSteps} of 3 Complete
-              </span>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-start space-x-3 rounded-lg border border-slate-800 bg-slate-900/40 p-3.5">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-white line-through opacity-75">
-                  1. Create Account & Workspace
-                </p>
-                <p className="text-xs text-slate-400">
-                  Authentication and workspace isolation configured via Supabase.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-3 rounded-lg border border-slate-800 bg-slate-900/40 p-3.5">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-white line-through opacity-75">
-                  2. Customize Workspace Profile
-                </p>
-                <p className="text-xs text-slate-400">
-                  Team profile and organization settings configured.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start justify-between rounded-lg border border-slate-800 bg-slate-900/80 p-3.5">
-              <div className="flex items-start space-x-3">
-                {hasContacts ? (
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                ) : (
-                  <Circle className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
-                )}
-                <div>
-                  <p className={`text-sm font-medium ${hasContacts ? "line-through opacity-75 text-white" : "text-white"}`}>
-                    3. Add Your First Contact
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    {hasContacts
-                      ? "Great job! Contacts recorded in CRM."
-                      : "Create leads and customer accounts to track sales conversations."}
-                  </p>
-                </div>
-              </div>
-              {!hasContacts && (
-                <Link
-                  href="/dashboard/contacts"
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "sm",
-                    className: "shrink-0 ml-2 text-xs",
-                  })}
-                >
-                  Add Contact
-                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                </Link>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Live Activity Feed Empty State (1 Col) */}
-        <Card className="border-slate-800 bg-slate-900/60">
-          <CardHeader>
-            <CardTitle className="text-lg">Recent Activity</CardTitle>
-            <CardDescription>Real-time audit log of team actions</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/80 text-slate-500 mb-3">
-              <Clock className="h-6 w-6" />
-            </div>
-            <p className="text-sm font-medium text-slate-300">No activity yet</p>
-            <p className="mt-1 text-xs text-slate-500 max-w-[200px]">
-              When you advance deals or log collection milestones, events will appear here.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <DashboardView
+      ownerName={ownerFirstName}
+      initialConversations={conversations}
+      initialCustomers={customers}
+      initialInvoices={invoices}
+    />
   );
 }

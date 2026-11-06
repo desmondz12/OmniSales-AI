@@ -24,7 +24,7 @@ export function DashboardShell({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+    <div className="flex min-h-screen bg-[#F8FAFC] text-slate-900 antialiased">
       {/* Desktop Sidebar (hidden on mobile) */}
       <Sidebar
         tenantName={tenant?.name}

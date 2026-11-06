@@ -1,39 +1,56 @@
 # OmniSales AI — Build Status
 
-> Last updated: 2026-11-05
+> Last updated: 2026-11-06
 
 ## Master Phased Roadmap
 
 | Phase | Description | Status |
 |---|---|---|
 | **Phase A** | **Design System, Master PostgreSQL Schema & Role-Based Auth** | ✅ Complete |
-| **Phase B** | **Business Client Dashboard (`/dashboard`)** (Money Brief, Handoff Queue, Collections, AI Co-Pilot) | ⬜ Next Up |
-| **Phase C** | **Unified 5-Channel Inbox & Slide-Over Drawer (`/dashboard/inbox`)** | ⬜ Pending |
+| **Phase B** | **Business Client Dashboard (`/dashboard`)** (Money Brief, Handoff Queue, Collections, AI Co-Pilot) | ✅ Complete |
+| **Phase C** | **Unified 5-Channel Inbox & Slide-Over Drawer (`/dashboard/inbox`)** | ⬜ Next Up |
 | **Phase D** | **Channels Hub & AI Agent Training (`/dashboard/channels` & `/dashboard/agent`)** | ⬜ Pending |
 | **Phase E** | **Super Admin Command Center (`/admin/*`)** (Health monitor, tenant manager, impersonate) | ⬜ Pending |
 | **Phase F** | **Backend API Webhooks & Gemini AI Processing Engine** | ⬜ Pending |
 
 ---
 
-## Phase A Summary ✅
+## Phase B Summary ✅
 
 ### What was built
-- [x] **Linear/Stripe Light-Mode Executive Theme**: Pure white cards (`#FFFFFF`), soft slate background (`#F8FAFC`), subtle borders (`#E2E8F0`), electric royal blue (`#2563EB`), emerald green (`#10B981`), amber (`#F59E0B`), and rose red (`#EF4444`).
-- [x] **Master PostgreSQL Migration (`supabase/migrations/20261105000002_omnisales_master_schema.sql`)**:
-  - `workspaces` (with token usage, limits, and MRR)
-  - `channels` (WhatsApp, Instagram, Messenger, TikTok, Telegram)
-  - `customers` (with structured `ai_memory` facts and preferences)
-  - `conversations` (triage tags: `ready_to_pay`, `upset`, `asked_for_person`, `promise_due`, `paid`)
-  - `messages` (sender types: `customer`, `ai`, `human`)
-  - `invoices` (amounts, due dates, payment links)
-  - `system_logs` (webhook events and API latencies)
-- [x] **TypeScript Domain Model (`src/types/database.ts`)**: Complete end-to-end typing with zero `any`.
-- [x] **Rich Seed State (`src/lib/data/seed-data.ts`)**: Realistic scenarios (Femi 550k deposit on WhatsApp, Obinna upset on Instagram, Amaka wholesale on Telegram, Dele Akin 300k paid, etc.).
-- [x] **Role Switcher & Demo Login on `/login`**: One-click "Login as Business Owner" and "Login as Super Admin" for instant preview and role verification.
-- [x] **Role-Based Auth Middleware (`src/middleware.ts`)**: Session refresh + access guards for `/admin` vs `/dashboard`.
-- [x] **Executive Landing Page (`src/app/page.tsx`)**: Linear/Stripe aesthetic highlighting 5-channel AI agent capabilities.
+- [x] **The Morning "Money Brief" Hero Card (`src/components/dashboard/money-brief-card.tsx`)**:
+  - 3D-style AI mascot avatar with active pulse indicator.
+  - Personalized greeting: `"Good morning, Musa."`
+  - Natural language executive synthesis across WhatsApp, Instagram, Messenger, TikTok, and Telegram.
+  - Interactive audio player button (`▶ Listen · 30s`) with animated waveform and Web Speech API synthesis.
+  - 4 inline metric cards: Owed by customers (₦1.2M), Collected yesterday (₦300k), Active Conversations (8 across 5 channels), Handled by AI agent (14 replies, 3 need human review).
+- [x] **"Needs You Now" Priority Human Handoff Queue (`src/components/dashboard/handoff-queue.tsx`)**:
+  - Escalated priority queue for high-value payment intent, distressed customers, and human requests.
+  - Channels badges (WhatsApp, Instagram, Messenger, TikTok, Telegram) and triage pills (`Ready to pay`, `Upset Customer`, `Asked for a person`, `Promise due`).
+  - One-click `"Review Handoff →"` trigger opening the live chat drawer.
+- [x] **"Money" Collections & Channel Revenue Tracker (`src/components/dashboard/collections-tracker.tsx`)**:
+  - "What's owed, by customer": horizontal progress bars with percentage indicators, customer avatar initials, overdue status tags, and quick actions ("Copy Link", "Send AI Nudge").
+  - "Overnight by Channel": Revenue and message volume distribution across 5 channels with comparative visual volume bars and SLA indicator.
+- [x] **"Advisor Tasks" Proactive AI Recommendations (`src/components/dashboard/advisor-tasks.tsx`)**:
+  - 3 categorized opportunities: Marketing (TikTok/IG bulk reseller leads), Finance (Overdue debts chase), Risk & Fraud (Bank transfer slip verification).
+  - Confidence matching, impact tags, and interactive `"Apply AI Action"` execution with simulated spinner and success states.
+- [x] **Slide-Over Live Customer Chat Drawer (`src/components/dashboard/chat-drawer.tsx`)**:
+  - Smooth slide-in drawer with backdrop overlay.
+  - Live conversation history with clear customer bubbles, automated AI Agent badges, and Staff badges.
+  - AI Agent ON/OFF toggle switch + Claim Handoff button.
+  - Quick action toolbar: `"Send Payment Link"`, `"Let AI Draft Reply"`.
+  - Customer Memory & CRM facts sidebar (Owed/Paid amounts, payment promises, extracted customer preferences and objections).
+- [x] **Floating Bottom AI Co-Pilot Dock (`src/components/dashboard/copilot-bar.tsx`)**:
+  - Glassmorphic bottom input dock (`backdrop-blur-xl bg-white/95 border-slate-200/90 shadow-2xl`).
+  - Pre-filled prompt chips: "Follow up with overdue customers", "Send payment link to Femi", "Check TikTok reseller inquiries", "Summarize today's cash collections".
+  - Voice speech microphone toggle with visual pulse.
+  - Interactive command execution modal simulating real-time multi-channel operations.
+- [x] **Executive Layout Enhancements (`src/components/layout/`)**:
+  - Sidebar: Donezo/Linear style with light background (`bg-white`), rounded active blue pill, 5-channel live indicator dots, and quick switch to Super Admin portal.
+  - Header: Live status pill (`● AI Agent Active • Handling 5 Channels`), workspace switcher, search bar with `⌘K` badge, and quick inbox unread trigger.
+  - Dashboard Shell: Clean `#F8FAFC` slate background with crisp `#FFFFFF` cards.
 
 ### Verification
 - `npm run type-check`: 0 errors
 - `npm run lint`: 0 errors / 0 warnings
-- `npm run build`: 15 routes compiled and validated successfully
+- `npm run build`: 14 routes compiled and statically optimized successfully
