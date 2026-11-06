@@ -21,7 +21,7 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
   const [isPlayingAudio, setIsPlayingAudio] = React.useState(false);
 
   const briefText =
-    "Three people need you today: Femi is ready to pay his 550,000 naira deposit, Obinna is upset about his order, and Amaka wants to talk to a person. 1.2 million naira is still owed across four customers, two of them overdue. Dele paid 300,000 naira yesterday and I matched it to his invoice. I handled 14 replies overnight across 5 channels.";
+    "Three people need you today: Jean-Pierre is ready to pay his 550,000 FCFA deposit via MTN MoMo, Boris is upset about his order delivery in Yaoundé, and Marie-Claire wants to negotiate wholesale pricing for Douala. 1.2 million FCFA is still owed across four customers, two of them overdue. Danielle paid 300,000 FCFA yesterday via Orange Money and I matched it to her invoice automatically. I handled 14 replies overnight across 5 channels in English and French.";
 
   const handleToggleSpeech = () => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
@@ -33,7 +33,7 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
       window.speechSynthesis.cancel();
       setIsPlayingAudio(false);
     } else {
-      window.speechSynthesis.cancel(); // Stop any pending speech
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(briefText);
       utterance.rate = 1.05;
       utterance.pitch = 1.0;
@@ -46,7 +46,6 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
     }
   };
 
-  // Stop speech when component unmounts
   React.useEffect(() => {
     return () => {
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -73,15 +72,15 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
           <div>
             <div className="flex items-center space-x-2">
               <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-                Good morning, {ownerName}.
+                Good morning / Bonjour, {ownerName}.
               </h2>
               <span className="inline-flex items-center rounded-full bg-blue-100/80 px-2.5 py-0.5 text-[11px] font-semibold text-blue-800">
                 <Sparkles className="mr-1 h-3 w-3 text-blue-600" />
-                The Morning Money Brief
+                The Morning Money Brief • Le Brief Matinal
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Live executive synthesis across 5 channels • Today at 08:00 AM
+              Live executive synthesis across 5 channels (Cameroon • Douala &amp; Yaoundé) • 08:00 AM
             </p>
           </div>
         </div>
@@ -111,7 +110,7 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
             ) : (
               <>
                 <Play className="mr-1.5 h-3.5 w-3.5 fill-current text-blue-600" />
-                <span>Listen · 30s</span>
+                <span>Écouter / Listen · 30s</span>
                 <Volume2 className="ml-1.5 h-3.5 w-3.5 text-slate-400" />
               </>
             )}
@@ -119,7 +118,7 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
 
           <button
             type="button"
-            onClick={() => onOpenCopilot?.("Explain what I need to do with Femi and Obinna today")}
+            onClick={() => onOpenCopilot?.("Explain what I need to do with Jean-Pierre and Boris today")}
             className="inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 border border-slate-200/90 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors shadow-xs"
           >
             <Sparkles className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
@@ -131,13 +130,14 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
       {/* The Natural Language Executive Summary */}
       <div className="mt-5 rounded-2xl bg-white/80 p-4 sm:p-5 backdrop-blur-xs border border-white/80 shadow-2xs">
         <p className="text-sm sm:text-[15px] font-medium leading-relaxed text-slate-800">
-          <strong className="text-blue-700 font-semibold">Three people need you today:</strong>{" "}
-          <span className="text-slate-900 font-semibold">Femi</span> is ready to pay his ₦550k deposit,{" "}
-          <span className="text-slate-900 font-semibold">Obinna</span> is upset about his order delivery, and{" "}
-          <span className="text-slate-900 font-semibold">Amaka</span> wants to talk to a person regarding wholesale pricing.{" "}
-          <strong className="text-slate-900 font-semibold">₦1,200,000</strong> is still owed across four customers, two of them overdue.{" "}
-          <span className="text-emerald-700 font-semibold">Dele paid ₦300k yesterday</span> and I matched it to his invoice automatically. I handled{" "}
-          <strong className="text-slate-900 font-semibold">14 replies overnight</strong> across 5 channels.
+          <strong className="text-blue-700 font-semibold">Trois clients ont besoin de vous aujourd&apos;hui :</strong>{" "}
+          <span className="text-slate-900 font-semibold">Jean-Pierre Fotso</span> est prêt à verser son acompte de{" "}
+          <strong className="text-slate-900 font-semibold">550 000 FCFA</strong> par MTN MoMo,{" "}
+          <span className="text-slate-900 font-semibold">Boris Atangana</span> est contrarié par son colis à Yaoundé, et{" "}
+          <span className="text-slate-900 font-semibold">Marie-Claire Ngo</span> souhaite négocier un tarif de gros pour Bonanjo.{" "}
+          <strong className="text-slate-900 font-semibold">1 200 000 FCFA</strong> restent dus sur quatre clients, dont deux en retard.{" "}
+          <span className="text-emerald-700 font-semibold">Danielle a payé 300 000 FCFA hier via Orange Money</span> et je l&apos;ai réconcilié automatiquement. J&apos;ai géré{" "}
+          <strong className="text-slate-900 font-semibold">14 réponses cette nuit</strong> sur 5 canaux en français et anglais.
         </p>
       </div>
 
@@ -146,66 +146,66 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
         {/* Metric 1 */}
         <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-4 backdrop-blur-xs shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Owed by customers</span>
+            <span>Créances clients (Owed)</span>
             <DollarSign className="h-3.5 w-3.5 text-amber-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-1.5">
             <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
-              ₦1,200,000
+              1 200 000 FCFA
             </span>
           </div>
           <p className="mt-1 text-[11px] font-medium text-amber-700">
-            4 customers (2 overdue)
+            4 clients (2 en retard)
           </p>
         </div>
 
         {/* Metric 2 */}
         <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-4 backdrop-blur-xs shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Collected yesterday</span>
+            <span>Encaissé hier (Collected)</span>
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-1.5">
             <span className="text-lg sm:text-xl font-bold tracking-tight text-emerald-700">
-              ₦300,000
+              300 000 FCFA
             </span>
           </div>
           <p className="mt-1 text-[11px] font-medium text-slate-500">
-            Dele Akin (Paystack matched)
+            Danielle Ewane (Orange Money)
           </p>
         </div>
 
         {/* Metric 3 */}
         <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-4 backdrop-blur-xs shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Active Conversations</span>
+            <span>Conversations actives</span>
             <MessageSquare className="h-3.5 w-3.5 text-blue-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-1.5">
             <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
               8
             </span>
-            <span className="text-xs text-slate-400">threads</span>
+            <span className="text-xs text-slate-400">échanges</span>
           </div>
           <p className="mt-1 text-[11px] font-medium text-slate-500">
-            Across all 5 channels
+            Sur les 5 canaux actifs
           </p>
         </div>
 
         {/* Metric 4 */}
         <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-4 backdrop-blur-xs shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Handled by AI Agent</span>
+            <span>Géré par l&apos;IA (Autonome)</span>
             <Bot className="h-3.5 w-3.5 text-indigo-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-1.5">
             <span className="text-lg sm:text-xl font-bold tracking-tight text-indigo-700">
               14
             </span>
-            <span className="text-xs text-slate-400">replies</span>
+            <span className="text-xs text-slate-400">réponses</span>
           </div>
           <p className="mt-1 text-[11px] font-medium text-rose-600">
-            3 need your review now
+            3 requièrent votre validation
           </p>
         </div>
       </div>

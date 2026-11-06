@@ -109,7 +109,7 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
               <Building2 className="h-3.5 w-3.5" />
             </div>
             <span className="truncate text-xs font-semibold text-slate-800">
-              {tenantName || "Musa Electronics & Fashion"}
+              {tenantName || "Fotso & Sons Commerce Douala"}
             </span>
           </div>
           <span className="shrink-0 rounded-full bg-emerald-100/80 px-1.5 py-0.2 text-[10px] font-bold text-emerald-800">

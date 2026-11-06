@@ -147,7 +147,7 @@ export function InboxShell({
       conversation_id: activeConversation.id,
       workspace_id: activeConversation.workspace_id,
       sender_type: "human",
-      sender_name: "Musa (Store Owner)",
+      sender_name: "Jean-Luc (Gérant)",
       content: replyText.trim(),
       channel_type: activeConversation.channel_type,
       metadata: { sent_via_inbox: true },
@@ -173,25 +173,25 @@ export function InboxShell({
 
     setTimeout(() => {
       setIsDraftingAi(false);
-      if (activeCustomer.name === "Femi Adeleke") {
+      if (activeCustomer.name === "Jean-Pierre Fotso" || activeCustomer.name === "Femi Adeleke") {
         setReplyText(
-          "Hi Femi, Musa here! Checking our live GTBank settlement feed right now. If your transaction shows successful, please paste the reference ID here and I will immediately mark your deposit cleared and reserve your units!"
+          "Bonjour M. Fotso, ici Jean-Luc ! Je viens de vérifier notre récapitulatif des transferts MTN MoMo et Afriland. Votre acompte de 550 000 FCFA est bien enregistré et la livraison à Akwa est réservée !"
         );
-      } else if (activeCustomer.name === "Obinna Eze") {
+      } else if (activeCustomer.name === "Boris Atangana" || activeCustomer.name === "Obinna Eze") {
         setReplyText(
-          "Hello Obinna, this is Musa personally. I completely understand your urgency for today's 2 PM event. I just called the dispatch rider: your package is in transit with PIN: 4892 and will be delivered by 12:45 PM. Thank you for your patience!"
+          "Bonjour Boris, ici Jean-Luc personnellement. Je comprends parfaitement l'urgence pour votre événement de 14h à Bastos. Le transporteur express est déjà en route et livre avant 12h45. Code de suivi colis : CM-7821."
         );
-      } else if (activeCustomer.name === "Amaka Johnson") {
+      } else if (activeCustomer.name === "Marie-Claire Ngo" || activeCustomer.name === "Amaka Johnson") {
         setReplyText(
-          "Hello Amaka, Musa here! For 50 pieces of our custom embroidered fabrics, we offer a special wholesale tier at ₦6,000 per piece (saving you ₦20,000). I can send fabric swatch previews via WhatsApp or courier today if that works for you?"
+          "Bonjour Marie-Claire, ici Jean-Luc ! Pour une commande de 50 pièces de pagnes / tissus brodés, nous offrons un tarif grossiste à 25 000 FCFA l'unité (soit 75 000 FCFA d'économie). Je peux vous envoyer les échantillons par WhatsApp dès maintenant."
         );
-      } else if (activeCustomer.name === "Chiamaka Nwosu") {
+      } else if (activeCustomer.name === "Danielle Ewane" || activeCustomer.name === "Chiamaka Nwosu") {
         setReplyText(
-          "Hi Chiamaka, thanks for the update! 4 PM today is noted. Here is your fast-checkout link so you can clear the balance the moment your client pays: https://pay.omnisales.ai/musa/inv-068. Have a productive day!"
+          "Bonjour Danielle, bien reçu pour votre promesse de paiement à 16h ! Voici votre lien rapide MoMo / OM pour solder dès réception : https://pay.omnisales.ai/fotso/inv-068. Excellente journée à vous !"
         );
       } else {
         setReplyText(
-          `Hello ${activeCustomer.name}, Musa here! Thank you for reaching out. How can I best assist you with your order today?`
+          `Bonjour ${activeCustomer.name}, ici l'équipe OmniSales Douala ! Merci de nous avoir contactés. En quoi puis-je vous aider aujourd'hui ?`
         );
       }
     }, 750);
@@ -527,10 +527,10 @@ export function InboxShell({
             >
               <UserCheck className="mr-1.5 h-3.5 w-3.5" />
               <span className="hidden sm:inline">
-                {claimedMap[activeConvId] ? "Claimed by Musa" : "Claim Handoff"}
+                {claimedMap[activeConvId] ? "Assigné à Jean-Luc" : "Prendre le relais"}
               </span>
               <span className="sm:hidden">
-                {claimedMap[activeConvId] ? "Claimed" : "Claim"}
+                {claimedMap[activeConvId] ? "Assigné" : "Prendre"}
               </span>
             </Button>
 
@@ -729,16 +729,16 @@ export function InboxShell({
 
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
-                <span className="text-[11px] text-slate-500">Total Owed</span>
+                <span className="text-[11px] text-slate-500">Total Dû</span>
                 <p className="text-sm font-bold text-slate-900 mt-0.5">
-                  ₦{(activeCustomer?.total_owed || 0).toLocaleString()}
+                  {(activeCustomer?.total_owed || 0).toLocaleString("fr-FR")} FCFA
                 </p>
               </div>
 
               <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-3">
-                <span className="text-[11px] text-emerald-700">Total Paid</span>
+                <span className="text-[11px] text-emerald-700">Total Versé</span>
                 <p className="text-sm font-bold text-emerald-900 mt-0.5">
-                  ₦{(activeCustomer?.total_paid || 0).toLocaleString()}
+                  {(activeCustomer?.total_paid || 0).toLocaleString("fr-FR")} FCFA
                 </p>
               </div>
             </div>
@@ -748,10 +748,10 @@ export function InboxShell({
               <div className="mt-2.5 rounded-xl border border-amber-200 bg-amber-50/60 p-2.5 text-xs text-amber-900 flex items-center justify-between">
                 <div className="flex items-center space-x-1.5">
                   <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                  <span>Promise:</span>
+                  <span>Promesse :</span>
                 </div>
                 <span className="font-bold">
-                  ₦{(activeCustomer.payment_promise_amount || 0).toLocaleString()}
+                  {(activeCustomer.payment_promise_amount || 0).toLocaleString("fr-FR")} FCFA
                 </span>
               </div>
             )}
@@ -825,7 +825,7 @@ export function InboxShell({
 
                     <div className="text-right">
                       <span className="font-bold text-slate-900">
-                        ₦{inv.amount.toLocaleString()}
+                        {inv.amount.toLocaleString("fr-FR")} FCFA
                       </span>
                       <div className="mt-0.5">
                         <span

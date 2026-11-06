@@ -47,10 +47,10 @@ export function CopilotBar({
 
   // Quick suggestion chips
   const suggestions = [
-    "Follow up with overdue customers",
-    "Send payment link to Femi",
-    "Check TikTok reseller inquiries",
-    "Summarize today's cash collections",
+    "Relancer les clients en retard de paiement (MoMo/OM)",
+    "Envoyer lien de paiement 550 000 FCFA à Jean-Pierre Fotso",
+    "Consulter les demandes de prix TikTok (Garoua/Yaoundé)",
+    "Faire le point des encaissements du jour en FCFA",
   ];
 
   const handleToggleMic = () => {
@@ -82,22 +82,24 @@ export function CopilotBar({
 
       if (
         currentQuery.toLowerCase().includes("overdue") ||
+        currentQuery.toLowerCase().includes("retard") ||
+        currentQuery.toLowerCase().includes("relance") ||
         currentQuery.toLowerCase().includes("follow up")
       ) {
         responseText =
-          "Found 2 customers with overdue commitments: Chiamaka Nwosu (₦250,000) and Femi Adeleke (₦550,000 pending). Dispatched personalized payment reminders with Paystack links.";
-        actionText = "Dispatched 2 WhatsApp & Messenger payment reminder messages.";
-      } else if (currentQuery.toLowerCase().includes("femi")) {
+          "J'ai identifié 2 clients avec des échéances dépassées : Christian Kamga (250 000 FCFA à Bafoussam) et Jean-Pierre Fotso (acompte de 550 000 FCFA en attente). J'ai envoyé des rappels personnalisés avec les liens de paiement MTN MoMo et Orange Money.";
+        actionText = "2 rappels WhatsApp & Messenger envoyés avec liens MoMo/Orange Money.";
+      } else if (currentQuery.toLowerCase().includes("fotso") || currentQuery.toLowerCase().includes("jean-pierre") || currentQuery.toLowerCase().includes("550")) {
         responseText =
-          "Generated instant Paystack payment link for Femi Adeleke (₦550,000) and sent it to his WhatsApp chat.";
-        actionText = "Sent invoice INV-2026-081 link to +234 803 111 2233.";
+          "Lien de paiement instantané MTN MoMo généré pour Jean-Pierre Fotso (550 000 FCFA) et envoyé sur sa discussion WhatsApp.";
+        actionText = "Lien de la facture INV-2026-081 transmis au +237 677 11 22 33.";
       } else if (currentQuery.toLowerCase().includes("tiktok")) {
         responseText =
-          "Analyzed 14 TikTok comments and DMs from overnight. 6 leads inquired about the bulk electronics catalog; sent automatic PDF brochure link.";
-        actionText = "Sent automated catalog link to 6 TikTok leads.";
+          "Analyse de 14 interactions TikTok cette nuit. 6 prospects ont demandé les tarifs du pack créateur pour Douala et Garoua ; catalogue PDF et modalités d'expédition envoyés.";
+        actionText = "Lien catalogue et expédition transmis à 6 prospects TikTok.";
       } else {
-        responseText = `OmniSales AI executed: "${currentQuery}". All channel states and customer CRM profiles updated.`;
-        actionText = "Instruction logged and executed successfully.";
+        responseText = `OmniSales AI a exécuté votre consigne : "${currentQuery}". Tous les canaux et fiches clients sont à jour.`;
+        actionText = "Instruction traitée et enregistrée avec succès.";
       }
 
       setActiveResult({

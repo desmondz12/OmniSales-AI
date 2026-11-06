@@ -25,16 +25,16 @@ function getInitialMessages(conversation: Conversation): Message[] {
   const customer = conversation.customers;
   const channel = conversation.channel_type;
 
-  if (customer?.name === "Femi Adeleke") {
+  if (customer?.name === "Jean-Pierre Fotso" || customer?.name === "Femi Adeleke") {
     return [
       {
         id: "m-101",
         conversation_id: conversation.id,
         workspace_id: conversation.workspace_id,
         sender_type: "customer",
-        sender_name: "Femi Adeleke",
+        sender_name: customer.name,
         content:
-          "Good day Musa, I am ready to pay the 550,000 deposit for the iPhone 15 units now. Can you send the active account number or payment link?",
+          "Bonjour M. Fotso, je suis prêt à verser l'acompte de 550 000 FCFA pour les 10 iPhone 15. Vous préférez MTN MoMo ou virement Afriland?",
         channel_type: channel,
         metadata: { intent: "ready_to_pay", amount: 550000 },
         created_at: new Date(Date.now() - 25 * 60000).toISOString(),
@@ -46,7 +46,7 @@ function getInitialMessages(conversation: Conversation): Message[] {
         sender_type: "ai",
         sender_name: "OmniSales AI Agent",
         content:
-          "Hello Femi! Wonderful to hear from you. I have prepared your secure payment link for ₦550,000. You can pay via card or bank transfer here: https://pay.omnisales.ai/musa/inv-081. Once completed, your order will be prioritized for Friday delivery!",
+          "Bonjour M. Fotso ! Ravi de vous lire. Vous pouvez payer instantanément par MTN MoMo au 671 23 45 67 ou via notre lien sécurisé : https://pay.omnisales.ai/fotso/inv-081 (550 000 FCFA). Dès réception, votre commande sera priorisée pour la livraison à Akwa vendredi !",
         channel_type: channel,
         metadata: { is_automated: true },
         created_at: new Date(Date.now() - 24 * 60000).toISOString(),
@@ -56,24 +56,24 @@ function getInitialMessages(conversation: Conversation): Message[] {
         conversation_id: conversation.id,
         workspace_id: conversation.workspace_id,
         sender_type: "customer",
-        sender_name: "Femi Adeleke",
+        sender_name: customer.name,
         content:
-          "I just tried the link and network was slow. Can you confirm if you received 550k from GTBank?",
+          "J'ai initié le paiement MoMo, pouvez-vous me confirmer la bonne réception des 550 000 FCFA ?",
         channel_type: channel,
         metadata: { intent: "handoff_ready" },
         created_at: new Date(Date.now() - 8 * 60000).toISOString(),
       },
     ];
-  } else if (customer?.name === "Obinna Eze") {
+  } else if (customer?.name === "Boris Atangana" || customer?.name === "Obinna Eze") {
     return [
       {
         id: "m-201",
         conversation_id: conversation.id,
         workspace_id: conversation.workspace_id,
         sender_type: "customer",
-        sender_name: "Obinna Eze",
+        sender_name: customer.name,
         content:
-          "Where is my smartwatch order?? You promised it would arrive yesterday! If I don't get an answer right now I will post this on Twitter and Instagram!",
+          "Où est ma montre connectée achetée à 180 000 FCFA ?? Vous aviez promis livraison à Bastos (Yaoundé) hier ! J'ai un événement aujourd'hui à 14h !",
         channel_type: channel,
         metadata: { sentiment: "angry" },
         created_at: new Date(Date.now() - 40 * 60000).toISOString(),
@@ -85,7 +85,7 @@ function getInitialMessages(conversation: Conversation): Message[] {
         sender_type: "ai",
         sender_name: "OmniSales AI Agent",
         content:
-          "I am truly sorry for this frustration, Obinna. I have stopped my automated responses and escalated this immediately to our store manager, Musa, who is reviewing your courier dispatch tracking right now.",
+          "Toutes nos excuses pour ce désagrément, Boris. J'ai suspendu mes réponses automatiques et transmis votre dossier en urgence au responsable logistique pour contacter le transporteur Douala-Yaoundé immédiatement.",
         channel_type: channel,
         metadata: { handoff_triggered: true },
         created_at: new Date(Date.now() - 39 * 60000).toISOString(),
@@ -113,7 +113,7 @@ function getInitialMessages(conversation: Conversation): Message[] {
         sender_type: "ai",
         sender_name: "OmniSales AI Agent",
         content:
-          "Hello! I am alerting our human team now. Musa will be with you shortly to assist with your request.",
+          "Hello! I am alerting our human team now. The manager will be with you shortly to assist with your request.",
         channel_type: channel,
         metadata: { is_automated: true },
         created_at: new Date(Date.now() - 29 * 60000).toISOString(),
@@ -152,7 +152,7 @@ function ChatDrawerContent({
       conversation_id: conversation.id,
       workspace_id: conversation.workspace_id,
       sender_type: "human",
-      sender_name: "Musa (Store Owner)",
+      sender_name: "Jean-Luc (Gérant)",
       content: replyText.trim(),
       channel_type: conversation.channel_type,
       metadata: { sent_by_owner: true },
@@ -167,17 +167,17 @@ function ChatDrawerContent({
     setIsGeneratingAiDraft(true);
     setTimeout(() => {
       setIsGeneratingAiDraft(false);
-      if (customer?.name === "Femi Adeleke") {
+      if (customer?.name === "Jean-Pierre Fotso" || customer?.name === "Femi Adeleke") {
         setReplyText(
-          "Hi Femi, Musa here! Checking our GTBank live feed now. If your network debited, please paste the transaction reference or screenshot and I will instantly mark your invoice cleared!"
+          "Bonjour M. Fotso, ici Jean-Luc. Je vérifie les notifications de réception MTN MoMo et notre relevé Afriland First Bank à l'instant. Votre acompte sera validé d'ici 5 minutes !"
         );
-      } else if (customer?.name === "Obinna Eze") {
+      } else if (customer?.name === "Boris Atangana" || customer?.name === "Obinna Eze") {
         setReplyText(
-          "Hello Obinna, this is Musa personally. I apologize for the courier delay. I just called the dispatch rider directly; your package is in transit and arriving before 1:00 PM today. Tracking PIN: 4892."
+          "Bonjour Boris, ici Jean-Luc personnellement. Toutes nos excuses pour le retard de livraison sur Yaoundé. L'agence de transport express vient de me confirmer l'arrivée à Bastos avant 13h30. Réf colis: CM-7821."
         );
       } else {
         setReplyText(
-          `Hello ${customer?.name || "there"}, Musa here. Thank you for your patience! How can I assist you with your order today?`
+          `Bonjour ${customer?.name || "cher client"}, ici le service client OmniSales. Merci de votre patience ! Comment puis-je vous aider aujourd'hui ?`
         );
       }
     }, 800);
@@ -189,8 +189,8 @@ function ChatDrawerContent({
       conversation_id: conversation.id,
       workspace_id: conversation.workspace_id,
       sender_type: "human",
-      sender_name: "Musa (Store Owner)",
-      content: `Here is your verified payment link for ₦${(customer?.total_owed || 550000).toLocaleString()}: https://pay.omnisales.ai/musa/checkout. Instant receipt generated upon payment.`,
+      sender_name: "Jean-Luc (Gérant)",
+      content: `Voici votre lien de paiement sécurisé MoMo / Orange Money de ${(customer?.total_owed || 550000).toLocaleString("fr-FR")} FCFA : https://pay.omnisales.ai/fotso/checkout. Reçu instantané généré dès confirmation.`,
       channel_type: conversation.channel_type,
       metadata: { payment_link: true },
       created_at: new Date().toISOString(),
@@ -262,7 +262,7 @@ function ChatDrawerContent({
             className="text-xs font-semibold h-8"
           >
             <UserCheck className="mr-1.5 h-3.5 w-3.5" />
-            {isClaimed ? "Claimed by Musa" : "Claim Handoff"}
+            {isClaimed ? "Assigné à Jean-Luc" : "Prendre en charge"}
           </Button>
 
           {/* Close Button */}
@@ -395,15 +395,15 @@ function ChatDrawerContent({
             </h4>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
-                <p className="text-[11px] text-slate-500">Total Owed</p>
+                <p className="text-[11px] text-slate-500">Total Dû</p>
                 <p className="text-sm font-bold text-slate-900 mt-0.5">
-                  ₦{(customer?.total_owed || 0).toLocaleString()}
+                  {(customer?.total_owed || 0).toLocaleString("fr-FR")} FCFA
                 </p>
               </div>
               <div className="rounded-xl bg-emerald-50/70 p-3 border border-emerald-100">
-                <p className="text-[11px] text-emerald-700">Total Paid</p>
+                <p className="text-[11px] text-emerald-700">Total Versé</p>
                 <p className="text-sm font-bold text-emerald-900 mt-0.5">
-                  ₦{(customer?.total_paid || 0).toLocaleString()}
+                  {(customer?.total_paid || 0).toLocaleString("fr-FR")} FCFA
                 </p>
               </div>
             </div>
@@ -412,10 +412,10 @@ function ChatDrawerContent({
               <div className="mt-2.5 rounded-xl bg-amber-50/70 p-2.5 border border-amber-200/70 text-xs text-amber-900 flex items-center justify-between">
                 <div className="flex items-center space-x-1.5">
                   <Clock className="h-3.5 w-3.5 text-amber-600" />
-                  <span>Promise:</span>
+                  <span>Promesse :</span>
                 </div>
                 <span className="font-bold">
-                  ₦{(customer.payment_promise_amount || 0).toLocaleString()}
+                  {(customer.payment_promise_amount || 0).toLocaleString("fr-FR")} FCFA
                 </span>
               </div>
             )}

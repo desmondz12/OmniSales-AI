@@ -29,74 +29,76 @@ type ToneType = "consultative" | "professional" | "closer" | "friendly";
 
 export function AgentTrainingClient() {
   // Agent Persona
-  const [agentName, setAgentName] = React.useState("Adaeze (Musa Sales Executive)");
+  const [agentName, setAgentName] = React.useState("Nathalie (Conseillère Ventes Fotso)");
   const [tone, setTone] = React.useState<ToneType>("consultative");
   const [systemPrompt, setSystemPrompt] = React.useState(
-    "Greet warmly, confirm delivery location (Lagos, Abuja, Port Harcourt), recommend complementary screen protectors and cases, and offer 5% discounts on orders of 3 or more units. Always verify payment via Paystack or direct GTBank transfer."
+    "Accueillir chaleureusement en français ou en anglais selon la langue du client. Confirmer la ville de livraison (Douala Akwa/Bonanjo, Yaoundé Bastos, Bafoussam, Limbe). Proposer des verres trempés et coques de protection assorties, et accorder jusqu'à 5% de remise pour toute commande de 3 unités ou plus. Paiements acceptés : MTN Mobile Money (MoMo), Orange Money (OM) et virement Afriland First Bank."
   );
 
-  // Languages enabled
+  // Languages enabled in Cameroon
   const [languages, setLanguages] = React.useState({
+    french: true,
     english: true,
+    camfranglais: true,
     pidgin: true,
-    yoruba: true,
-    igbo: false,
-    hausa: false,
   });
 
-  // Products Catalog
+  // Products Catalog (FCFA)
   const [products, setProducts] = React.useState<ProductItem[]>([
     {
       id: "prod-1",
-      name: "iPhone 15 Pro (256GB, Black Titanium)",
+      name: "iPhone 15 Pro (256 Go, Titane Noir)",
       category: "Smartphones",
       price: 550000,
       stock: 12,
-      salesNotes: "Highlight official Apple warranty; max 5% discount for 5+ units",
+      salesNotes: "Garantie Apple officielle 1 an ; expédition le jour même sur Douala/Yaoundé",
     },
     {
       id: "prod-2",
-      name: "Ultra Smartwatch Series 9 (Cellular)",
-      category: "Wearables",
+      name: "Montre Connectée Ultra Series 9 (Cellulaire)",
+      category: "Accessoires",
       price: 180000,
       stock: 24,
-      salesNotes: "Free extra silicone strap included; 24h dispatch guarantee",
+      salesNotes: "Bracelet silicone supplémentaire offert ; étanche 50m",
     },
     {
       id: "prod-3",
-      name: "Creator Wireless Mic & Ring Light Studio Bundle",
-      category: "Accessories",
+      name: "Kit Créateur Micro Sans Fil & Ring Light Studio",
+      category: "Accessoires",
       price: 80000,
       stock: 35,
-      salesNotes: "Trending on TikTok; bundle discount already applied",
+      salesNotes: "Très populaire auprès des créateurs TikTok Douala ; réduction pack incluse",
     },
     {
       id: "prod-4",
-      name: "Enterprise Custom Embroidered Wholesale Fabric",
-      category: "Fashion",
+      name: "Pagnes & Tissus Brodés Gros (Lot de 30 pièces)",
+      category: "Textile & Mode",
       price: 320000,
       stock: 8,
-      salesNotes: "Minimum order 30 pieces; swatch previews sent on request",
+      salesNotes: "Minimum de commande 30 pièces ; photos d'échantillons envoyées sur WhatsApp",
     },
   ]);
 
-  // Payment Gateway Keys
-  const [paystackKey, setPaystackKey] = React.useState(
-    "pk_live_89102837461902837461928"
+  // Payment Gateway Keys (Cameroon)
+  const [momoMerchantKey, setMomoMerchantKey] = React.useState(
+    "momo_cm_live_671234567_fotso"
+  );
+  const [orangeMoneyKey, setOrangeMoneyKey] = React.useState(
+    "om_cm_partner_699887766_fotso"
   );
   const [bankAccount, setBankAccount] = React.useState({
-    bankName: "Guaranty Trust Bank (GTBank)",
-    accountName: "Musa Electronics Retail Hub",
-    accountNumber: "0123456789",
+    bankName: "Afriland First Bank Cameroun",
+    accountName: "Fotso & Sons Commerce Général SARL",
+    accountNumber: "10005 00012 34567890123 45",
   });
 
   // Handoff Rules
   const [handoffRules, setHandoffRules] = React.useState({
-    highValuePayment: true, // > 100k
-    distressedCustomer: true, // sentiment anger
-    explicitHumanRequest: true, // "talk to person"
-    receiptScreenshot: true, // bank slip uploaded
-    discountOver15: true, // discount > 15%
+    highValuePayment: true, // > 250 000 FCFA
+    distressedCustomer: true, // sentiment colère / urgence
+    explicitHumanRequest: true, // "parler à un humain", "gérant"
+    receiptScreenshot: true, // capture reçu MoMo/OM
+    discountOver15: true, // remise > 15%
   });
 
   // Simulator / Playground State
@@ -106,12 +108,12 @@ export function AgentTrainingClient() {
   >([
     {
       sender: "customer",
-      text: "Hello! Do you have the iPhone 15 Pro in stock and what is the best price for 2 units?",
+      text: "Bonjour ! Est-ce que l'iPhone 15 Pro est disponible et quel est votre meilleur prix pour 2 pièces ?",
     },
     {
       sender: "ai",
-      text: "Hello and welcome to Musa Electronics! 😊 Yes, we have 12 units of the iPhone 15 Pro 256GB Black Titanium in stock at ₦550,000 each. For 2 units (₦1,100,000), I can include free premium tempered glass protectors and expedite your delivery! What city are you based in?",
-      tag: "consultative_tone",
+      text: "Bonjour et bienvenue chez Fotso & Sons Douala ! 😊 Oui, nous avons 12 unités de l'iPhone 15 Pro 256 Go Titane Noir en stock à 550 000 FCFA l'unité. Pour 2 unités (1 100 000 FCFA), nous vous offrons les verres trempés blindés et la livraison express gratuite sur Douala ou Yaoundé ! Dans quelle ville êtes-vous basé ?",
+      tag: "ton_commercial_chaleureux",
     },
   ]);
   const [isSimulating, setIsSimulating] = React.useState(false);
@@ -139,20 +141,20 @@ export function AgentTrainingClient() {
       let tag = "automated";
 
       const lower = userText.toLowerCase();
-      if (lower.includes("discount") && lower.includes("20%")) {
+      if (lower.includes("remise") || lower.includes("discount") || lower.includes("20%")) {
         reply =
-          "I understand you are looking for a bulk discount! Our standard threshold is 5% for multiple units, but for discounts above 15%, I am looping in Musa directly to approve your special quotation. Hold on!";
-        tag = "handoff_discount";
-      } else if (lower.includes("angry") || lower.includes("delayed") || lower.includes("where is my order")) {
+          "Je comprends votre souhait de bénéficier d'un tarif préférentiel ! Notre barème standard prévoit jusqu'à 5% pour les achats groupés. Pour une réduction supérieure à 15%, je transmets immédiatement votre demande à M. Fotso pour validation spéciale. Un instant !";
+        tag = "escalade_remise";
+      } else if (lower.includes("fâché") || lower.includes("retard") || lower.includes("où est ma commande") || lower.includes("angry")) {
         reply =
-          "I am truly sorry for any inconvenience caused. I am pausing automated replies and escalating your tracking details immediately to store manager Musa. You will receive a direct call shortly.";
-        tag = "handoff_upset";
-      } else if (lower.includes("pay") || lower.includes("link") || lower.includes("account")) {
+          "Toutes nos excuses pour ce contretemps. J'ai immédiatement suspendu les messages automatiques et transmis votre dossier en priorité au responsable des expéditions Douala-Yaoundé. Vous recevrez un appel d'ici quelques minutes.";
+        tag = "escalade_urgence";
+      } else if (lower.includes("payer") || lower.includes("momo") || lower.includes("orange") || lower.includes("lien") || lower.includes("compte")) {
         reply =
-          "Wonderful! You can make payment securely via Paystack or direct GTBank transfer (Acct: 0123456789 - Musa Electronics Retail Hub). Instant confirmation receipt is generated once received!";
-        tag = "ready_to_pay";
+          "Parfait ! Vous pouvez régler en toute sécurité via MTN MoMo au 671 23 45 67, Orange Money au 699 88 77 66 ou virement Afriland First Bank (Fotso & Sons Commerce SARL). Dès validation, un reçu certifié vous est envoyé automatiquement !";
+        tag = "pret_a_payer";
       } else {
-        reply = `Thank you for your message! Based on our catalog, all our items carry official warranty with 24-48h nationwide dispatch. Would you like me to reserve a package for you?`;
+        reply = `Merci pour votre message ! Tous nos appareils sont garantis d'origine avec expédition express sous 24h partout au Cameroun. Souhaitez-vous que je réserve votre article dès à présent ?`;
       }
 
       setSimulatorMessages((prev) => [
@@ -316,15 +318,14 @@ export function AgentTrainingClient() {
             {/* Language Fluency Switches */}
             <div>
               <label className="text-xs font-semibold text-slate-700">
-                Multi-Lingual Recognition
+                Langues reconnues (Bilinguisme Cameroun)
               </label>
               <div className="mt-2 flex flex-wrap gap-2">
                 {[
-                  { key: "english", label: "English" },
-                  { key: "pidgin", label: "Nigerian Pidgin" },
-                  { key: "yoruba", label: "Yoruba" },
-                  { key: "igbo", label: "Igbo" },
-                  { key: "hausa", label: "Hausa" },
+                  { key: "french", label: "Français (Officiel)" },
+                  { key: "english", label: "English (Official)" },
+                  { key: "camfranglais", label: "Camfranglais (Douala/Yaoundé)" },
+                  { key: "pidgin", label: "Pidgin English (Cameroun)" },
                 ].map((lang) => {
                   const isChecked = languages[lang.key as keyof typeof languages];
                   return (
@@ -339,7 +340,7 @@ export function AgentTrainingClient() {
                       }
                       className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
                         isChecked
-                          ? "border-blue-600 bg-blue-50 text-blue-700"
+                          ? "border-blue-600 bg-blue-50 text-blue-700 font-bold"
                           : "border-slate-200 bg-white text-slate-500 hover:bg-slate-50"
                       }`}
                     >
@@ -397,7 +398,7 @@ export function AgentTrainingClient() {
 
                     <div className="text-right">
                       <span className="text-sm font-bold text-slate-900">
-                        ₦{item.price.toLocaleString()}
+                        {item.price.toLocaleString("fr-FR")} FCFA
                       </span>
                       <button
                         type="button"
@@ -418,7 +419,7 @@ export function AgentTrainingClient() {
             </div>
           </div>
 
-          {/* Section 3: Payment Gateways & Bank Credentials */}
+          {/* Section 3: Payment Gateways & Mobile Money Credentials */}
           <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
             <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -426,37 +427,50 @@ export function AgentTrainingClient() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-slate-900">
-                  Payment Gateways & Direct Bank Setup
+                  Passerelles Mobile Money & Comptes Bancaires (Cameroun)
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Credentials used when the AI automatically generates instant payment links
+                  Coordonnées utilisées par l&apos;IA pour générer automatiquement les liens de paiement
                 </p>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-700">
-                  Paystack Public Key
-                </label>
-                <input
-                  type="password"
-                  value={paystackKey}
-                  onChange={(e) => setPaystackKey(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700">
+                    Clé Marchand MTN Mobile Money (MoMo)
+                  </label>
+                  <input
+                    type="password"
+                    value={momoMerchantKey}
+                    onChange={(e) => setMomoMerchantKey(e.target.value)}
+                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-slate-700">
+                    Clé Partenaire Orange Money Cameroun
+                  </label>
+                  <input
+                    type="password"
+                    value={orangeMoneyKey}
+                    onChange={(e) => setOrangeMoneyKey(e.target.value)}
+                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-3.5 space-y-2">
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4 text-blue-600" />
                   <span className="text-xs font-bold text-slate-800">
-                    Corporate Bank Account (for Direct Transfers)
+                    Compte Bancaire Professionnel (Virements Directs Cameroun)
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs pt-1">
                   <div>
-                    <label className="text-[11px] text-slate-500 font-semibold">Bank Name</label>
+                    <label className="text-[11px] text-slate-500 font-semibold">Banque</label>
                     <input
                       type="text"
                       value={bankAccount.bankName}
@@ -467,7 +481,7 @@ export function AgentTrainingClient() {
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-500 font-semibold">Account Number</label>
+                    <label className="text-[11px] text-slate-500 font-semibold">Numéro de Compte / RIB</label>
                     <input
                       type="text"
                       value={bankAccount.accountNumber}
@@ -479,7 +493,7 @@ export function AgentTrainingClient() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-500 font-semibold">Account Name</label>
+                  <label className="text-[11px] text-slate-500 font-semibold">Intitulé du Compte</label>
                   <input
                     type="text"
                     value={bankAccount.accountName}
@@ -501,10 +515,10 @@ export function AgentTrainingClient() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-slate-900">
-                  Human Handoff Escalation Rules
+                  Règles d&apos;Escalade et Relais Humain
                 </h3>
                 <p className="text-xs text-slate-500">
-                  When triggered, AI automatically pauses auto-replies and alerts the store owner
+                  Quand ces critères sont remplis, l&apos;IA suspend ses réponses et alerte le gérant
                 </p>
               </div>
             </div>
@@ -513,28 +527,28 @@ export function AgentTrainingClient() {
               {[
                 {
                   key: "highValuePayment",
-                  label: "High-Value Payment Intent (> ₦100,000)",
-                  desc: "Pause and alert when customer commits to large transaction",
+                  label: "Intention de Paiement Élevée (> 250 000 FCFA)",
+                  desc: "Pause et notification immédiate dès qu&apos;un client confirme un gros montant",
                 },
                 {
                   key: "distressedCustomer",
-                  label: "Distressed or Angry Sentiment",
-                  desc: "Detect complaints, bad review threats, and delivery distress",
+                  label: "Sentiment de Colère ou d&apos;Urgence",
+                  desc: "Détecte les réclamations, plaintes de livraison ou menaces de réputation",
                 },
                 {
                   key: "explicitHumanRequest",
-                  label: "Explicit Human Representative Request",
-                  desc: 'Triggers on phrases like "talk to a person", "call me", "manager"',
+                  label: "Demande Explicite d'un Interlocuteur Humain",
+                  desc: 'Déclenché sur des expressions comme "parler au gérant", "appelez-moi", "conseiller"',
                 },
                 {
                   key: "receiptScreenshot",
-                  label: "Bank Transfer Slip / Screenshot Uploaded",
-                  desc: "Alert staff to verify bank account balance before dispatch",
+                  label: "Capture Reçu Mobile Money / Bordereau Bancaire",
+                  desc: "Alerte le personnel pour vérifier le solde MoMo/OM avant expédition",
                 },
                 {
                   key: "discountOver15",
-                  label: "Custom Discount Negotiation (> 15%)",
-                  desc: "Prevent unauthorized price cuts without manager approval",
+                  label: "Négociation de Remise Spéciale (> 15%)",
+                  desc: "Empêche les rabais non autorisés sans validation préalable de la direction",
                 },
               ].map((rule) => {
                 const isChecked = handoffRules[rule.key as keyof typeof handoffRules];
@@ -629,7 +643,7 @@ export function AgentTrainingClient() {
               {isSimulating && (
                 <div className="flex items-center space-x-2 text-xs text-slate-400 p-2">
                   <span className="h-2 w-2 rounded-full bg-blue-500 animate-ping" />
-                  <span>Adaeze is formulating sales response...</span>
+                  <span>Nathalie formule la réponse commerciale...</span>
                 </div>
               )}
             </div>
@@ -640,9 +654,9 @@ export function AgentTrainingClient() {
             {/* Quick Test Chips */}
             <div className="flex items-center space-x-1.5 overflow-x-auto pb-2 no-scrollbar">
               {[
-                "Can you give 20% discount on 10 iPhones?",
-                "Where is my smartwatch order? You delayed it!",
-                "Send me account number to pay 550k",
+                "Pouvez-vous faire 20% de remise sur 10 iPhones ?",
+                "Où est ma montre commandée ? Livraison en retard !",
+                "Envoyez le numéro MoMo pour payer les 550k",
               ].map((chip) => (
                 <button
                   key={chip}

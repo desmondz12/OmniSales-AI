@@ -50,13 +50,13 @@ export function CollectionsTracker({
     .filter((c) => c.total_owed > 0)
     .sort((a, b) => b.total_owed - a.total_owed);
 
-  // Channel revenue & message metrics
+  // Channel revenue & message metrics (Cameroon)
   const channelStats: ChannelStat[] = [
     {
-      name: "WhatsApp Cloud",
+      name: "WhatsApp Cloud (MTN/Orange)",
       type: "whatsapp",
       messagesCount: 18,
-      revenueCollected: 300000,
+      revenueCollected: 300000, // 300,000 FCFA
       automatedRate: 98,
       color: "text-emerald-700",
       bgColor: "bg-emerald-50 border-emerald-200",
@@ -73,7 +73,7 @@ export function CollectionsTracker({
       barColor: "bg-slate-900",
     },
     {
-      name: "Instagram Direct",
+      name: "Instagram Direct Inbox",
       type: "instagram",
       messagesCount: 12,
       revenueCollected: 0,
@@ -86,14 +86,14 @@ export function CollectionsTracker({
       name: "Facebook Messenger",
       type: "messenger",
       messagesCount: 8,
-      revenueCollected: 50000,
+      revenueCollected: 50000, // 50,000 FCFA
       automatedRate: 88,
       color: "text-blue-700",
       bgColor: "bg-blue-50 border-blue-200",
       barColor: "bg-blue-600",
     },
     {
-      name: "Telegram Bot",
+      name: "Telegram Bot Gateway",
       type: "telegram",
       messagesCount: 6,
       revenueCollected: 0,
@@ -106,8 +106,8 @@ export function CollectionsTracker({
 
   const maxVolume = Math.max(...channelStats.map((c) => c.messagesCount));
 
-  const formatNaira = (amount: number) => {
-    return `₦${amount.toLocaleString("en-NG")}`;
+  const formatFCFA = (amount: number) => {
+    return `${amount.toLocaleString("fr-FR")} FCFA`;
   };
 
   const handleCopyPaymentLink = (invoiceId: string, link: string | null) => {
@@ -135,22 +135,22 @@ export function CollectionsTracker({
                   <CreditCard className="h-4 w-4" />
                 </span>
                 <h3 className="text-lg font-bold tracking-tight text-slate-900">
-                  What&apos;s Owed, by Customer
+                  Créances par client (What&apos;s Owed)
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-1">
-                Outstanding balances tracked by AI payment listeners
+                Soldes dus et promesses suivis par l&apos;IA via MTN MoMo et Orange Money
               </p>
             </div>
 
             <div className="flex items-center space-x-2">
               <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800 border border-amber-200/70">
                 <Clock className="mr-1 h-3.5 w-3.5 text-amber-600" />
-                {overdueCount} Overdue
+                {overdueCount} En retard
               </span>
               <span className="text-xs font-semibold text-slate-400">•</span>
               <span className="text-xs font-semibold text-slate-700">
-                Total: <span className="text-slate-900 font-bold">{formatNaira(totalOwed)}</span>
+                Total : <span className="text-slate-900 font-bold">{formatFCFA(totalOwed)}</span>
               </span>
             </div>
           </div>
@@ -167,8 +167,8 @@ export function CollectionsTracker({
                 customer.payment_promise_date &&
                 new Date(customer.payment_promise_date) < new Date();
 
-              const isReadyToday = customer.id === "cust-1"; // Femi Adeleke
-              const isFriday = customer.id === "cust-6"; // Sodiq
+              const isReadyToday = customer.id === "cust-1"; // Jean-Pierre Fotso
+              const isFriday = customer.id === "cust-6"; // Fadimatou Bello
 
               return (
                 <div key={customer.id} className="pt-4 first:pt-0">
@@ -192,13 +192,12 @@ export function CollectionsTracker({
                           >
                             {customer.name}
                           </button>
-                          {/* Channel Tag */}
                           <span className="text-[10px] uppercase font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md">
                             {customer.channel_type}
                           </span>
                         </div>
                         <p className="text-xs text-slate-500">
-                          {matchedInvoice?.description || "Pending invoice payment"}
+                          {matchedInvoice?.description || "Paiement de facture en attente"}
                         </p>
                       </div>
                     </div>
@@ -207,26 +206,26 @@ export function CollectionsTracker({
                     <div className="text-right">
                       <div className="flex items-center justify-end space-x-1.5">
                         <span className="text-sm font-bold text-slate-900">
-                          {formatNaira(customer.total_owed)}
+                          {formatFCFA(customer.total_owed)}
                         </span>
-                        <span className="text-xs text-slate-400">owed</span>
+                        <span className="text-xs text-slate-400">dû</span>
                       </div>
                       <div className="mt-0.5">
                         {isReadyToday ? (
                           <span className="inline-flex items-center text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                            Ready to pay today
+                            Prêt à payer aujourd&apos;hui
                           </span>
                         ) : isOverdue ? (
                           <span className="inline-flex items-center text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
-                            Overdue (3d ago)
+                            En retard (depuis 3j)
                           </span>
                         ) : isFriday ? (
                           <span className="inline-flex items-center text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                            Promise due Friday
+                            Promesse pour vendredi
                           </span>
                         ) : (
                           <span className="inline-flex items-center text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
-                            Due next week
+                            Échéance semaine prochaine
                           </span>
                         )}
                       </div>
@@ -237,10 +236,10 @@ export function CollectionsTracker({
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
                       <span>
-                        Paid: <strong className="text-slate-700">{formatNaira(customer.total_paid)}</strong>
+                        Encaissé : <strong className="text-slate-700">{formatFCFA(customer.total_paid)}</strong>
                       </span>
                       <span>
-                        {paidPercent}% collected
+                        {paidPercent}% encaissé
                       </span>
                     </div>
 
@@ -267,12 +266,12 @@ export function CollectionsTracker({
                         {copiedInvoiceId === matchedInvoice.id ? (
                           <>
                             <CheckCircle2 className="mr-1 h-3.5 w-3.5 text-emerald-600" />
-                            Link Copied!
+                            Lien copié !
                           </>
                         ) : (
                           <>
                             <ExternalLink className="mr-1 h-3.5 w-3.5 text-slate-500" />
-                            Copy Link
+                            Copier lien MoMo
                           </>
                         )}
                       </button>
@@ -286,12 +285,12 @@ export function CollectionsTracker({
                       {nudgedCustomerId === customer.id ? (
                         <>
                           <CheckCircle2 className="mr-1 h-3.5 w-3.5 text-emerald-600" />
-                          AI Nudge Sent!
+                          Relance IA envoyée !
                         </>
                       ) : (
                         <>
                           <Send className="mr-1 h-3.5 w-3.5 text-blue-600" />
-                          Send AI Nudge
+                          Envoyer relance IA
                         </>
                       )}
                     </button>
@@ -304,8 +303,8 @@ export function CollectionsTracker({
 
         {/* Footer info pill */}
         <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span>AI automatically detects and matches bank transfer references</span>
-          <span className="font-medium text-blue-600">4 Active Invoices</span>
+          <span>L&apos;IA détecte et réconcilie les SMS MTN MoMo, Orange Money et virements Afriland</span>
+          <span className="font-medium text-blue-600">4 Factures actives</span>
         </div>
       </div>
 
@@ -320,16 +319,16 @@ export function CollectionsTracker({
                   <TrendingUp className="h-4 w-4" />
                 </span>
                 <h3 className="text-lg font-bold tracking-tight text-slate-900">
-                  Overnight by Channel
+                  Activité nocturne par canal
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-1">
-                Volume and revenue collected across 5 channels
+                Volume et encaissements sur les 5 canaux au Cameroun
               </p>
             </div>
 
             <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-              +₦350,000 Total
+              +350 000 FCFA
             </span>
           </div>
 
@@ -353,7 +352,7 @@ export function CollectionsTracker({
                       <div>
                         <h4 className="text-xs font-semibold text-slate-900">{channel.name}</h4>
                         <p className="text-[11px] text-slate-500">
-                          {channel.messagesCount} messages • {channel.automatedRate}% AI handled
+                          {channel.messagesCount} messages • {channel.automatedRate}% gérés par l&apos;IA
                         </p>
                       </div>
                     </div>
@@ -361,10 +360,10 @@ export function CollectionsTracker({
                     <div className="text-right">
                       <span className="text-xs font-bold text-slate-900">
                         {channel.revenueCollected > 0
-                          ? formatNaira(channel.revenueCollected)
-                          : "₦0"}
+                          ? formatFCFA(channel.revenueCollected)
+                          : "0 FCFA"}
                       </span>
-                      <p className="text-[10px] text-slate-400">collected</p>
+                      <p className="text-[10px] text-slate-400">encaissé</p>
                     </div>
                   </div>
 
@@ -392,7 +391,7 @@ export function CollectionsTracker({
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
               <span className="text-xs font-semibold text-slate-800">
-                All 5 channels connected & listening
+                5 canaux connectés (Cameroun • MTN &amp; Orange)
               </span>
             </div>
             <span className="text-xs font-bold text-blue-700">99.8% SLA</span>

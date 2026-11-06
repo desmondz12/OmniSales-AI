@@ -31,11 +31,11 @@ export function AdvisorTasks() {
     {
       id: "task-1",
       category: "marketing",
-      title: "6 High-Intent Leads from TikTok & Instagram",
+      title: "6 prospects qualifiés depuis TikTok & Instagram",
       description:
-        "Instagram and TikTok brought 6 new leads overnight, 4 asking about pricing for the bulk reseller pack. Sodiq Bello promised payment on Friday.",
-      impact: "+₦320,000 potential pipeline",
-      actionLabel: "Dispatch Catalog & Special Offer Link",
+        "TikTok et Instagram ont généré 6 nouveaux leads cette nuit à Douala et Yaoundé, dont 4 demandant les tarifs de gros pour les packs revendeurs. Fadimatou Bello a promis de payer vendredi via MTN MoMo.",
+      impact: "+320 000 FCFA de pipeline potentiel",
+      actionLabel: "Envoyer catalogue & lien de réduction",
       confidence: 96,
       icon: Megaphone,
       badgeBg: "bg-indigo-50",
@@ -45,11 +45,11 @@ export function AdvisorTasks() {
     {
       id: "task-2",
       category: "finance",
-      title: "Two Overdue Debts Make Up 46% of Receivables",
+      title: "Deux impayés représentent 46% de vos créances",
       description:
-        "Chase Chiamaka Nwosu first (₦250,000 overdue). She has a 100% historical response rate to morning WhatsApp voice notes.",
-      impact: "₦250,000 immediate cash recovery",
-      actionLabel: "Trigger WhatsApp Auto-Nudge",
+        "Relancez Christian Kamga en priorité (250 000 FCFA dus à Bafoussam). Historiquement, il règle immédiatement suite à une note vocale WhatsApp personnalisée.",
+      impact: "250 000 FCFA de recouvrement immédiat",
+      actionLabel: "Déclencher relance auto WhatsApp",
       confidence: 98,
       icon: TrendingUp,
       badgeBg: "bg-amber-50",
@@ -59,11 +59,11 @@ export function AdvisorTasks() {
     {
       id: "task-3",
       category: "risk",
-      title: "Bank Transfer Slip Awaiting Manual Verification",
+      title: "Bordereau de virement bancaire en attente de vérification",
       description:
-        "One customer sent a screenshot of a ₦180,000 transfer receipt instead of paying through the automated Paystack link. Verify bank credit before dispatch.",
-      impact: "Prevent unauthorized goods dispatch",
-      actionLabel: "Review Receipt in Live Inbox",
+        "Un client a envoyé une capture d'écran d'un virement de 180 000 FCFA (Afriland First Bank) au lieu d'utiliser le paiement direct MoMo/Orange Money. Vérifiez le crédit effectif avant expédition.",
+      impact: "Éviter une expédition non soldée",
+      actionLabel: "Consulter la pièce jointe dans l'Inbox",
       confidence: 94,
       icon: ShieldAlert,
       badgeBg: "bg-rose-50",
@@ -98,20 +98,20 @@ export function AdvisorTasks() {
           <div>
             <div className="flex items-center space-x-2">
               <h3 className="text-lg font-bold tracking-tight text-slate-900">
-                Advisor Tasks
+                Tâches Conseiller IA (Advisor Tasks)
               </h3>
               <span className="inline-flex items-center rounded-full bg-blue-100/80 px-2 py-0.5 text-[11px] font-semibold text-blue-800">
-                Proactive AI Engine
+                Moteur Proactif Cameroun
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              High-leverage business actions generated from overnight message and invoice analysis
+              Recommandations commerciales et financières à fort impact générées par l&apos;analyse de nuit
             </p>
           </div>
         </div>
 
         <div className="flex items-center space-x-2 text-xs text-slate-500">
-          <span>{tasks.length} active opportunities</span>
+          <span>{tasks.length} opportunités identifiées</span>
         </div>
       </div>
 
@@ -143,14 +143,14 @@ export function AdvisorTasks() {
 
                   <div className="flex items-center space-x-2">
                     <span className="text-[11px] font-medium text-slate-400">
-                      {task.confidence}% match
+                      {task.confidence}% pertinence
                     </span>
                     {!isCompleted && (
                       <button
                         type="button"
                         onClick={() => handleDismissTask(task.id)}
                         className="text-slate-400 hover:text-slate-600 p-0.5 rounded-md hover:bg-slate-200/60 transition-colors"
-                        title="Dismiss recommendation"
+                        title="Ignorer la recommandation"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
@@ -180,7 +180,7 @@ export function AdvisorTasks() {
                 {isCompleted ? (
                   <div className="flex items-center justify-center space-x-1.5 rounded-xl bg-emerald-100/80 py-2 px-3 text-xs font-semibold text-emerald-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    <span>Action Executed by AI</span>
+                    <span>Action exécutée par l&apos;IA</span>
                   </div>
                 ) : (
                   <Button
@@ -194,7 +194,7 @@ export function AdvisorTasks() {
                     {isExecuting ? (
                       <>
                         <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                        Executing...
+                        Exécution en cours...
                       </>
                     ) : (
                       <>

@@ -34,6 +34,7 @@ export function Header({
   onOpenInboxDrawer,
 }: HeaderProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
+  const [lang, setLang] = React.useState<"FR" | "EN">("FR");
   const userMenuRef = React.useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -51,7 +52,10 @@ export function Header({
   }, []);
 
   const displayName =
-    profile?.full_name || (userEmail.startsWith("musa") ? "Musa Danjuma" : userEmail.split("@")[0]);
+    profile?.full_name ||
+    (userEmail.startsWith("fotso") || userEmail.startsWith("musa") || userEmail.startsWith("business")
+      ? "Jean-Luc Fotso"
+      : userEmail.split("@")[0]);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 sm:px-6 backdrop-blur-md">
@@ -70,10 +74,10 @@ export function Header({
         <div className="hidden sm:flex items-center space-x-2 rounded-xl border border-slate-200/70 bg-slate-50/80 px-3 py-1.5">
           <Building2 className="h-4 w-4 text-blue-600" />
           <span className="text-xs font-semibold text-slate-800">
-            {tenant?.name || "Musa Electronics & Fashion"}
+            {tenant?.name || "Fotso & Sons Commerce Douala"}
           </span>
           <span className="rounded-full bg-emerald-100 px-1.5 py-0.2 text-[9px] font-bold text-emerald-800">
-            Active
+            Actif
           </span>
         </div>
 
@@ -103,8 +107,22 @@ export function Header({
         </div>
       </div>
 
-      {/* Right Controls: Unified Inbox quick open + Notifications + User profile */}
+      {/* Right Controls: Language Selector + Unified Inbox quick open + Notifications + User profile */}
       <div className="flex items-center space-x-2.5">
+        {/* Bilingual Cameroon Language Switcher */}
+        <button
+          type="button"
+          onClick={() => setLang((prev) => (prev === "FR" ? "EN" : "FR"))}
+          className="inline-flex items-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs"
+          title="Basculer la langue / Switch language (Cameroon Bilingual)"
+        >
+          <span className="text-sm">🇨🇲</span>
+          <span className="text-[11px] font-bold text-slate-800">
+            {lang === "FR" ? "FR" : "EN"}
+          </span>
+          <span className="text-[9px] text-slate-400">| {lang === "FR" ? "EN" : "FR"}</span>
+        </button>
+
         {/* Quick Inbox Drawer Button */}
         {onOpenInboxDrawer ? (
           <button

@@ -29,13 +29,13 @@ function createScenarioPayload(channel: ChannelType, scenario: ScenarioType) {
             id: "wh_entry_9921",
             channel: channel,
             customer: {
-              name: "Femi Adeleke",
-              phone: "+234 803 111 2233",
+              name: "Jean-Pierre Fotso",
+              phone: "+237 671 23 45 67",
               channel_type: channel,
             },
             message: {
               id: "msg_sim_01",
-              text: "I am ready to pay the 550,000 naira deposit now. Send payment link please.",
+              text: "Bonjour, je suis prêt à verser l'acompte de 550 000 FCFA par MTN MoMo maintenant. Envoyez le lien svp.",
               timestamp: 1730880000,
             },
           },
@@ -49,13 +49,13 @@ function createScenarioPayload(channel: ChannelType, scenario: ScenarioType) {
             id: "wh_entry_9922",
             channel: channel,
             customer: {
-              name: "Obinna Eze",
-              handle: "@obinna_eze",
+              name: "Boris Atangana",
+              handle: "@boris_atangana",
               channel_type: channel,
             },
             message: {
               id: "msg_sim_02",
-              text: "Where is my order?? You promised it would arrive yesterday! I am reporting this!",
+              text: "Où est ma montre connectée achetée hier à 180 000 FCFA ?? Vous aviez promis livraison à Bastos (Yaoundé) ce matin !",
               timestamp: 1730880000,
             },
           },
@@ -69,13 +69,13 @@ function createScenarioPayload(channel: ChannelType, scenario: ScenarioType) {
             id: "wh_entry_9923",
             channel: channel,
             customer: {
-              name: "Amaka Johnson",
-              phone: "+234 818 777 8899",
+              name: "Marie-Claire Ngo",
+              phone: "+237 699 88 77 66",
               channel_type: channel,
             },
             message: {
               id: "msg_sim_03",
-              text: "I want to purchase 50 units wholesale. Can I talk to the owner directly?",
+              text: "Je souhaite commander 50 pièces de pagnes brodés en gros. Puis-je parler au gérant directement ?",
               timestamp: 1730880000,
             },
           },
@@ -89,13 +89,13 @@ function createScenarioPayload(channel: ChannelType, scenario: ScenarioType) {
             id: "wh_entry_9924",
             channel: channel,
             customer: {
-              name: "Sodiq Bello",
-              handle: "@sodiq_trends",
+              name: "Fadimatou Bello",
+              handle: "@fadimatou_bello",
               channel_type: channel,
             },
             message: {
               id: "msg_sim_04",
-              text: "How much is the wireless mic bundle and do you ship to Ibadan?",
+              text: "Quel est le prix du pack studio créateur micro et livrez-vous à Garoua / Maroua ?",
               timestamp: 1730880000,
             },
           },
@@ -137,7 +137,7 @@ export function WebhookTestModal({
           latencyMs: 142,
           triageTag: "ready_to_pay",
           aiResponse:
-            "Prepared secure checkout link for ₦550,000. Alerted human manager for high-value transaction.",
+            "Lien de paiement sécurisé MoMo/OM généré pour 550 000 FCFA. Alerte de relais envoyée au gérant pour transaction à forte valeur.",
           handoffTriggered: true,
         });
       } else if (scenario === "angry_customer") {
@@ -146,7 +146,7 @@ export function WebhookTestModal({
           latencyMs: 165,
           triageTag: "upset",
           aiResponse:
-            "Detected high emotional distress. AI auto-reply paused. Priority handoff alert sent to owner.",
+            "Détection de détresse / réclamation client. Réponses auto suspendues. Escalade urgente transmise au service logistique Douala-Yaoundé.",
           handoffTriggered: true,
         });
       } else if (scenario === "wholesale_person") {
@@ -155,7 +155,7 @@ export function WebhookTestModal({
           latencyMs: 128,
           triageTag: "asked_for_person",
           aiResponse:
-            "Customer requested human owner for 50-piece wholesale terms. Ticket escalated to Needs Human queue.",
+            "Demande d'échange avec le gérant pour commande en gros de 50 pièces. Ticket routé vers la file 'Besoins Humains'.",
           handoffTriggered: true,
         });
       } else {
@@ -164,7 +164,7 @@ export function WebhookTestModal({
           latencyMs: 110,
           triageTag: "none",
           aiResponse:
-            "Answered catalog price (₦80,000) and confirmed 24h delivery to Ibadan. AI handled conversation without human intervention.",
+            "Prix catalogue (80 000 FCFA) communiqué avec confirmation de livraison sous 24-48h à Garoua. Géré par l'IA sans intervention humaine.",
           handoffTriggered: false,
         });
       }

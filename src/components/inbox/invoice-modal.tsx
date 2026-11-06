@@ -44,7 +44,7 @@ export function InvoiceModal({
   const [items, setItems] = React.useState<LineItem[]>([
     {
       id: "item-1",
-      description: "iPhone 15 Pro (256GB, Black Titanium)",
+      description: "iPhone 15 Pro (256 Go, Titane Noir)",
       quantity: 1,
       unitPrice: 550000,
     },
@@ -63,9 +63,9 @@ export function InvoiceModal({
       ...prev,
       {
         id: `item-${prev.length + 1}-${Date.now()}`,
-        description: "Additional accessory / service",
+        description: "Accessoire / Service d'expédition Douala-Yaoundé",
         quantity: 1,
-        unitPrice: 25000,
+        unitPrice: 15000,
       },
     ]);
   };
@@ -88,10 +88,10 @@ export function InvoiceModal({
   const handleSendInvoice = () => {
     const invNumber = generateInvoiceCode();
     const lineItemDetails = items
-      .map((it) => `• ${it.quantity}x ${it.description} — ₦${(it.quantity * it.unitPrice).toLocaleString()}`)
+      .map((it) => `• ${it.quantity}x ${it.description} — ${(it.quantity * it.unitPrice).toLocaleString("fr-FR")} FCFA`)
       .join("\n");
 
-    const message = `📄 Formal Invoice #${invNumber} generated for ${customer.name}:\n\n${lineItemDetails}\n\nTotal Due: ₦${totalAmount.toLocaleString()}\nDue Date: ${dueDate}\nPayment Link: https://pay.omnisales.ai/musa/${invNumber.toLowerCase()}`;
+    const message = `📄 Facture Officielle #${invNumber} émise pour ${customer.name} :\n\n${lineItemDetails}\n\nTotal Dû : ${totalAmount.toLocaleString("fr-FR")} FCFA\nDate d'échéance : ${dueDate}\nPaiement MoMo / Orange Money : https://pay.omnisales.ai/fotso/${invNumber.toLowerCase()}`;
 
     onInsertInvoice(message);
     onClose();
@@ -198,9 +198,9 @@ export function InvoiceModal({
 
           {/* Total summary */}
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-600">Total Invoice Amount:</span>
+            <span className="text-xs font-semibold text-slate-600">Montant Total Facture :</span>
             <span className="text-base font-bold text-slate-900">
-              ₦{totalAmount.toLocaleString()}
+              {totalAmount.toLocaleString("fr-FR")} FCFA
             </span>
           </div>
         </div>
