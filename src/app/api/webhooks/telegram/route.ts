@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
 import { checkRateLimit, verifyTelegramSecret } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
@@ -53,6 +54,28 @@ export async function POST(request: NextRequest) {
       workspaceId: "ws-fotso-douala",
     });
 
+    // 4. Live Outbound Message Dispatch: transmit AI reply back to Telegram chat
+    let outboundResult = null;
+    if (aiResult.replyText && chatId) {
+      try {
+        outboundResult = await dispatchOutboundMessage({
+          channel: "telegram",
+          recipient: String(chatId),
+          text: aiResult.replyText,
+          workspaceId: "ws-fotso-douala",
+          senderType: "ai",
+          senderName: "Nathalie (IA)",
+          metadata: {
+            inbound_message_text: messageText,
+            triage_tag: aiResult.triageTag,
+            sentiment: aiResult.sentiment,
+          },
+        });
+      } catch (dispatchErr) {
+        console.error("Telegram Outbound Dispatch Error:", dispatchErr);
+      }
+    }
+
     return NextResponse.json({
       ok: true,
       channel: "telegram",
@@ -61,6 +84,8 @@ export async function POST(request: NextRequest) {
       senderHandle,
       aiTriage: aiResult.triageTag,
       replyText: aiResult.replyText,
+      outboundDispatched: Boolean(outboundResult?.delivered),
+      outboundResult,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

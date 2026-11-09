@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
 import { checkRateLimit, safeEqual } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
@@ -47,6 +48,28 @@ export async function POST(request: NextRequest) {
       workspaceId: "ws-fotso-douala",
     });
 
+    // 4. Live Outbound Message Dispatch: transmit AI reply back to TikTok direct message
+    let outboundResult = null;
+    if (aiResult.replyText && senderId) {
+      try {
+        outboundResult = await dispatchOutboundMessage({
+          channel: "tiktok",
+          recipient: senderId,
+          text: aiResult.replyText,
+          workspaceId: "ws-fotso-douala",
+          senderType: "ai",
+          senderName: "Nathalie (IA)",
+          metadata: {
+            inbound_message_text: messageContent,
+            triage_tag: aiResult.triageTag,
+            sentiment: aiResult.sentiment,
+          },
+        });
+      } catch (dispatchErr) {
+        console.error("TikTok Outbound Dispatch Error:", dispatchErr);
+      }
+    }
+
     return NextResponse.json({
       code: 0,
       message: "ok",
@@ -55,6 +78,8 @@ export async function POST(request: NextRequest) {
       senderId,
       aiTriage: aiResult.triageTag,
       replyText: aiResult.replyText,
+      outboundDispatched: Boolean(outboundResult?.delivered),
+      outboundResult,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

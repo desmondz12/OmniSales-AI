@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { processCustomerMessage } from "@/lib/ai/process-message-service";
+import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
 import { checkRateLimit, verifyMetaSignature } from "@/lib/security";
+import type { ChannelType } from "@/types/database";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -65,7 +67,7 @@ export async function POST(request: NextRequest) {
     const isInstagram = body.object === "instagram";
     const isMessenger = body.object === "page";
 
-    let channel = "whatsapp";
+    let channel: ChannelType = "whatsapp";
     let senderId = "";
     let senderName = "Client";
     let messageText = "";
@@ -101,6 +103,28 @@ export async function POST(request: NextRequest) {
       workspaceId: "ws-fotso-douala",
     });
 
+    // 6. Live Outbound Message Dispatch: transmit AI reply back to the customer's phone/app
+    let outboundResult = null;
+    if (aiResult.replyText && senderId) {
+      try {
+        outboundResult = await dispatchOutboundMessage({
+          channel,
+          recipient: senderId,
+          text: aiResult.replyText,
+          workspaceId: "ws-fotso-douala",
+          senderType: "ai",
+          senderName: "Nathalie (IA)",
+          metadata: {
+            inbound_message_text: messageText,
+            triage_tag: aiResult.triageTag,
+            sentiment: aiResult.sentiment,
+          },
+        });
+      } catch (dispatchErr) {
+        console.error("Meta Outbound Dispatch Error:", dispatchErr);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       channel,
@@ -110,6 +134,8 @@ export async function POST(request: NextRequest) {
       replyGenerated: Boolean(aiResult.replyText),
       replyText: aiResult.replyText,
       sentiment: aiResult.sentiment,
+      outboundDispatched: Boolean(outboundResult?.delivered),
+      outboundResult,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

@@ -34,6 +34,22 @@
 |---|---|---|---|---|
 | `GEMINI_API_KEY` | — | Server only | Phase 6 | Google Gemini API key |
 
+### Outbound Messaging Dispatchers (WhatsApp, Telegram, Meta, TikTok)
+
+| Variable | Prefix | Side | Required | Description |
+|---|---|---|---|---|
+| `WHATSAPP_PHONE_NUMBER_ID` | — | Server only | Optional | Meta Cloud API WhatsApp Phone Number ID |
+| `WHATSAPP_ACCESS_TOKEN` | — | Server only | Optional | WhatsApp Cloud API System User token (v21.0) |
+| `META_APP_SECRET` | — | Server only | Optional | Meta App Secret for payload HMAC signature validation |
+| `TELEGRAM_BOT_TOKEN` | — | Server only | Optional | Telegram Bot API token from @BotFather |
+| `TELEGRAM_WEBHOOK_SECRET` | — | Server only | Optional | Secret token header for Telegram webhook validation |
+| `INSTAGRAM_ACCESS_TOKEN` | — | Server only | Optional | Meta Graph Send API token for Instagram Direct |
+| `MESSENGER_ACCESS_TOKEN` | — | Server only | Optional | Meta Graph Send API token for Facebook Messenger |
+| `TIKTOK_ACCESS_TOKEN` | — | Server only | Optional | TikTok Business Suite Access Token for Direct Messages |
+
+> [!NOTE]
+> When live credentials are not provided, the dispatchers automatically run in high-fidelity simulation mode with realistic latency and provider IDs (`wamid...`, `tg_msg...`), allowing development and staging workflows without requiring active paid accounts.
+
 ### Payments — Stripe (Phase 8)
 
 | Variable | Prefix | Side | Required | Description |

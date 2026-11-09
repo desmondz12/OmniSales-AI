@@ -137,25 +137,70 @@ export function InboxShell({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeMessages.length, activeConvId]);
 
-  // Handle Send message
-  const handleSendMessage = (e?: React.FormEvent) => {
+  // Handle Send message via Outbound API Dispatcher
+  const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!replyText.trim() || !activeConversation) return;
 
+    const messageText = replyText.trim();
+    const tempId = `m-${Date.now()}`;
+
     const newMsg: Message = {
-      id: `m-${Date.now()}`,
+      id: tempId,
       conversation_id: activeConversation.id,
       workspace_id: activeConversation.workspace_id,
       sender_type: "human",
       sender_name: "Jean-Luc (Gérant)",
-      content: replyText.trim(),
+      content: messageText,
       channel_type: activeConversation.channel_type,
-      metadata: { sent_via_inbox: true },
+      metadata: { sent_via_inbox: true, status: "sending" },
       created_at: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, newMsg]);
     setReplyText("");
+
+    try {
+      const recipient =
+        activeCustomer?.phone ||
+        activeCustomer?.handle?.replace(/^@/, "") ||
+        "237671234567";
+
+      const res = await fetch("/api/messages/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId: activeConversation.id,
+          recipient,
+          text: messageText,
+          channel: activeConversation.channel_type,
+          workspaceId: activeConversation.workspace_id,
+          senderName: "Jean-Luc (Gérant)",
+          senderType: "human",
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.message) {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === tempId
+              ? {
+                  ...m,
+                  id: data.message.id || m.id,
+                  metadata: {
+                    ...m.metadata,
+                    status: "delivered",
+                    simulated: data.dispatchResult?.simulated,
+                  },
+                }
+              : m
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Outbound dispatch failed:", err);
+    }
   };
 
   // Keyboard shortcut: Cmd/Ctrl + Enter to send

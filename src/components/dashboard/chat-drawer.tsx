@@ -143,24 +143,69 @@ function ChatDrawerContent({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!replyText.trim()) return;
 
+    const messageText = replyText.trim();
+    const tempId = `msg-${Date.now()}`;
+
     const newMsg: Message = {
-      id: `msg-${Date.now()}`,
+      id: tempId,
       conversation_id: conversation.id,
       workspace_id: conversation.workspace_id,
       sender_type: "human",
       sender_name: "Jean-Luc (Gérant)",
-      content: replyText.trim(),
+      content: messageText,
       channel_type: conversation.channel_type,
-      metadata: { sent_by_owner: true },
+      metadata: { sent_by_owner: true, status: "sending" },
       created_at: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, newMsg]);
     setReplyText("");
+
+    try {
+      const recipient =
+        customer?.phone ||
+        customer?.handle?.replace(/^@/, "") ||
+        "237671234567";
+
+      const res = await fetch("/api/messages/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId: conversation.id,
+          recipient,
+          text: messageText,
+          channel: conversation.channel_type,
+          workspaceId: conversation.workspace_id,
+          senderName: "Jean-Luc (Gérant)",
+          senderType: "human",
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.message) {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === tempId
+              ? {
+                  ...m,
+                  id: data.message.id || m.id,
+                  metadata: {
+                    ...m.metadata,
+                    status: "delivered",
+                    simulated: data.dispatchResult?.simulated,
+                  },
+                }
+              : m
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Outbound dispatch failed:", err);
+    }
   };
 
   const handleDraftAiReply = () => {
