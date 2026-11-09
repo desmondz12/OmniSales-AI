@@ -43,7 +43,7 @@ export function Dialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs transition-opacity animate-in fade-in-50"
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity animate-in fade-in-50"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -53,23 +53,23 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-3xl border border-border-button-default bg-background-primary-default p-6 text-text-primary shadow-modal transition-all animate-in zoom-in-95",
+          "relative z-50 w-full max-w-lg rounded-xl border border-slate-200 bg-white p-6 text-slate-900 shadow-xl transition-all animate-in zoom-in-95",
           className
         )}
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-text-tertiary hover:bg-background-secondary-default hover:text-text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
           aria-label="Close dialog"
         >
           <X className="h-4 w-4" />
         </button>
 
         <div className="space-y-1 mb-5">
-          <h2 className="text-lg font-semibold tracking-tight text-text-primary">{title}</h2>
+          <h2 className="text-lg font-bold tracking-tight text-slate-900">{title}</h2>
           {description && (
-            <p className="text-xs text-text-secondary">{description}</p>
+            <p className="text-xs text-slate-500">{description}</p>
           )}
         </div>
 

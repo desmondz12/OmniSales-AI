@@ -161,15 +161,15 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center space-x-2.5">
-            <h1 className="text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
               Connected Channels
             </h1>
-            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/40">
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 border border-emerald-200">
               <span className="mr-1.5 h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               5 of 5 Active
             </span>
           </div>
-          <p className="mt-1 text-xs sm:text-sm text-text-secondary">
+          <p className="mt-1 text-xs sm:text-sm text-slate-500">
             Manage your live messaging gateways, AI auto-reply toggles, and test incoming webhook listeners
           </p>
         </div>
@@ -181,19 +181,19 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
             variant="outline"
             size="sm"
             onClick={() => openTestWebhook("whatsapp")}
-            className="rounded-full border-border-button-default bg-background-primary-default text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-background-secondary-default shadow-2xs"
+            className="rounded-xl border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs"
           >
-            <Code2 className="mr-1.5 h-3.5 w-3.5 text-accent-600" />
+            <Code2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
             Send Test Webhook
           </Button>
 
           <button
             type="button"
             onClick={handleToggleGlobalAi}
-            className={`inline-flex items-center rounded-full px-4 py-2 text-xs font-medium shadow-2xs transition-colors ${
+            className={`inline-flex items-center rounded-xl px-3.5 py-2 text-xs font-semibold shadow-2xs transition-colors ${
               globalAiEnabled
-                ? "bg-accent-600 text-white shadow-accent-600/20"
-                : "bg-background-secondary-default text-text-secondary border border-border-button-default"
+                ? "bg-blue-600 text-white shadow-blue-500/20"
+                : "bg-slate-100 text-slate-600 border border-slate-200"
             }`}
           >
             <Bot className="mr-1.5 h-3.5 w-3.5" />
@@ -204,35 +204,35 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
 
       {/* Gateway Health Overview Banner */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-5 shadow-card">
-          <div className="flex items-center justify-between text-xs text-text-tertiary">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Gateway Uptime SLA</span>
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
           </div>
-          <div className="mt-2 text-xl font-semibold text-text-primary">99.98%</div>
-          <p className="mt-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
+          <div className="mt-2 text-xl font-bold text-slate-900">99.98%</div>
+          <p className="mt-1 text-[11px] font-medium text-emerald-700">
             0 dropped webhook events this week
           </p>
         </div>
 
-        <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-5 shadow-card">
-          <div className="flex items-center justify-between text-xs text-text-tertiary">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Messages Processed Today</span>
-            <MessageSquare className="h-4 w-4 text-accent-600" />
+            <MessageSquare className="h-4 w-4 text-blue-600" />
           </div>
-          <div className="mt-2 text-xl font-semibold text-text-primary">58 Messages</div>
-          <p className="mt-1 text-[11px] font-medium text-text-tertiary">
+          <div className="mt-2 text-xl font-bold text-slate-900">58 Messages</div>
+          <p className="mt-1 text-[11px] font-medium text-slate-500">
             52 handled autonomously • 6 escalated
           </p>
         </div>
 
-        <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-5 shadow-card">
-          <div className="flex items-center justify-between text-xs text-text-tertiary">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Average API Latency</span>
-            <Radio className="h-4 w-4 text-accent-600" />
+            <Radio className="h-4 w-4 text-indigo-600" />
           </div>
-          <div className="mt-2 text-xl font-semibold text-accent-700 dark:text-accent-400">138 ms</div>
-          <p className="mt-1 text-[11px] font-medium text-text-tertiary">
+          <div className="mt-2 text-xl font-bold text-indigo-700">138 ms</div>
+          <p className="mt-1 text-[11px] font-medium text-slate-500">
             Meta Cloud • TikTok • Telegram Gateways
           </p>
         </div>
@@ -246,7 +246,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
           return (
             <div
               key={ch.id}
-              className="flex flex-col justify-between rounded-3xl border border-border-button-default bg-background-primary-default p-6 shadow-card transition-all hover:border-accent-500 hover:shadow-modal"
+              className="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm"
             >
               <div>
                 {/* Card Top: Icon + Channel Status */}
@@ -258,7 +258,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/40">
+                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
                       <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       Connected
                     </span>
@@ -266,37 +266,37 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                 </div>
 
                 {/* Title & Subtitle */}
-                <h3 className="mt-4 text-base font-semibold text-text-primary">
+                <h3 className="mt-4 text-base font-bold text-slate-900">
                   {ch.title}
                 </h3>
-                <p className="text-xs text-text-secondary mt-0.5">{ch.subtitle}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{ch.subtitle}</p>
 
                 {/* Handle & ID Badge */}
-                <div className="mt-3.5 inline-flex items-center rounded-xl bg-background-secondary-default border border-border-button-default px-3 py-1.5 text-xs font-mono font-semibold text-text-primary">
+                <div className="mt-3.5 inline-flex items-center rounded-xl bg-slate-50 border border-slate-200/80 px-3 py-1.5 text-xs font-mono font-semibold text-slate-800">
                   {ch.handle}
                 </div>
 
                 {/* Metrics Breakdown */}
-                <div className="mt-4 rounded-2xl bg-background-secondary-default border border-border-button-default p-3.5 space-y-2 text-xs">
+                <div className="mt-4 rounded-2xl bg-slate-50/60 border border-slate-100 p-3.5 space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-text-tertiary">Overnight Traffic</span>
-                    <span className="font-semibold text-text-primary">
+                    <span className="text-slate-500">Overnight Traffic</span>
+                    <span className="font-bold text-slate-800">
                       {ch.messagesCount} inbound msgs
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-text-tertiary">AI Automation Rate</span>
-                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+                    <span className="text-slate-500">AI Automation Rate</span>
+                    <span className="font-bold text-emerald-700">
                       {ch.automatedRate}% autonomous
                     </span>
                   </div>
                 </div>
 
                 {/* AI Auto-Reply Toggle Switch */}
-                <div className="mt-4 flex items-center justify-between rounded-2xl border border-border-button-default p-3 bg-background-primary-default">
+                <div className="mt-4 flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 bg-white">
                   <div>
-                    <p className="text-xs font-semibold text-text-primary">AI Auto-Replies</p>
-                    <p className="text-[11px] text-text-secondary">
+                    <p className="text-xs font-bold text-slate-900">AI Auto-Replies</p>
+                    <p className="text-[11px] text-slate-500">
                       {isAiActive ? "Responding automatically" : "Human review only"}
                     </p>
                   </div>
@@ -305,7 +305,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     onClick={() => handleToggleAutoReply(ch.id)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      isAiActive ? "bg-accent-600" : "bg-neutral-300 dark:bg-neutral-700"
+                      isAiActive ? "bg-blue-600" : "bg-slate-300"
                     }`}
                   >
                     <span
@@ -318,15 +318,15 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
               </div>
 
               {/* Bottom Actions */}
-              <div className="mt-5 flex items-center space-x-2 pt-4 border-t border-border-secondary">
+              <div className="mt-5 flex items-center space-x-2 pt-4 border-t border-slate-100">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => openTestWebhook(ch.type)}
-                  className="flex-1 rounded-full text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-background-secondary-default border-border-button-default"
+                  className="flex-1 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50"
                 >
-                  <Code2 className="mr-1.5 h-3.5 w-3.5 text-accent-600" />
+                  <Code2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
                   Test Webhook
                 </Button>
 
@@ -335,7 +335,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     size="sm"
                     onClick={() => setIsQrModalOpen(true)}
-                    className="flex-1 rounded-full bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium shadow-xs"
+                    className="flex-1 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white text-xs font-semibold shadow-xs"
                   >
                     Configure / QR
                   </Button>
@@ -346,7 +346,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     size="sm"
                     onClick={() => setIsTelegramModalOpen(true)}
-                    className="flex-1 rounded-full bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium shadow-xs"
+                    className="flex-1 rounded-xl bg-slate-900 hover:bg-sky-600 text-white text-xs font-semibold shadow-xs"
                   >
                     Bot Token & Ping
                   </Button>
@@ -357,7 +357,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     size="sm"
                     onClick={() => openTestWebhook(ch.type)}
-                    className="flex-1 rounded-full bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium shadow-xs"
+                    className="flex-1 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs font-semibold shadow-xs"
                   >
                     Gateway Settings
                   </Button>

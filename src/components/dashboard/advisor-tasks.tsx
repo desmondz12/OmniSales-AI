@@ -88,29 +88,29 @@ export function AdvisorTasks() {
   };
 
   return (
-    <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-6 sm:p-7 shadow-card">
+    <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs">
       {/* Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-border-secondary">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-slate-100">
         <div className="flex items-center space-x-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent-600 text-white shadow-xs">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs">
             <Sparkles className="h-4 w-4" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-semibold tracking-tight text-text-primary">
+              <h3 className="text-lg font-bold tracking-tight text-slate-900">
                 Tâches Conseiller IA (Advisor Tasks)
               </h3>
-              <span className="inline-flex items-center rounded-full bg-accent-50 px-2 py-0.5 text-[11px] font-medium text-accent-700 border border-accent-200/50 dark:bg-accent-950/40 dark:text-accent-300 dark:border-accent-900/40">
+              <span className="inline-flex items-center rounded-full bg-blue-100/80 px-2 py-0.5 text-[11px] font-semibold text-blue-800">
                 Moteur Proactif Cameroun
               </span>
             </div>
-            <p className="text-xs text-text-secondary mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Recommandations commerciales et financières à fort impact générées par l&apos;analyse de nuit
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs text-text-tertiary">
+        <div className="flex items-center space-x-2 text-xs text-slate-500">
           <span>{tasks.length} opportunités identifiées</span>
         </div>
       </div>
@@ -127,29 +127,29 @@ export function AdvisorTasks() {
               key={task.id}
               className={`group relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 ${
                 isCompleted
-                  ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-900/40 dark:bg-emerald-950/40"
-                  : "border-border-button-default bg-background-secondary-default hover:bg-background-primary-default hover:shadow-card"
+                  ? "border-emerald-200 bg-emerald-50/40"
+                  : "border-slate-200/80 bg-slate-50/40 hover:bg-white hover:border-slate-300 hover:shadow-xs"
               }`}
             >
               <div>
                 {/* Top Row: Category Badge + Dismiss Button */}
                 <div className="flex items-center justify-between">
                   <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium border capitalize ${task.badgeBg} ${task.badgeText} ${task.badgeBorder}`}
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border capitalize ${task.badgeBg} ${task.badgeText} ${task.badgeBorder}`}
                   >
                     <Icon className="mr-1 h-3 w-3" />
                     {task.category}
                   </span>
 
                   <div className="flex items-center space-x-2">
-                    <span className="text-[11px] font-medium text-text-tertiary">
+                    <span className="text-[11px] font-medium text-slate-400">
                       {task.confidence}% pertinence
                     </span>
                     {!isCompleted && (
                       <button
                         type="button"
                         onClick={() => handleDismissTask(task.id)}
-                        className="text-text-tertiary hover:text-text-primary p-1 rounded-full hover:bg-background-secondary-default transition-colors"
+                        className="text-slate-400 hover:text-slate-600 p-0.5 rounded-md hover:bg-slate-200/60 transition-colors"
                         title="Ignorer la recommandation"
                       >
                         <X className="h-3.5 w-3.5" />
@@ -159,26 +159,26 @@ export function AdvisorTasks() {
                 </div>
 
                 {/* Title */}
-                <h4 className="mt-3 text-sm font-semibold text-text-primary group-hover:text-accent-600 transition-colors">
+                <h4 className="mt-3 text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                   {task.title}
                 </h4>
 
                 {/* Description */}
-                <p className="mt-1.5 text-xs text-text-secondary leading-relaxed">
+                <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
                   {task.description}
                 </p>
 
                 {/* Impact Highlight */}
-                <div className="mt-3 inline-flex items-center rounded-lg bg-background-primary-default border border-border-button-default px-2.5 py-1 text-[11px] font-medium text-text-primary">
+                <div className="mt-3 inline-flex items-center rounded-lg bg-white/90 border border-slate-200/80 px-2.5 py-1 text-[11px] font-semibold text-slate-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1.5" />
                   {task.impact}
                 </div>
               </div>
 
               {/* Bottom Action Button */}
-              <div className="mt-5 pt-3 border-t border-border-secondary">
+              <div className="mt-5 pt-3 border-t border-slate-200/60">
                 {isCompleted ? (
-                  <div className="flex items-center justify-center space-x-1.5 rounded-xl bg-emerald-100/80 py-2 px-3 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+                  <div className="flex items-center justify-center space-x-1.5 rounded-xl bg-emerald-100/80 py-2 px-3 text-xs font-semibold text-emerald-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     <span>Action exécutée par l&apos;IA</span>
                   </div>
@@ -189,7 +189,7 @@ export function AdvisorTasks() {
                     size="sm"
                     disabled={isExecuting}
                     onClick={() => handleExecuteTask(task.id)}
-                    className="w-full justify-center rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-medium text-xs shadow-xs transition-colors"
+                    className="w-full justify-center rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs shadow-xs transition-colors"
                   >
                     {isExecuting ? (
                       <>

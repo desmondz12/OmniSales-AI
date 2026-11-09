@@ -54,25 +54,25 @@ export default async function SettingsPage() {
   const canEdit = role === "owner" || role === "admin";
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6">
       {/* Settings Navigation Tabs */}
-      <div className="flex border-b border-border-button-default pb-3 space-x-6 text-sm">
-        <span className="font-semibold text-accent-600 border-b-2 border-accent-600 pb-3 -mb-3.5">
+      <div className="flex border-b border-slate-200 pb-3 space-x-6 text-sm">
+        <span className="font-semibold text-blue-600 border-b-2 border-blue-600 pb-3 -mb-3.5">
           Paramètres Espace Client
         </span>
         <Link
           href="/dashboard/settings/profile"
-          className="font-medium text-text-secondary hover:text-text-primary transition-colors"
+          className="font-medium text-slate-500 hover:text-slate-800 transition-colors"
         >
           Profil Utilisateur
         </Link>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
           Paramètres Espace Client (Workspace)
         </h1>
-        <p className="mt-1 text-sm text-text-secondary">
+        <p className="mt-1 text-sm text-slate-500">
           Gérez l&apos;identité commerciale de votre entreprise, vos canaux connectés et les permissions.
         </p>
       </div>

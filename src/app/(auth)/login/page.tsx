@@ -117,11 +117,11 @@ function LoginForm() {
   };
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6">
       {/* Demo Role Switcher Cards */}
-      <div className="rounded-3xl border border-accent-200/80 bg-accent-50/70 p-4 shadow-card">
-        <div className="flex items-center space-x-2 text-xs font-semibold text-accent-950 mb-2.5">
-          <Sparkles className="h-4 w-4 text-accent-600" />
+      <div className="rounded-xl border border-blue-100 bg-blue-50/70 p-4">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-blue-900 mb-2.5">
+          <Sparkles className="h-4 w-4 text-blue-600" />
           <span>One-Click Role Switcher (Instant Demo Access)</span>
         </div>
         <div className="grid gap-2.5 sm:grid-cols-2">
@@ -129,22 +129,22 @@ function LoginForm() {
             type="button"
             onClick={() => handleDemoLogin("business_client")}
             disabled={isLoading || Boolean(isDemoLoading)}
-            className="flex flex-col items-start rounded-2xl border border-border-button-default bg-background-primary-default p-3.5 text-left shadow-2xs hover:border-accent-400 hover:shadow-card transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="flex flex-col items-start rounded-lg border border-blue-200/80 bg-white p-3 text-left shadow-2xs hover:border-blue-500 hover:shadow-xs transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center space-x-2 w-full justify-between">
-              <span className="flex items-center text-xs font-bold text-text-primary">
-                <Building2 className="mr-1.5 h-3.5 w-3.5 text-accent-600" />
+              <span className="flex items-center text-xs font-bold text-slate-900">
+                <Building2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
                 Business Owner
               </span>
-              <span className="rounded-full bg-accent-100 px-2 py-0.5 text-[10px] font-semibold text-accent-800">
+              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
                 /dashboard
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-text-secondary leading-tight">
+            <p className="mt-1 text-[11px] text-slate-500 leading-tight">
               Musa&apos;s 5-channel AI Sales & Collections workspace
             </p>
             {isDemoLoading === "owner" && (
-              <span className="mt-2 text-[10px] text-accent-600 font-medium animate-pulse">
+              <span className="mt-2 text-[10px] text-blue-600 font-medium animate-pulse">
                 Launching Business Portal...
               </span>
             )}
@@ -154,22 +154,22 @@ function LoginForm() {
             type="button"
             onClick={() => handleDemoLogin("super_admin")}
             disabled={isLoading || Boolean(isDemoLoading)}
-            className="flex flex-col items-start rounded-2xl border border-border-button-default bg-background-primary-default p-3.5 text-left shadow-2xs hover:border-accent-400 hover:shadow-card transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="flex flex-col items-start rounded-lg border border-purple-200/80 bg-white p-3 text-left shadow-2xs hover:border-purple-500 hover:shadow-xs transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center space-x-2 w-full justify-between">
-              <span className="flex items-center text-xs font-bold text-text-primary">
-                <ShieldCheck className="mr-1.5 h-3.5 w-3.5 text-accent-700" />
+              <span className="flex items-center text-xs font-bold text-slate-900">
+                <ShieldCheck className="mr-1.5 h-3.5 w-3.5 text-purple-600" />
                 Super Admin
               </span>
-              <span className="rounded-full bg-accent-100 px-2 py-0.5 text-[10px] font-semibold text-accent-800">
+              <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700">
                 /admin
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-text-secondary leading-tight">
+            <p className="mt-1 text-[11px] text-slate-500 leading-tight">
               SaaS owner platform command center & tenant control
             </p>
             {isDemoLoading === "admin" && (
-              <span className="mt-2 text-[10px] text-accent-700 font-medium animate-pulse">
+              <span className="mt-2 text-[10px] text-purple-600 font-medium animate-pulse">
                 Launching Admin Portal...
               </span>
             )}
@@ -178,17 +178,17 @@ function LoginForm() {
       </div>
 
       <div className="relative flex items-center justify-center">
-        <div className="border-t border-border-button-default w-full" />
-        <span className="bg-background-full px-3 text-[11px] font-medium text-text-tertiary uppercase tracking-wider">
+        <div className="border-t border-slate-200 w-full" />
+        <span className="bg-[#F8FAFC] px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider">
           Or sign in with email
         </span>
       </div>
 
       {/* Standard Form */}
-      <Card className="rounded-3xl border border-border-button-default bg-background-primary-default shadow-card">
+      <Card className="border border-slate-200 bg-white shadow-sm">
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-text-primary">Sign in to your account</CardTitle>
-          <CardDescription className="text-text-secondary text-xs">
+          <CardTitle className="text-xl">Sign in to your account</CardTitle>
+          <CardDescription>
             Enter your credentials to access your sales workspace
           </CardDescription>
         </CardHeader>
@@ -214,20 +214,20 @@ function LoginForm() {
                 disabled={isLoading}
                 required
               />
-              <Mail className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-text-tertiary" />
+              <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
             </div>
 
             <div className="relative">
               <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-text-primary"
+                  className="block text-xs font-semibold text-slate-700"
                 >
                   Password
                 </label>
                 <Link
                   href={ROUTES.FORGOT_PASSWORD}
-                  className="text-xs text-accent-600 hover:text-accent-700 font-medium"
+                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Forgot password?
                 </Link>
@@ -248,7 +248,7 @@ function LoginForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
-                  className="absolute right-3.5 top-3 text-text-tertiary hover:text-text-primary transition-colors"
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
@@ -264,7 +264,7 @@ function LoginForm() {
           <CardFooter className="flex flex-col space-y-3 pt-2">
             <Button
               type="submit"
-              className="w-full rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+              className="w-full"
               isLoading={isLoading}
               disabled={isLoading || Boolean(isDemoLoading)}
             >
@@ -272,11 +272,11 @@ function LoginForm() {
               Sign In
             </Button>
 
-            <div className="text-center text-xs text-text-secondary">
+            <div className="text-center text-xs text-slate-500">
               Don&apos;t have an account?{" "}
               <Link
                 href={ROUTES.SIGNUP}
-                className="font-semibold text-accent-600 hover:text-accent-700"
+                className="font-semibold text-blue-600 hover:text-blue-700"
               >
                 Create a workspace
               </Link>
@@ -290,24 +290,24 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background-full px-4 py-12 text-text-primary font-sans antialiased">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-card mb-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
             <Bot className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             {APP_NAME}
           </h1>
-          <p className="text-xs text-text-secondary max-w-xs mx-auto">
+          <p className="text-xs text-slate-500 max-w-xs mx-auto">
             AI-powered sales, CRM & collections platform across 5 channels
           </p>
         </div>
 
         <React.Suspense
           fallback={
-            <div className="h-64 rounded-3xl border border-border-button-default bg-background-primary-default shadow-card animate-pulse" />
+            <div className="h-64 rounded-xl border border-slate-200 bg-white shadow-xs animate-pulse" />
           }
         >
           <LoginForm />

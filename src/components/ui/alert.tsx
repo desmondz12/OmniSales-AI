@@ -4,18 +4,17 @@ import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "relative w-full rounded-2xl border p-4 text-xs [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4",
+  "relative w-full rounded-lg border p-3.5 text-xs [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-3.5 [&>svg]:top-3.5",
   {
     variants: {
       variant: {
-        default:
-          "border-border-button-default bg-background-secondary-default text-text-primary [&>svg]:text-text-secondary",
+        default: "border-slate-200 bg-slate-50 text-slate-800 [&>svg]:text-slate-600",
         destructive:
-          "border-rose-200/80 bg-rose-50/60 text-rose-900 [&>svg]:text-rose-600 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-200",
+          "border-rose-200 bg-rose-50 text-rose-800 [&>svg]:text-rose-600",
         success:
-          "border-emerald-200/80 bg-emerald-50/60 text-emerald-900 [&>svg]:text-emerald-600 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200",
+          "border-emerald-200 bg-emerald-50 text-emerald-800 [&>svg]:text-emerald-600",
         warning:
-          "border-amber-200/80 bg-amber-50/60 text-amber-900 [&>svg]:text-amber-600 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-200",
+          "border-amber-200 bg-amber-50 text-amber-800 [&>svg]:text-amber-600",
       },
     },
     defaultVariants: {

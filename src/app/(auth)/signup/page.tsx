@@ -123,29 +123,29 @@ export default function SignUpPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background-full px-4 py-12 text-text-primary font-sans antialiased">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-card mb-2">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
               <Bot className="h-6 w-6" />
             </div>
-            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
               {APP_NAME}
             </h2>
           </div>
 
-          <Card className="rounded-3xl border border-emerald-200 bg-background-primary-default shadow-card">
+          <Card className="border border-emerald-200 bg-white shadow-sm">
             <CardHeader className="text-center pb-2">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <CardTitle className="text-xl font-bold text-text-primary">Check your inbox</CardTitle>
-              <CardDescription className="text-text-secondary">
+              <CardTitle className="text-xl">Check your inbox</CardTitle>
+              <CardDescription className="text-slate-500">
                 We sent a confirmation link to:
               </CardDescription>
-              <p className="mt-1 font-semibold text-text-primary">{email}</p>
+              <p className="mt-1 font-semibold text-slate-900">{email}</p>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4 text-xs text-text-secondary text-center">
+            <CardContent className="space-y-4 pt-4 text-xs text-slate-600 text-center">
               <p>
                 Click the verification link in the email to activate your account
                 and complete setting up <strong>{companyName}</strong>.
@@ -154,7 +154,7 @@ export default function SignUpPage() {
             <CardFooter>
               <Link
                 href={ROUTES.LOGIN}
-                className={buttonVariants({ variant: "outline", className: "w-full rounded-full text-xs font-semibold" })}
+                className={buttonVariants({ variant: "outline", className: "w-full" })}
               >
                 Return to Sign In
               </Link>
@@ -166,24 +166,24 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background-full px-4 py-12 text-text-primary font-sans antialiased">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-card mb-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
             <Bot className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             {APP_NAME}
           </h1>
-          <p className="text-xs text-text-secondary">
+          <p className="text-xs text-slate-500">
             Create your sales workspace across 5 channels
           </p>
         </div>
 
-        <Card className="rounded-3xl border border-border-button-default bg-background-primary-default shadow-card">
+        <Card className="border border-slate-200 bg-white shadow-sm">
           <CardHeader className="pb-4">
-            <CardTitle className="text-xl font-bold text-text-primary">Create a workspace</CardTitle>
-            <CardDescription className="text-text-secondary text-xs">
+            <CardTitle className="text-xl">Create a workspace</CardTitle>
+            <CardDescription>
               Enter your business details to launch your AI sales agent
             </CardDescription>
           </CardHeader>
@@ -202,28 +202,28 @@ export default function SignUpPage() {
                   label="Your Full Name"
                   type="text"
                   autoComplete="name"
-                  placeholder="Jean-Luc Fotso"
+                  placeholder="Jane Doe"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   error={fieldErrors.fullName}
                   disabled={isLoading}
                   required
                 />
-                <User className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-text-tertiary" />
+                <User className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <Input
                   label="Company / Workspace Name"
                   type="text"
-                  placeholder="Fotso Distribution Douala"
+                  placeholder="Acme Retail"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   error={fieldErrors.companyName}
                   disabled={isLoading}
                   required
                 />
-                <Building2 className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-text-tertiary" />
+                <Building2 className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
@@ -231,20 +231,20 @@ export default function SignUpPage() {
                   label="Work Email"
                   type="email"
                   autoComplete="email"
-                  placeholder="jeanluc@fotsotrading.cm"
+                  placeholder="jane@acme.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={fieldErrors.email}
                   disabled={isLoading}
                   required
                 />
-                <Mail className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-text-tertiary" />
+                <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-text-primary mb-1"
+                  className="block text-xs font-semibold text-slate-700 mb-1"
                 >
                   Password (min. 8 characters)
                 </label>
@@ -264,7 +264,7 @@ export default function SignUpPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     tabIndex={-1}
-                    className="absolute right-3.5 top-3 text-text-tertiary hover:text-text-primary transition-colors"
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -294,7 +294,7 @@ export default function SignUpPage() {
             <CardFooter className="flex flex-col space-y-3 pt-2">
               <Button
                 type="submit"
-                className="w-full rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+                className="w-full"
                 isLoading={isLoading}
                 disabled={isLoading}
               >
@@ -302,11 +302,11 @@ export default function SignUpPage() {
                 Create Workspace
               </Button>
 
-              <div className="text-center text-xs text-text-secondary">
+              <div className="text-center text-xs text-slate-500">
                 Already have an account?{" "}
                 <Link
                   href={ROUTES.LOGIN}
-                  className="font-semibold text-accent-600 hover:text-accent-700"
+                  className="font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Sign in
                 </Link>

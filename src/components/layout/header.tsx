@@ -4,13 +4,13 @@ import * as React from "react";
 import Link from "next/link";
 import {
   Bell,
+  Building2,
   ChevronDown,
   Inbox,
   Menu,
   Radio,
   Search,
   Shield,
-  Sparkles,
   User as UserIcon,
 } from "lucide-react";
 import { SignOutButton } from "@/components/shared/sign-out-button";
@@ -37,6 +37,7 @@ export function Header({
   const [lang, setLang] = React.useState<"FR" | "EN">("FR");
   const userMenuRef = React.useRef<HTMLDivElement>(null);
 
+  // Close dropdown when clicking outside
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -52,50 +53,55 @@ export function Header({
 
   const displayName =
     profile?.full_name ||
-    tenant?.name ||
-    userEmail.split("@")[0];
+    (userEmail.startsWith("fotso") || userEmail.startsWith("musa") || userEmail.startsWith("business")
+      ? "Jean-Luc Fotso"
+      : userEmail.split("@")[0]);
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border-button-default bg-background-primary-default/90 px-4 sm:px-6 backdrop-blur-md font-sans">
-      {/* Left: Mobile Menu Trigger + Live Status Pill */}
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 sm:px-6 backdrop-blur-md">
+      {/* Left: Mobile Menu + Workspace indicator */}
       <div className="flex items-center space-x-3">
         <button
           type="button"
           onClick={onOpenMobileMenu}
-          className="rounded-full p-2 text-text-tertiary hover:bg-background-secondary-default hover:text-text-primary md:hidden transition-colors"
-          aria-label="Open mobile navigation"
+          className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 md:hidden"
+          aria-label="Open sidebar menu"
         >
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Live Channel Status Pill */}
-        <div className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200/80 px-3 py-1 text-xs font-semibold text-emerald-800 shadow-2xs">
+        {/* Workspace pill */}
+        <div className="hidden sm:flex items-center space-x-2 rounded-xl border border-slate-200/70 bg-slate-50/80 px-3 py-1.5">
+          <Building2 className="h-4 w-4 text-blue-600" />
+          <span className="text-xs font-semibold text-slate-800">
+            {tenant?.name || "Fotso & Sons Commerce Douala"}
+          </span>
+          <span className="rounded-full bg-emerald-100 px-1.5 py-0.2 text-[9px] font-bold text-emerald-800">
+            Actif
+          </span>
+        </div>
+
+        {/* Live AI Status Pill */}
+        <div className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 text-xs font-semibold text-emerald-800 shadow-2xs">
           <span className="relative flex h-2 w-2 mr-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
           </span>
-          <span className="hidden sm:inline">
-            5 Channels Connected • Agent Active (Douala)
-          </span>
-          <span className="sm:hidden">5 Channels Active</span>
-        </div>
-
-        {/* Active Workspace Pill for Mobile */}
-        <div className="sm:hidden text-xs font-bold text-text-primary truncate max-w-[120px]">
-          {tenant?.name || "OmniSales"}
+          <span className="hidden sm:inline">AI Agent Active • Handling 5 Channels</span>
+          <span className="sm:hidden">AI Active</span>
         </div>
       </div>
 
-      {/* Middle: Universal Search Bar (BoardUI style) */}
+      {/* Middle: Search Bar (Donezo style) */}
       <div className="hidden lg:flex items-center w-72">
         <div className="relative w-full">
-          <Search className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-text-tertiary" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Rechercher clients, factures..."
-            className="w-full rounded-full border border-border-button-default bg-background-secondary-default py-1.5 pl-9 pr-10 text-xs text-text-primary placeholder:text-text-tertiary focus:bg-background-primary-default focus:border-accent-600 focus:outline-none transition-all"
+            placeholder="Search customer, invoice..."
+            className="w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-9 pr-12 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none transition-colors"
           />
-          <kbd className="absolute right-3 top-2 rounded-md bg-background-primary-default px-1.5 py-0.5 text-[10px] font-bold text-text-tertiary border border-border-button-default shadow-2xs">
+          <kbd className="absolute right-2.5 top-2 rounded bg-white px-1.5 py-0.5 text-[10px] font-bold text-slate-400 border border-slate-200 shadow-2xs">
             ⌘K
           </kbd>
         </div>
@@ -107,14 +113,14 @@ export function Header({
         <button
           type="button"
           onClick={() => setLang((prev) => (prev === "FR" ? "EN" : "FR"))}
-          className="inline-flex items-center space-x-1.5 rounded-full border border-border-button-default bg-background-primary-default px-3 py-1.5 text-xs font-semibold text-text-primary hover:bg-background-secondary-default transition-colors shadow-2xs"
+          className="inline-flex items-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs"
           title="Basculer la langue / Switch language (Cameroon Bilingual)"
         >
           <span className="text-sm">🇨🇲</span>
-          <span className="text-[11px] font-bold text-text-primary">
+          <span className="text-[11px] font-bold text-slate-800">
             {lang === "FR" ? "FR" : "EN"}
           </span>
-          <span className="text-[9px] text-text-tertiary">| {lang === "FR" ? "EN" : "FR"}</span>
+          <span className="text-[9px] text-slate-400">| {lang === "FR" ? "EN" : "FR"}</span>
         </button>
 
         {/* Quick Inbox Drawer Button */}
@@ -122,10 +128,10 @@ export function Header({
           <button
             type="button"
             onClick={onOpenInboxDrawer}
-            className="relative flex items-center space-x-1.5 rounded-full border border-border-button-default bg-background-primary-default px-3.5 py-1.5 text-xs font-semibold text-text-primary hover:bg-background-secondary-default hover:text-accent-600 transition-colors shadow-2xs"
+            className="relative flex items-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors shadow-2xs"
             title="Open Live Chat Drawer"
           >
-            <Inbox className="h-4 w-4 text-accent-600" />
+            <Inbox className="h-4 w-4 text-blue-600" />
             <span className="hidden sm:inline">Inbox</span>
             <span className="flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
               3
@@ -134,10 +140,10 @@ export function Header({
         ) : (
           <Link
             href="/dashboard/inbox"
-            className="relative flex items-center space-x-1.5 rounded-full border border-border-button-default bg-background-primary-default px-3.5 py-1.5 text-xs font-semibold text-text-primary hover:bg-background-secondary-default hover:text-accent-600 transition-colors shadow-2xs"
+            className="relative flex items-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors shadow-2xs"
             title="Open Live Unified Inbox"
           >
-            <Inbox className="h-4 w-4 text-accent-600" />
+            <Inbox className="h-4 w-4 text-blue-600" />
             <span className="hidden sm:inline">Inbox</span>
             <span className="flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
               3
@@ -148,10 +154,10 @@ export function Header({
         {/* Notifications Icon */}
         <button
           type="button"
-          className="relative rounded-full border border-border-button-default bg-background-primary-default p-2 text-text-secondary hover:bg-background-secondary-default hover:text-text-primary transition-colors shadow-2xs"
+          className="relative rounded-xl border border-slate-200/80 bg-white p-2 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-accent-600 ring-2 ring-white" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
         </button>
 
         {/* User Profile Dropdown */}
@@ -159,30 +165,30 @@ export function Header({
           <button
             type="button"
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="flex items-center space-x-2 rounded-full border border-border-button-default bg-background-primary-default p-1.5 pr-2.5 text-left transition-colors hover:bg-background-secondary-default shadow-2xs"
+            className="flex items-center space-x-2 rounded-xl border border-slate-200/80 bg-white p-1.5 text-left transition-colors hover:bg-slate-50 shadow-2xs"
             aria-expanded={isUserMenuOpen}
             aria-haspopup="true"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-accent-600 to-indigo-600 text-xs font-bold text-white shadow-2xs">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-xs font-bold text-white shadow-2xs">
               {displayName.charAt(0).toUpperCase()}
             </div>
             <div className="hidden sm:block text-xs text-left pr-1">
-              <p className="font-semibold text-text-primary leading-tight">
+              <p className="font-semibold text-slate-900 leading-tight">
                 {displayName}
               </p>
-              <p className="text-[10px] text-text-tertiary">
+              <p className="text-[10px] text-slate-500">
                 {membership?.role || "Owner"}
               </p>
             </div>
-            <ChevronDown className="h-3.5 w-3.5 text-text-tertiary" />
+            <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
           </button>
 
           {isUserMenuOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-3xl border border-border-button-default bg-background-primary-default p-2 shadow-modal animate-in fade-in slide-in-from-top-2 duration-150">
-              <div className="border-b border-border-button-default px-3 py-2">
-                <p className="text-xs font-semibold text-text-primary">{displayName}</p>
-                <p className="text-[11px] text-text-tertiary truncate">{userEmail}</p>
-                <span className="mt-1 inline-block rounded-full bg-accent-50 px-2 py-0.5 text-[9px] font-bold text-accent-700">
+            <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="border-b border-slate-100 px-3 py-2">
+                <p className="text-xs font-semibold text-slate-900">{displayName}</p>
+                <p className="text-[11px] text-slate-500 truncate">{userEmail}</p>
+                <span className="mt-1 inline-block rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-bold text-blue-700">
                   Business Owner
                 </span>
               </div>
@@ -191,32 +197,32 @@ export function Header({
                 <Link
                   href="/admin"
                   onClick={() => setIsUserMenuOpen(false)}
-                  className="flex items-center space-x-2 rounded-2xl px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-accent-50 hover:text-accent-700 transition-colors"
+                  className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
                 >
-                  <Shield className="h-4 w-4 text-accent-600" />
+                  <Shield className="h-4 w-4 text-blue-600" />
                   <span>Super Admin Portal</span>
                 </Link>
 
                 <Link
                   href="/dashboard/settings/profile"
                   onClick={() => setIsUserMenuOpen(false)}
-                  className="flex items-center space-x-2 rounded-2xl px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-background-secondary-default hover:text-text-primary transition-colors"
+                  className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
-                  <UserIcon className="h-4 w-4 text-text-tertiary" />
+                  <UserIcon className="h-4 w-4 text-slate-400" />
                   <span>Profile Settings</span>
                 </Link>
 
                 <Link
                   href="/dashboard/channels"
                   onClick={() => setIsUserMenuOpen(false)}
-                  className="flex items-center space-x-2 rounded-2xl px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-background-secondary-default hover:text-text-primary transition-colors"
+                  className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
-                  <Radio className="h-4 w-4 text-text-tertiary" />
+                  <Radio className="h-4 w-4 text-slate-400" />
                   <span>Connected Channels (5)</span>
                 </Link>
               </div>
 
-              <div className="border-t border-border-button-default pt-1">
+              <div className="border-t border-slate-100 pt-1">
                 <SignOutButton />
               </div>
             </div>
