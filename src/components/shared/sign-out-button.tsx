@@ -40,7 +40,7 @@ export function SignOutButton() {
       onClick={handleSignOut}
       isLoading={isLoading}
       disabled={isLoading}
-      className="text-slate-600 hover:text-slate-900 border-slate-200"
+      className="text-text-secondary hover:text-text-primary border-border-button-default hover:bg-background-secondary-default"
     >
       <LogOut className="mr-2 h-4 w-4" />
       Déconnexion

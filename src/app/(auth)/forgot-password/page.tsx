@@ -70,31 +70,31 @@ export default function ForgotPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background-full px-4 py-12 text-text-primary font-sans antialiased">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-card mb-2">
               <Bot className="h-6 w-6" />
             </div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
               {APP_NAME}
             </h2>
           </div>
 
-          <Card className="border border-emerald-200 bg-white shadow-sm">
+          <Card className="rounded-3xl border border-emerald-200 bg-background-primary-default shadow-card">
             <CardHeader className="text-center pb-2">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <CardTitle className="text-xl">Check your inbox</CardTitle>
-              <CardDescription className="text-slate-500">
+              <CardTitle className="text-xl font-bold text-text-primary">Check your inbox</CardTitle>
+              <CardDescription className="text-text-secondary text-xs">
                 If an account exists for <strong>{email}</strong>, you will receive a reset link shortly.
               </CardDescription>
             </CardHeader>
             <CardFooter className="pt-4">
               <Link
                 href={ROUTES.LOGIN}
-                className={buttonVariants({ variant: "outline", className: "w-full" })}
+                className={buttonVariants({ variant: "outline", className: "w-full rounded-full text-xs font-semibold" })}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Sign In
@@ -107,24 +107,24 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background-full px-4 py-12 text-text-primary font-sans antialiased">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-card mb-2">
             <Bot className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
             {APP_NAME}
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-text-secondary">
             Reset your account password
           </p>
         </div>
 
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-3xl border border-border-button-default bg-background-primary-default shadow-card">
           <CardHeader className="pb-4">
-            <CardTitle className="text-xl">Forgot password?</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-xl font-bold text-text-primary">Forgot password?</CardTitle>
+            <CardDescription className="text-text-secondary text-xs">
               Enter your email address and we will send you a password recovery link
             </CardDescription>
           </CardHeader>
@@ -143,31 +143,31 @@ export default function ForgotPasswordPage() {
                   label="Work Email"
                   type="email"
                   autoComplete="email"
-                  placeholder="name@company.com"
+                  placeholder="jeanluc@fotsotrading.cm"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={fieldError}
                   disabled={isLoading}
                   required
                 />
-                <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
+                <Mail className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-text-tertiary" />
               </div>
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-3 pt-2">
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
                 isLoading={isLoading}
                 disabled={isLoading}
               >
                 Send Reset Link
               </Button>
 
-              <div className="text-center text-xs text-slate-500">
+              <div className="text-center text-xs text-text-secondary">
                 <Link
                   href={ROUTES.LOGIN}
-                  className="inline-flex items-center font-semibold text-slate-600 hover:text-slate-900"
+                  className="inline-flex items-center font-semibold text-accent-600 hover:text-accent-700"
                 >
                   <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
                   Back to Sign In

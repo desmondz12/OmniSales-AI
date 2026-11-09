@@ -8,18 +8,17 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-blue-600 text-white shadow-xs",
+          "border-transparent bg-accent-600 text-white shadow-2xs",
         secondary:
-          "border-slate-200 bg-slate-100 text-slate-700",
+          "border-border-button-default bg-background-secondary-default text-text-secondary",
         outline:
-          "border-slate-200 text-slate-700 bg-white",
+          "border-border-button-default text-text-primary bg-background-primary-default",
         success:
           "border-emerald-200 bg-emerald-50 text-emerald-700 font-medium",
         warning:
           "border-amber-200 bg-amber-50 text-amber-700 font-medium",
         destructive:
-          "border-rose-200 bg-rose-50 text-rose-700 font-medium",
-        // Specific status badges per master design
+          "border-red-200 bg-red-50 text-red-700 font-medium",
         ready_to_pay:
           "border-emerald-200 bg-emerald-50 text-emerald-700 font-medium",
         paid:
@@ -27,7 +26,7 @@ const badgeVariants = cva(
         promise_due:
           "border-amber-200 bg-amber-50 text-amber-700 font-medium",
         upset:
-          "border-rose-200 bg-rose-50 text-rose-700 font-medium",
+          "border-red-200 bg-red-50 text-red-700 font-medium",
         needs_human:
           "border-purple-200 bg-purple-50 text-purple-700 font-medium",
         ai_handling:
@@ -39,7 +38,7 @@ const badgeVariants = cva(
         customer:
           "border-emerald-200 bg-emerald-50 text-emerald-700 font-medium",
         churned:
-          "border-slate-200 bg-slate-100 text-slate-600 font-medium",
+          "border-border-button-default bg-background-secondary-default text-text-tertiary font-medium",
       },
     },
     defaultVariants: {

@@ -55,18 +55,18 @@ function PaymentLinkModalContent({
   };
 
   return (
-    <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+    <div className="relative w-full max-w-lg rounded-3xl border border-border-button-default bg-background-primary-default p-6 shadow-modal animate-in zoom-in-95 duration-200">
       {/* Header */}
-      <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+      <div className="flex items-start justify-between border-b border-border-secondary pb-4">
         <div className="flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-accent-50 text-accent-700">
             <CreditCard className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900">
+            <h3 className="text-base font-semibold text-text-primary">
               Générer un Lien de Paiement
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-text-secondary mt-0.5">
               Client : {customer.name} ({customer.channel_type.toUpperCase()})
             </p>
           </div>
@@ -74,7 +74,7 @@ function PaymentLinkModalContent({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+          className="rounded-full p-2 text-text-tertiary hover:bg-background-secondary-default hover:text-text-primary transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -84,7 +84,7 @@ function PaymentLinkModalContent({
       <div className="mt-5 space-y-4">
         {/* Amount input */}
         <div>
-          <label className="text-xs font-semibold text-slate-700">
+          <label className="text-xs font-medium text-text-secondary">
             Montant (FCFA / XAF)
           </label>
           <div className="relative mt-1">
@@ -92,9 +92,9 @@ function PaymentLinkModalContent({
               type="number"
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-4 pr-16 py-2 text-sm font-bold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-border-button-default bg-background-secondary-default pl-4 pr-16 py-2 text-sm font-semibold text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
             />
-            <span className="absolute right-3.5 top-2.5 text-xs font-bold text-slate-400">
+            <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-text-tertiary">
               FCFA
             </span>
           </div>
@@ -102,30 +102,30 @@ function PaymentLinkModalContent({
 
         {/* Description input */}
         <div>
-          <label className="text-xs font-semibold text-slate-700">
+          <label className="text-xs font-medium text-text-secondary">
             Motif / Description
           </label>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            className="mt-1 w-full rounded-xl border border-border-button-default bg-background-secondary-default px-3.5 py-2 text-xs text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
           />
         </div>
 
         {/* Gateway Provider Selection */}
         <div>
-          <label className="text-xs font-semibold text-slate-700">
+          <label className="text-xs font-medium text-text-secondary">
             Moyen de Paiement Cameroun
           </label>
           <div className="mt-1.5 grid grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => setProvider("momo")}
-              className={`rounded-xl border p-2.5 text-center text-xs font-semibold transition-all ${
+              className={`rounded-xl border p-2.5 text-center text-xs font-medium transition-all ${
                 provider === "momo"
-                  ? "border-amber-500 bg-amber-50/70 text-amber-900 ring-2 ring-amber-500/20"
-                  : "border-slate-200 bg-slate-50/50 text-slate-600 hover:bg-slate-100"
+                  ? "border-amber-500 bg-amber-50/70 text-amber-900 ring-2 ring-amber-500/20 dark:bg-amber-950/40 dark:text-amber-200"
+                  : "border-border-button-default bg-background-secondary-default text-text-secondary hover:bg-background-secondary-hover"
               }`}
             >
               MTN MoMo
@@ -133,10 +133,10 @@ function PaymentLinkModalContent({
             <button
               type="button"
               onClick={() => setProvider("orange")}
-              className={`rounded-xl border p-2.5 text-center text-xs font-semibold transition-all ${
+              className={`rounded-xl border p-2.5 text-center text-xs font-medium transition-all ${
                 provider === "orange"
-                  ? "border-orange-500 bg-orange-50/70 text-orange-900 ring-2 ring-orange-500/20"
-                  : "border-slate-200 bg-slate-50/50 text-slate-600 hover:bg-slate-100"
+                  ? "border-orange-500 bg-orange-50/70 text-orange-900 ring-2 ring-orange-500/20 dark:bg-orange-950/40 dark:text-orange-200"
+                  : "border-border-button-default bg-background-secondary-default text-text-secondary hover:bg-background-secondary-hover"
               }`}
             >
               Orange Money
@@ -144,10 +144,10 @@ function PaymentLinkModalContent({
             <button
               type="button"
               onClick={() => setProvider("afriland")}
-              className={`rounded-xl border p-2.5 text-center text-xs font-semibold transition-all ${
+              className={`rounded-xl border p-2.5 text-center text-xs font-medium transition-all ${
                 provider === "afriland"
-                  ? "border-blue-600 bg-blue-50/60 text-blue-700 ring-2 ring-blue-500/20"
-                  : "border-slate-200 bg-slate-50/50 text-slate-600 hover:bg-slate-100"
+                  ? "border-accent-600 bg-accent-50 text-accent-700 ring-2 ring-accent-500/20 dark:bg-accent-950/40 dark:text-accent-300"
+                  : "border-border-button-default bg-background-secondary-default text-text-secondary hover:bg-background-secondary-hover"
               }`}
             >
               Afriland / Virement
@@ -156,18 +156,18 @@ function PaymentLinkModalContent({
         </div>
 
         {/* Generated Link Preview */}
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3">
-          <span className="text-[11px] font-semibold text-slate-500">
+        <div className="rounded-2xl border border-border-button-default bg-background-secondary-default p-3">
+          <span className="text-[11px] font-medium text-text-tertiary">
             Lien de Checkout généré
           </span>
-          <div className="mt-1 flex items-center justify-between rounded-xl bg-white border border-slate-200 px-3 py-1.5 text-xs text-slate-700">
-            <span className="truncate font-mono text-[11px] text-blue-600 mr-2">
+          <div className="mt-1 flex items-center justify-between rounded-xl bg-background-primary-default border border-border-button-default px-3 py-1.5 text-xs text-text-primary">
+            <span className="truncate font-mono text-[11px] text-accent-700 dark:text-accent-400 mr-2">
               {generatedLink}
             </span>
             <button
               type="button"
               onClick={handleCopy}
-              className="shrink-0 text-slate-500 hover:text-slate-800 transition-colors"
+              className="shrink-0 text-text-tertiary hover:text-text-primary transition-colors"
               title="Copier le lien"
             >
               {isCopied ? (
@@ -181,13 +181,13 @@ function PaymentLinkModalContent({
       </div>
 
       {/* Modal Actions */}
-      <div className="mt-6 flex items-center justify-end space-x-2.5 border-t border-slate-100 pt-4">
+      <div className="mt-6 flex items-center justify-end space-x-2.5 border-t border-border-secondary pt-4">
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={onClose}
-          className="text-xs rounded-xl"
+          className="text-xs rounded-full border-border-button-default text-text-secondary hover:text-text-primary"
         >
           Annuler
         </Button>
@@ -196,7 +196,7 @@ function PaymentLinkModalContent({
           type="button"
           size="sm"
           onClick={handleInsert}
-          className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs"
+          className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-medium text-xs shadow-xs"
         >
           <Send className="mr-1.5 h-3.5 w-3.5" />
           Insérer dans la discussion
@@ -215,7 +215,7 @@ export function PaymentLinkModal({
   if (!isOpen || !customer) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
       <PaymentLinkModalContent
         key={customer.id}
         customer={customer}

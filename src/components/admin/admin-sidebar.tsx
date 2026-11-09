@@ -36,7 +36,7 @@ const navItems: AdminNavItem[] = [
     href: "/admin/businesses",
     icon: Building2,
     badge: "18",
-    badgeColor: "bg-blue-100 text-blue-800",
+    badgeColor: "bg-accent-100 text-accent-800",
   },
   {
     title: "Global Webhook & AI Logs",
@@ -67,22 +67,22 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-screen w-64 flex-col border-r border-slate-200/80 bg-white shadow-2xs",
+        "flex h-screen w-64 flex-col border-r border-border-button-default bg-background-primary-default shadow-card",
         className
       )}
     >
       {/* Brand Header */}
-      <div className="flex h-16 items-center justify-between border-b border-slate-100 px-6">
+      <div className="flex h-16 items-center justify-between border-b border-border-button-default px-6">
         <Link
           href="/admin"
-          className="flex items-center space-x-2.5 font-bold tracking-tight text-slate-900 hover:opacity-90 transition-opacity"
+          className="flex items-center space-x-2.5 font-bold tracking-tight text-text-primary hover:opacity-90 transition-opacity"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-slate-900 to-blue-900 font-black text-white shadow-sm shadow-slate-900/25">
-            <Shield className="h-4 w-4 text-blue-400" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-gradient-to-tr from-slate-900 to-accent-900 font-black text-white shadow-2xs">
+            <Shield className="h-4 w-4 text-accent-400" />
           </div>
           <div className="flex flex-col">
             <span className="text-base tracking-tight leading-tight">{APP_NAME}</span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
               Super Admin
             </span>
           </div>
@@ -93,18 +93,18 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
       </div>
 
       {/* Super Admin Status Tag */}
-      <div className="border-b border-slate-100 px-5 py-3 bg-slate-50/50">
+      <div className="border-b border-border-button-default px-5 py-3 bg-background-secondary-default/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 min-w-0">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            <span className="truncate text-xs font-bold text-slate-800">
+            <span className="truncate text-xs font-bold text-text-primary">
               SaaS Control Center
             </span>
           </div>
-          <span className="shrink-0 rounded-full bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 text-[10px] font-bold text-emerald-800">
+          <span className="shrink-0 rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
             CEMAC Cluster
           </span>
         </div>
@@ -112,7 +112,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
 
       {/* Main Navigation Links */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-        <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
           Admin Command
         </p>
 
@@ -127,10 +127,10 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150",
+                "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                 isActive
                   ? "bg-slate-900 text-white shadow-xs"
-                  : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
+                  : "text-text-secondary hover:bg-background-secondary-default hover:text-text-primary"
               )}
             >
               <div className="flex items-center space-x-3">
@@ -138,8 +138,8 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
                     isActive
-                      ? "text-blue-400"
-                      : "text-slate-500 group-hover:text-slate-900"
+                      ? "text-accent-400"
+                      : "text-text-tertiary group-hover:text-text-primary"
                   )}
                 />
                 <span>{item.title}</span>
@@ -148,7 +148,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
                 <span
                   className={cn(
                     "rounded-full px-2 py-0.5 text-[10px] font-bold",
-                    item.badgeColor || "bg-slate-100 text-slate-700"
+                    item.badgeColor || "bg-background-secondary-default text-text-secondary"
                   )}
                 >
                   {item.badge}
@@ -160,21 +160,21 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
       </div>
 
       {/* Bottom Switcher: Quick Jump to Client Workspace */}
-      <div className="border-t border-slate-100 p-4 bg-slate-50/40">
+      <div className="border-t border-border-button-default p-4 bg-background-secondary-default/40">
         <Link
           href="/dashboard"
-          className="group flex items-center justify-between rounded-2xl border border-blue-200/80 bg-blue-50/60 p-3 text-xs font-semibold text-blue-900 transition-all hover:bg-blue-100/80 hover:border-blue-300"
+          className="group flex items-center justify-between rounded-3xl border border-accent-200/80 bg-accent-50/70 p-3.5 text-xs font-semibold text-accent-950 transition-all hover:bg-accent-100 hover:border-accent-300 shadow-card"
         >
           <div className="flex items-center space-x-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-600 text-white shadow-2xs">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-accent-600 text-white shadow-2xs">
+              <Sparkles className="h-4 w-4" />
             </div>
             <div>
-              <p className="font-bold text-xs text-blue-950">Client Dashboard</p>
-              <p className="text-[10px] text-blue-700">Jump into Workspace View</p>
+              <p className="font-bold text-xs text-accent-950">Client Dashboard</p>
+              <p className="text-[10px] text-accent-700">Jump into Workspace View</p>
             </div>
           </div>
-          <ArrowUpRight className="h-4 w-4 text-blue-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight className="h-4 w-4 text-accent-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>
     </aside>

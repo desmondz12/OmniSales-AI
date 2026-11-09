@@ -57,75 +57,78 @@ export function WorkspaceForm({ tenant, canEdit }: WorkspaceFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {successMessage && (
-        <Alert variant="success">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
-        </Alert>
-      )}
-
-      {errorMessage && (
-        <Alert variant="destructive">
-          <AlertTitle>Update Failed</AlertTitle>
-          <AlertDescription>{errorMessage}</AlertDescription>
-        </Alert>
-      )}
-
-      <div>
-        <Input
-          label="Workspace Name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={fieldError}
-          disabled={!canEdit || isLoading}
-          required
-        />
-        {!canEdit && (
-          <p className="mt-1.5 text-xs text-amber-400">
-            You need Admin or Owner permissions in this workspace to modify its name.
-          </p>
+    <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-6 shadow-card font-sans">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {successMessage && (
+          <Alert variant="success">
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{successMessage}</AlertDescription>
+          </Alert>
         )}
-      </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 pt-2">
+        {errorMessage && (
+          <Alert variant="destructive">
+            <AlertTitle>Update Failed</AlertTitle>
+            <AlertDescription>{errorMessage}</AlertDescription>
+          </Alert>
+        )}
+
         <div>
-          <label className="block text-xs font-medium text-slate-400">
-            Workspace Slug
-          </label>
-          <div className="mt-1 flex items-center rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300">
-            <Building2 className="mr-2 h-4 w-4 text-slate-500" />
-            <span className="font-mono">{tenant.slug}</span>
+          <Input
+            label="Workspace Name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={fieldError}
+            disabled={!canEdit || isLoading}
+            required
+          />
+          {!canEdit && (
+            <p className="mt-1.5 text-xs text-amber-600 font-medium">
+              You need Admin or Owner permissions in this workspace to modify its name.
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 pt-1">
+          <div>
+            <label className="block text-xs font-semibold text-text-primary mb-1">
+              Workspace Slug
+            </label>
+            <div className="flex items-center rounded-2xl border border-border-button-default bg-background-secondary-default px-3.5 py-2.5 text-xs text-text-secondary">
+              <Building2 className="mr-2 h-4 w-4 text-text-tertiary" />
+              <span className="font-mono font-medium">{tenant.slug}</span>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-text-primary mb-1">
+              Workspace ID
+            </label>
+            <div className="flex items-center rounded-2xl border border-border-button-default bg-background-secondary-default px-3.5 py-2.5 text-xs text-text-tertiary truncate">
+              <span className="font-mono text-xs">{tenant.id}</span>
+            </div>
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-medium text-slate-400">
-            Workspace ID
-          </label>
-          <div className="mt-1 flex items-center rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-400 truncate">
-            <span className="font-mono text-xs">{tenant.id}</span>
+        {canEdit && (
+          <div className="pt-2 border-t border-border-button-default flex justify-end">
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading || name.trim() === tenant.name}
+              className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+            >
+              {successMessage ? (
+                <Check className="mr-2 h-4 w-4 text-white" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              Save Changes
+            </Button>
           </div>
-        </div>
-      </div>
-
-      {canEdit && (
-        <div className="pt-2">
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            disabled={isLoading || name.trim() === tenant.name}
-          >
-            {successMessage ? (
-              <Check className="mr-2 h-4 w-4 text-emerald-400" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            Save Changes
-          </Button>
-        </div>
-      )}
-    </form>
+        )}
+      </form>
+    </div>
   );
 }

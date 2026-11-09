@@ -95,32 +95,32 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs">
+    <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-6 sm:p-7 shadow-card">
       {/* Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-slate-100">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-border-secondary">
         <div>
           <div className="flex items-center space-x-2">
-            <h3 className="text-lg font-bold tracking-tight text-slate-900">
+            <h3 className="text-lg font-semibold tracking-tight text-text-primary">
               Needs You Now
             </h3>
-            <span className="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700 border border-rose-200/60">
+            <span className="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-medium text-rose-700 border border-rose-200/60 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/40">
               <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
               {priorityQueue.length} Priority Escalations
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Escalated conversations where AI detected high-value payment intent, distress, or human requests
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs text-slate-500">
-          <Clock className="h-3.5 w-3.5 text-slate-400" />
+        <div className="flex items-center space-x-2 text-xs text-text-tertiary">
+          <Clock className="h-3.5 w-3.5 text-text-tertiary" />
           <span>Avg. resolution target: &lt; 15 mins</span>
         </div>
       </div>
 
       {/* Escalation Queue Table / List */}
-      <div className="mt-4 divide-y divide-slate-100">
+      <div className="mt-4 divide-y divide-border-secondary">
         {priorityQueue.map((item) => {
           const customerName = item.customers?.name || "Customer";
           const isUpset = item.status === "upset";
@@ -129,7 +129,7 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
           return (
             <div
               key={item.id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between py-4 transition-colors hover:bg-slate-50/60 rounded-xl px-2.5 -mx-2.5"
+              className="flex flex-col sm:flex-row sm:items-center justify-between py-4 transition-colors hover:bg-background-secondary-default rounded-2xl px-3 -mx-3"
             >
               <div className="flex items-start space-x-3.5 min-w-0">
                 {/* Status Dot */}
@@ -140,7 +140,7 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
                         ? "bg-emerald-500"
                         : isUpset
                         ? "bg-rose-500"
-                        : "bg-blue-500"
+                        : "bg-accent-600"
                     }`}
                   />
                 </span>
@@ -148,13 +148,13 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
                 {/* Info block */}
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-bold text-slate-900 truncate">
+                    <span className="text-sm font-semibold text-text-primary truncate">
                       {customerName}
                     </span>
                     {getChannelBadge(item.channel_type)}
                     {getTriageBadge(item.triage_tag)}
                   </div>
-                  <p className="text-xs text-slate-600 mt-1 line-clamp-1 leading-relaxed">
+                  <p className="text-xs text-text-secondary mt-1 line-clamp-1 leading-relaxed">
                     {item.ai_context_summary}
                   </p>
                 </div>
@@ -165,10 +165,10 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
                 <button
                   type="button"
                   onClick={() => onReviewHandoff(item)}
-                  className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100/80 px-3 py-1.5 rounded-xl border border-blue-200/60 transition-colors"
+                  className="inline-flex items-center text-xs font-medium text-accent-700 hover:text-accent-800 bg-accent-50 hover:bg-accent-100 px-3.5 py-1.5 rounded-full border border-accent-200/60 transition-colors shadow-2xs"
                 >
                   <span>Review Handoff</span>
-                  <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </button>
               </div>
             </div>

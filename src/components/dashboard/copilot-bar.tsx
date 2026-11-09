@@ -123,9 +123,9 @@ export function CopilotBar({
                 key={s}
                 type="button"
                 onClick={() => setInput(s)}
-                className="inline-flex shrink-0 items-center rounded-full bg-white/95 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm border border-slate-200/90 backdrop-blur-md hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all cursor-pointer"
+                className="inline-flex shrink-0 items-center rounded-full bg-background-primary-default px-3 py-1 text-xs font-medium text-text-secondary shadow-xs border border-border-button-default backdrop-blur-md hover:bg-background-secondary-default hover:text-text-primary transition-all cursor-pointer"
               >
-                <Sparkles className="mr-1.5 h-3 w-3 text-blue-600" />
+                <Sparkles className="mr-1.5 h-3 w-3 text-accent-600" />
                 {s}
               </button>
             ))}
@@ -134,10 +134,10 @@ export function CopilotBar({
           {/* Main Floating Glassmorphic Bar */}
           <form
             onSubmit={handleSubmit}
-            className="relative flex w-full items-center rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 sm:p-2 shadow-2xl backdrop-blur-xl transition-all duration-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10"
+            className="relative flex w-full items-center rounded-full border border-border-button-default bg-background-primary-default/95 p-1.5 sm:p-2 shadow-modal backdrop-blur-xl transition-all duration-300 focus-within:border-accent-600 focus-within:ring-4 focus-within:ring-accent-500/10"
           >
             {/* AI Mascot Glow Icon */}
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs ml-1">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 text-white shadow-xs ml-1">
               <Bot className="h-5 w-5" />
             </div>
 
@@ -147,17 +147,17 @@ export function CopilotBar({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask or give an instruction (e.g., 'Follow up with everyone who promised to pay today')..."
-              className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-text-primary placeholder:text-text-placeholder focus:outline-none"
             />
 
             {/* Microphone Toggle Button */}
             <button
               type="button"
               onClick={handleToggleMic}
-              className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:text-slate-900 ${
+              className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-tertiary transition-colors hover:text-text-primary ${
                 isListening
                   ? "bg-rose-500 text-white animate-pulse hover:text-white"
-                  : "hover:bg-slate-100"
+                  : "hover:bg-background-secondary-default"
               }`}
               title={isListening ? "Listening... click to cancel" : "Voice instruction"}
             >
@@ -173,7 +173,7 @@ export function CopilotBar({
               type="submit"
               disabled={!input.trim() || isProcessing}
               size="sm"
-              className="ml-1.5 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-3.5 font-semibold text-xs shadow-xs"
+              className="ml-1.5 h-9 rounded-full bg-accent-600 hover:bg-accent-700 text-white px-4 font-medium text-xs shadow-xs"
             >
               {isProcessing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -191,44 +191,44 @@ export function CopilotBar({
       {/* Execution Result Modal / Notification Card */}
       {activeResult && (
         <div className="fixed bottom-24 right-4 sm:right-8 z-50 max-w-md w-full animate-in fade-in slide-in-from-bottom-5 duration-300">
-          <div className="rounded-3xl border border-blue-200 bg-white p-5 shadow-2xl ring-1 ring-black/5">
+          <div className="rounded-3xl border border-border-button-default bg-background-primary-default p-5 shadow-modal">
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-accent-50 text-accent-700">
                   <Sparkles className="h-4 w-4" />
                 </span>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900">
+                  <h4 className="text-xs font-semibold text-text-primary">
                     OmniSales AI Co-Pilot
                   </h4>
-                  <p className="text-[10px] text-slate-400">{activeResult.timestamp}</p>
+                  <p className="text-[10px] text-text-tertiary">{activeResult.timestamp}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveResult(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+                className="text-text-tertiary hover:text-text-primary p-1 rounded-full hover:bg-background-secondary-default"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-3 rounded-xl bg-slate-50 p-2.5 border border-slate-100">
-              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <div className="mt-3 rounded-2xl bg-background-secondary-default p-2.5 border border-border-button-default">
+              <p className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider">
                 Instruction
               </p>
-              <p className="text-xs font-medium text-slate-900 mt-0.5">
+              <p className="text-xs font-medium text-text-primary mt-0.5">
                 &ldquo;{activeResult.query}&rdquo;
               </p>
             </div>
 
             <div className="mt-3">
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <p className="text-xs text-text-secondary leading-relaxed">
                 {activeResult.response}
               </p>
             </div>
 
-            <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-800">
+            <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-200/60 px-3 py-2 text-xs font-medium text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/40">
               <div className="flex items-center space-x-1.5">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span className="truncate">{activeResult.actionTaken}</span>
@@ -241,7 +241,7 @@ export function CopilotBar({
                 variant="outline"
                 size="sm"
                 onClick={() => setActiveResult(null)}
-                className="text-xs"
+                className="text-xs rounded-full border-border-button-default text-text-secondary hover:text-text-primary hover:bg-background-secondary-default"
               >
                 Dismiss
               </Button>
@@ -254,7 +254,7 @@ export function CopilotBar({
                     setActiveResult(null);
                     onNavigateInbox();
                   }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"
+                  className="bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium rounded-full"
                 >
                   View in Inbox
                   <ArrowRight className="ml-1.5 h-3.5 w-3.5" />

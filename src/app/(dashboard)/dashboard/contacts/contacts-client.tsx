@@ -54,7 +54,6 @@ export function ContactsClient({
   const [isLoading, setIsLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
-
   // Form values for Contact (New or Edit)
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -264,7 +263,7 @@ export function ContactsClient({
       }
 
       setCompanies((prev) => [...prev, data as Company]);
-      setCompanyId(data.id); // Auto-select new company
+      setCompanyId(data.id);
       setIsAddCompanyOpen(false);
       setCompanyName("");
       setCompanyDomain("");
@@ -277,14 +276,14 @@ export function ContactsClient({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Top Header Actions */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
             Contacts & Accounts
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-text-secondary">
             {contacts.length} {contacts.length === 1 ? "contact" : "contacts"} recorded in your workspace
           </p>
         </div>
@@ -296,8 +295,9 @@ export function ContactsClient({
               setErrorMessage(null);
               setIsAddCompanyOpen(true);
             }}
+            className="rounded-full border-border-button-default bg-background-primary-default text-xs font-semibold shadow-2xs hover:bg-background-secondary-default"
           >
-            <Building2 className="mr-1.5 h-4 w-4" />
+            <Building2 className="mr-1.5 h-3.5 w-3.5" />
             New Company
           </Button>
           <Button
@@ -306,28 +306,29 @@ export function ContactsClient({
               resetContactForm();
               setIsAddContactOpen(true);
             }}
+            className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
           >
-            <Plus className="mr-1.5 h-4 w-4" />
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
             Add Contact
           </Button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between rounded-3xl border border-border-button-default bg-background-primary-default p-4 shadow-card">
         <div className="relative flex-1 max-w-md">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />
+          <Search className="pointer-events-none absolute left-3.5 top-2.5 h-4 w-4 text-text-tertiary" />
           <input
             type="text"
             placeholder="Search by name, email, or company..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-slate-900/60 pl-9 pr-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-full border border-border-button-default bg-background-secondary-default pl-9 pr-4 py-2 text-xs text-text-primary placeholder:text-text-tertiary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
           />
         </div>
 
         {/* Status Filters */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 rounded-full border border-border-button-default bg-background-secondary-default p-1">
           {[
             { label: "All", value: "all" },
             { label: "Leads", value: "lead" },
@@ -339,10 +340,10 @@ export function ContactsClient({
               key={item.value}
               type="button"
               onClick={() => setSelectedStatus(item.value)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                 selectedStatus === item.value
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800"
+                  ? "bg-background-primary-default text-text-primary shadow-2xs font-bold"
+                  : "text-text-secondary hover:text-text-primary"
               }`}
             >
               {item.label}
@@ -353,22 +354,22 @@ export function ContactsClient({
 
       {/* Contact List / Table */}
       {filteredContacts.length === 0 ? (
-        <Card className="border-slate-800 bg-slate-900/40">
+        <Card className="rounded-3xl border border-border-button-default bg-background-primary-default shadow-card">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800/80 text-slate-500 mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 mb-3 shadow-2xs">
               <Users className="h-7 w-7" />
             </div>
             {contacts.length === 0 ? (
               <>
-                <p className="text-base font-semibold text-white">
+                <p className="text-base font-semibold text-text-primary">
                   No contacts in your workspace
                 </p>
-                <p className="mt-1 text-xs text-slate-400 max-w-sm">
+                <p className="mt-1 text-xs text-text-secondary max-w-sm">
                   Start building your sales network by adding your first lead or customer contact.
                 </p>
                 <Button
                   size="sm"
-                  className="mt-4"
+                  className="mt-4 rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold shadow-xs"
                   onClick={() => {
                     resetContactForm();
                     setIsAddContactOpen(true);
@@ -380,16 +381,16 @@ export function ContactsClient({
               </>
             ) : (
               <>
-                <p className="text-base font-semibold text-white">
+                <p className="text-base font-semibold text-text-primary">
                   No contacts found
                 </p>
-                <p className="mt-1 text-xs text-slate-400 max-w-sm">
+                <p className="mt-1 text-xs text-text-secondary max-w-sm">
                   No contacts match your current search or status filter. Try resetting your filters.
                 </p>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="mt-4"
+                  className="mt-4 rounded-full border-border-button-default bg-background-primary-default text-xs font-semibold"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedStatus("all");
@@ -402,11 +403,11 @@ export function ContactsClient({
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <div className="overflow-hidden rounded-3xl border border-border-button-default bg-background-primary-default shadow-card">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-300">
-              <thead className="border-b border-slate-800 bg-slate-900 text-xs uppercase tracking-wider text-slate-400">
-                <tr>
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-border-button-default bg-background-secondary-default/50 text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
                   <th scope="col" className="px-6 py-3.5">
                     Contact
                   </th>
@@ -424,25 +425,25 @@ export function ContactsClient({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-border-button-default">
                 {filteredContacts.map((contact) => (
                   <tr
                     key={contact.id}
-                    className="hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-background-secondary-default/60 transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-950 font-bold text-blue-400 border border-blue-900/60">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-accent-100 font-bold text-accent-700 border border-accent-200 shadow-2xs">
                           {contact.first_name.charAt(0)}
                           {contact.last_name.charAt(0)}
                         </div>
                         <div>
-                          <div className="font-medium text-white">
+                          <div className="font-semibold text-text-primary text-xs sm:text-sm">
                             {contact.first_name} {contact.last_name}
                           </div>
-                          <div className="flex items-center space-x-2 text-xs text-slate-400 mt-0.5">
+                          <div className="flex items-center space-x-2 text-xs text-text-secondary mt-0.5">
                             <span className="flex items-center">
-                              <Mail className="mr-1 h-3 w-3" />
+                              <Mail className="mr-1 h-3 w-3 text-text-tertiary" />
                               {contact.email}
                             </span>
                             {contact.job_title && (
@@ -458,51 +459,51 @@ export function ContactsClient({
 
                     <td className="px-6 py-4 text-xs">
                       {contact.companies?.name ? (
-                        <div className="flex items-center space-x-1.5 text-slate-200">
-                          <Building2 className="h-3.5 w-3.5 text-slate-400" />
-                          <span className="font-medium">
+                        <div className="flex items-center space-x-1.5 text-text-primary">
+                          <Building2 className="h-3.5 w-3.5 text-text-tertiary" />
+                          <span className="font-semibold">
                             {contact.companies.name}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-slate-500">—</span>
+                        <span className="text-text-tertiary">—</span>
                       )}
                     </td>
 
                     <td className="px-6 py-4">
-                      <Badge variant={contact.status} className="capitalize">
+                      <Badge variant={contact.status} className="capitalize rounded-full font-semibold">
                         {contact.status}
                       </Badge>
                     </td>
 
-                    <td className="px-6 py-4 text-xs text-slate-400">
+                    <td className="px-6 py-4 text-xs text-text-secondary font-mono">
                       {contact.phone ? (
                         <span className="flex items-center">
-                          <Phone className="mr-1.5 h-3 w-3 text-slate-500" />
+                          <Phone className="mr-1.5 h-3 w-3 text-text-tertiary" />
                           {contact.phone}
                         </span>
                       ) : (
-                        <span className="text-slate-600">—</span>
+                        <span className="text-text-tertiary">—</span>
                       )}
                     </td>
 
                     <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
+                      <div className="flex items-center justify-end space-x-1.5">
                         <button
                           type="button"
                           onClick={() => openEditModal(contact)}
-                          className="rounded p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="rounded-full p-2 text-text-tertiary hover:bg-background-secondary-default hover:text-text-primary transition-colors border border-border-button-default"
                           aria-label={`Edit ${contact.first_name}`}
                         >
-                          <Edit2 className="h-4 w-4" />
+                          <Edit2 className="h-3.5 w-3.5" />
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeletingContact(contact)}
-                          className="rounded p-1.5 text-slate-400 hover:bg-red-950/50 hover:text-red-400 transition-colors"
+                          className="rounded-full p-2 text-text-tertiary hover:bg-rose-50 hover:text-rose-600 transition-colors border border-border-button-default"
                           aria-label={`Delete ${contact.first_name}`}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     </td>
@@ -523,7 +524,7 @@ export function ContactsClient({
         title="Add New Contact"
         description="Enter the lead or customer details to add them to your CRM."
       >
-        <form onSubmit={handleCreateContact} className="space-y-4">
+        <form onSubmit={handleCreateContact} className="space-y-4 font-sans">
           {errorMessage && (
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
@@ -535,7 +536,7 @@ export function ContactsClient({
             <Input
               label="First Name"
               type="text"
-              placeholder="Sarah"
+              placeholder="Jean"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               disabled={isLoading}
@@ -544,7 +545,7 @@ export function ContactsClient({
             <Input
               label="Last Name"
               type="text"
-              placeholder="Connor"
+              placeholder="Fotso"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               disabled={isLoading}
@@ -556,7 +557,7 @@ export function ContactsClient({
             <Input
               label="Email"
               type="email"
-              placeholder="sarah@example.com"
+              placeholder="jean@example.cm"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
@@ -565,7 +566,7 @@ export function ContactsClient({
             <Input
               label="Phone Number"
               type="tel"
-              placeholder="+1 (555) 019-2834"
+              placeholder="+237 671 23 45 67"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               disabled={isLoading}
@@ -576,20 +577,20 @@ export function ContactsClient({
             <Input
               label="Job Title"
               type="text"
-              placeholder="VP of Sales"
+              placeholder="Directeur Commercial"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               disabled={isLoading}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-text-primary mb-1.5">
                 Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ContactStatus)}
                 disabled={isLoading}
-                className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex h-10 w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
               >
                 <option value="lead">Lead</option>
                 <option value="prospect">Prospect</option>
@@ -600,14 +601,14 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-text-primary mb-1.5">
               Company / Account
             </label>
             <select
               value={companyId}
               onChange={(e) => setCompanyId(e.target.value)}
               disabled={isLoading}
-              className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex h-10 w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
             >
               <option value="">No Company Assigned</option>
               {companies.map((c) => (
@@ -619,7 +620,7 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-text-primary mb-1.5">
               Notes
             </label>
             <textarea
@@ -628,20 +629,26 @@ export function ContactsClient({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               disabled={isLoading}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary placeholder:text-text-tertiary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-3 pt-3 border-t border-border-button-default">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsAddContactOpen(false)}
               disabled={isLoading}
+              className="rounded-full text-xs"
             >
               Cancel
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+            >
               Save Contact
             </Button>
           </div>
@@ -657,7 +664,7 @@ export function ContactsClient({
         title="Edit Contact"
         description="Update contact information and details."
       >
-        <form onSubmit={handleUpdateContact} className="space-y-4">
+        <form onSubmit={handleUpdateContact} className="space-y-4 font-sans">
           {errorMessage && (
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
@@ -711,14 +718,14 @@ export function ContactsClient({
               disabled={isLoading}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-text-primary mb-1.5">
                 Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ContactStatus)}
                 disabled={isLoading}
-                className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex h-10 w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
               >
                 <option value="lead">Lead</option>
                 <option value="prospect">Prospect</option>
@@ -729,14 +736,14 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-text-primary mb-1.5">
               Company / Account
             </label>
             <select
               value={companyId}
               onChange={(e) => setCompanyId(e.target.value)}
               disabled={isLoading}
-              className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex h-10 w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
             >
               <option value="">No Company Assigned</option>
               {companies.map((c) => (
@@ -748,7 +755,7 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-text-primary mb-1.5">
               Notes
             </label>
             <textarea
@@ -756,20 +763,26 @@ export function ContactsClient({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               disabled={isLoading}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-border-button-default bg-background-secondary-default px-3 py-2 text-xs text-text-primary placeholder:text-text-tertiary focus:border-accent-600 focus:bg-background-primary-default focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-3 pt-3 border-t border-border-button-default">
             <Button
               type="button"
               variant="outline"
               onClick={() => setEditingContact(null)}
               disabled={isLoading}
+              className="rounded-full text-xs"
             >
               Cancel
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+            >
               Update Contact
             </Button>
           </div>
@@ -785,7 +798,7 @@ export function ContactsClient({
         title="Create New Company"
         description="Add a company account to associate with your contacts."
       >
-        <form onSubmit={handleCreateCompany} className="space-y-4">
+        <form onSubmit={handleCreateCompany} className="space-y-4 font-sans">
           {errorMessage && (
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
@@ -796,7 +809,7 @@ export function ContactsClient({
           <Input
             label="Company Name"
             type="text"
-            placeholder="Acme Technologies Ltd"
+            placeholder="Chantiers & BTP du Wouri SARL"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             disabled={isLoading}
@@ -806,7 +819,7 @@ export function ContactsClient({
           <Input
             label="Domain / Website"
             type="text"
-            placeholder="acme.com"
+            placeholder="chantier-douala.cm"
             value={companyDomain}
             onChange={(e) => setCompanyDomain(e.target.value)}
             disabled={isLoading}
@@ -815,22 +828,28 @@ export function ContactsClient({
           <Input
             label="Industry"
             type="text"
-            placeholder="SaaS / Fintech / Healthcare"
+            placeholder="Construction / BTP / Commerce"
             value={companyIndustry}
             onChange={(e) => setCompanyIndustry(e.target.value)}
             disabled={isLoading}
           />
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-3 pt-3 border-t border-border-button-default">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsAddCompanyOpen(false)}
               disabled={isLoading}
+              className="rounded-full text-xs"
             >
               Cancel
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-semibold text-xs shadow-xs"
+            >
               Create Company
             </Button>
           </div>
@@ -846,7 +865,7 @@ export function ContactsClient({
         title="Delete Contact"
         description={`Are you sure you want to delete ${deletingContact?.first_name} ${deletingContact?.last_name}? This action cannot be undone.`}
       >
-        <div className="space-y-4">
+        <div className="space-y-4 font-sans">
           {errorMessage && (
             <Alert variant="destructive">
               <AlertTitle>Delete Failed</AlertTitle>
@@ -854,12 +873,13 @@ export function ContactsClient({
             </Alert>
           )}
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-3 pt-3 border-t border-border-button-default">
             <Button
               type="button"
               variant="outline"
               onClick={() => setDeletingContact(null)}
               disabled={isLoading}
+              className="rounded-full text-xs"
             >
               Cancel
             </Button>
@@ -869,6 +889,7 @@ export function ContactsClient({
               onClick={handleDeleteContact}
               isLoading={isLoading}
               disabled={isLoading}
+              className="rounded-full text-xs shadow-xs"
             >
               Delete Contact
             </Button>

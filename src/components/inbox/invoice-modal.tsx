@@ -98,19 +98,19 @@ export function InvoiceModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-      <div className="relative w-full max-w-xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+      <div className="relative w-full max-w-xl rounded-3xl border border-border-button-default bg-background-primary-default p-6 shadow-modal animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+        <div className="flex items-start justify-between border-b border-border-secondary pb-4">
           <div className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-accent-50 text-accent-700">
               <FileText className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-semibold text-text-primary">
                 Create & Dispatch Invoice
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-secondary mt-0.5">
                 Billed to {customer.name}
               </p>
             </div>
@@ -118,7 +118,7 @@ export function InvoiceModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="rounded-full p-2 text-text-tertiary hover:bg-background-secondary-default hover:text-text-primary transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -127,11 +127,11 @@ export function InvoiceModal({
         {/* Line Items Table */}
         <div className="mt-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-700">Line Items</span>
+            <span className="text-xs font-semibold text-text-primary">Line Items</span>
             <button
               type="button"
               onClick={handleAddItem}
-              className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-700"
+              className="inline-flex items-center text-xs font-medium text-accent-700 hover:text-accent-800"
             >
               <Plus className="mr-1 h-3.5 w-3.5" />
               Add Item
@@ -142,7 +142,7 @@ export function InvoiceModal({
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center space-x-2 rounded-xl border border-slate-200 bg-slate-50/50 p-2 text-xs"
+                className="flex items-center space-x-2 rounded-2xl border border-border-button-default bg-background-secondary-default p-2 text-xs"
               >
                 <input
                   type="text"
@@ -151,7 +151,7 @@ export function InvoiceModal({
                     handleUpdateItem(item.id, "description", e.target.value)
                   }
                   placeholder="Item description"
-                  className="flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none"
+                  className="flex-1 rounded-xl border border-border-button-default bg-background-primary-default px-2.5 py-1.5 text-xs text-text-primary focus:outline-none"
                 />
                 <input
                   type="number"
@@ -160,7 +160,7 @@ export function InvoiceModal({
                   onChange={(e) =>
                     handleUpdateItem(item.id, "quantity", Number(e.target.value))
                   }
-                  className="w-14 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-900 text-center focus:outline-none"
+                  className="w-14 rounded-xl border border-border-button-default bg-background-primary-default px-2 py-1.5 text-xs text-text-primary text-center focus:outline-none"
                 />
                 <input
                   type="number"
@@ -168,13 +168,13 @@ export function InvoiceModal({
                   onChange={(e) =>
                     handleUpdateItem(item.id, "unitPrice", Number(e.target.value))
                   }
-                  className="w-24 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 text-right focus:outline-none"
+                  className="w-24 rounded-xl border border-border-button-default bg-background-primary-default px-2.5 py-1.5 text-xs text-text-primary text-right focus:outline-none"
                 />
                 {items.length > 1 && (
                   <button
                     type="button"
                     onClick={() => handleRemoveItem(item.id)}
-                    className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                    className="p-1 text-text-tertiary hover:text-rose-600 transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -185,34 +185,34 @@ export function InvoiceModal({
 
           {/* Due date input */}
           <div className="flex items-center justify-between pt-2">
-            <label className="text-xs font-semibold text-slate-700">
+            <label className="text-xs font-medium text-text-secondary">
               Payment Due Date
             </label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-1 text-xs text-slate-800 focus:outline-none"
+              className="rounded-xl border border-border-button-default bg-background-secondary-default px-2.5 py-1 text-xs text-text-primary focus:outline-none"
             />
           </div>
 
           {/* Total summary */}
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-600">Montant Total Facture :</span>
-            <span className="text-base font-bold text-slate-900">
+          <div className="rounded-2xl border border-border-button-default bg-background-secondary-default p-3.5 flex items-center justify-between">
+            <span className="text-xs font-medium text-text-secondary">Montant Total Facture :</span>
+            <span className="text-base font-semibold text-text-primary">
               {totalAmount.toLocaleString("fr-FR")} FCFA
             </span>
           </div>
         </div>
 
         {/* Modal Actions */}
-        <div className="mt-6 flex items-center justify-end space-x-2.5 border-t border-slate-100 pt-4">
+        <div className="mt-6 flex items-center justify-end space-x-2.5 border-t border-border-secondary pt-4">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={onClose}
-            className="text-xs rounded-xl"
+            className="text-xs rounded-full border-border-button-default text-text-secondary hover:text-text-primary"
           >
             Cancel
           </Button>
@@ -221,7 +221,7 @@ export function InvoiceModal({
             type="button"
             size="sm"
             onClick={handleSendInvoice}
-            className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs"
+            className="rounded-full bg-accent-600 hover:bg-accent-700 text-white font-medium text-xs shadow-xs"
           >
             <Send className="mr-1.5 h-3.5 w-3.5" />
             Send Invoice to Chat

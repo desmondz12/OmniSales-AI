@@ -46,25 +46,25 @@ export default async function ProfileSettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Settings Navigation Tabs */}
-      <div className="flex border-b border-slate-200 pb-3 space-x-6 text-sm">
+      <div className="flex border-b border-border-button-default pb-3 space-x-6 text-sm">
         <Link
           href="/dashboard/settings"
-          className="font-medium text-slate-500 hover:text-slate-800 transition-colors"
+          className="font-medium text-text-secondary hover:text-text-primary transition-colors"
         >
           Paramètres Espace Client
         </Link>
-        <span className="font-semibold text-blue-600 border-b-2 border-blue-600 pb-3 -mb-3.5">
+        <span className="font-semibold text-accent-600 border-b-2 border-accent-600 pb-3 -mb-3.5">
           Profil Utilisateur
         </span>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
           Mon Profil
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-text-secondary">
           Gérez vos informations de compte, coordonnées et préférences de notification.
         </p>
       </div>
