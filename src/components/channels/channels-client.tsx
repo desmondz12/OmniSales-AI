@@ -177,8 +177,11 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     return map;
   });
 
+  const [mounted, setMounted] = React.useState(false);
+
   // Handle URL query parameters for OAuth returns
   React.useEffect(() => {
+    setMounted(true);
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     const connectedParam = params.get("connected");
@@ -193,9 +196,11 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
 
     if (seamlessParam === "instagram" || seamlessParam === "messenger") {
       setMetaChannelTarget(seamlessParam);
-      setIsMetaModalOpen(true);
+      const timer = setTimeout(() => setIsMetaModalOpen(true), 50);
+      return () => clearTimeout(timer);
     } else if (seamlessParam === "tiktok") {
-      setIsTikTokModalOpen(true);
+      const timer = setTimeout(() => setIsTikTokModalOpen(true), 50);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -497,39 +502,43 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
         })}
       </div>
 
-      {/* Modals */}
-      <WhatsAppQRModal
-        isOpen={isQrModalOpen}
-        onClose={() => setIsQrModalOpen(false)}
-        phoneNumber="+237 671 23 45 67"
-        onConnected={(type, handle) => handleChannelConnected(type, handle)}
-      />
+      {/* Modals rendered safely post-hydration */}
+      {mounted && (
+        <div id="channels-portal-container">
+          <WhatsAppQRModal
+            isOpen={isQrModalOpen}
+            onClose={() => setIsQrModalOpen(false)}
+            phoneNumber="+237 671 23 45 67"
+            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+          />
 
-      <TelegramTokenModal
-        isOpen={isTelegramModalOpen}
-        onClose={() => setIsTelegramModalOpen(false)}
-        botUsername="@MusaSalesAgentBot"
-        onConnected={(type, handle) => handleChannelConnected(type, handle)}
-      />
+          <TelegramTokenModal
+            isOpen={isTelegramModalOpen}
+            onClose={() => setIsTelegramModalOpen(false)}
+            botUsername="@MusaSalesAgentBot"
+            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+          />
 
-      <WebhookTestModal
-        isOpen={isWebhookModalOpen}
-        onClose={() => setIsWebhookModalOpen(false)}
-        defaultChannel={webhookChannelTarget}
-      />
+          <WebhookTestModal
+            isOpen={isWebhookModalOpen}
+            onClose={() => setIsWebhookModalOpen(false)}
+            defaultChannel={webhookChannelTarget}
+          />
 
-      <MetaOAuthModal
-        isOpen={isMetaModalOpen}
-        onClose={() => setIsMetaModalOpen(false)}
-        channel={metaChannelTarget}
-        onConnected={(type, handle) => handleChannelConnected(type, handle)}
-      />
+          <MetaOAuthModal
+            isOpen={isMetaModalOpen}
+            onClose={() => setIsMetaModalOpen(false)}
+            channel={metaChannelTarget}
+            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+          />
 
-      <TikTokOAuthModal
-        isOpen={isTikTokModalOpen}
-        onClose={() => setIsTikTokModalOpen(false)}
-        onConnected={(type, handle) => handleChannelConnected(type, handle)}
-      />
+          <TikTokOAuthModal
+            isOpen={isTikTokModalOpen}
+            onClose={() => setIsTikTokModalOpen(false)}
+            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+          />
+        </div>
+      )}
     </div>
   );
 }
