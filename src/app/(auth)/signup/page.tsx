@@ -123,40 +123,40 @@ export default function SignUpPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900 selection:bg-[#0071E3]/15 selection:text-[#0071E3]">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0071E3] text-white shadow-md shadow-[#0071E3]/20 mb-2">
               <Bot className="h-6 w-6" />
             </div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
               {APP_NAME}
             </h2>
           </div>
 
-          <Card className="border border-emerald-200 bg-white shadow-sm">
+          <Card className="apple-glass-card rounded-3xl border border-white/60 bg-white/80 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#34C759]/10 text-[#34C759]">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <CardTitle className="text-xl">Check your inbox</CardTitle>
-              <CardDescription className="text-slate-500">
-                We sent a confirmation link to:
+              <CardTitle className="text-lg font-semibold tracking-tight text-slate-900">Vérifiez vos e-mails</CardTitle>
+              <CardDescription className="text-xs text-slate-500 font-normal">
+                Un lien de confirmation a été envoyé à l&apos;adresse :
               </CardDescription>
-              <p className="mt-1 font-semibold text-slate-900">{email}</p>
+              <p className="mt-1 font-semibold text-xs text-slate-900">{email}</p>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4 text-xs text-slate-600 text-center">
+            <CardContent className="space-y-4 pt-3 text-xs text-slate-600 text-center font-normal">
               <p>
-                Click the verification link in the email to activate your account
-                and complete setting up <strong>{companyName}</strong>.
+                Cliquez sur le lien dans l&apos;e-mail pour activer votre compte
+                et démarrer la configuration de <strong>{companyName}</strong>.
               </p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="pt-2">
               <Link
                 href={ROUTES.LOGIN}
-                className={buttonVariants({ variant: "outline", className: "w-full" })}
+                className={buttonVariants({ variant: "outline", className: "apple-press w-full rounded-2xl text-xs font-medium" })}
               >
-                Return to Sign In
+                Retour à la page de connexion
               </Link>
             </CardFooter>
           </Card>
@@ -166,87 +166,90 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900 selection:bg-[#0071E3]/15 selection:text-[#0071E3]">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0071E3] text-white shadow-md shadow-[#0071E3]/20 mb-2">
             <Bot className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
             {APP_NAME}
           </h1>
-          <p className="text-xs text-slate-500">
-            Create your sales workspace across 5 channels
+          <p className="text-xs text-slate-400 font-normal">
+            Créez votre espace commercial omnicanal en quelques clics
           </p>
         </div>
 
-        <Card className="border border-slate-200 bg-white shadow-sm">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl">Create a workspace</CardTitle>
-            <CardDescription>
-              Enter your business details to launch your AI sales agent
+        <Card className="apple-glass-card rounded-3xl border border-white/60 bg-white/80 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-2">
+          <CardHeader className="pb-3 pt-4 px-5">
+            <CardTitle className="text-lg font-semibold tracking-[-0.02em] text-slate-900">Nouveau compte</CardTitle>
+            <CardDescription className="text-xs text-slate-500 font-normal">
+              Renseignez vos coordonnées pour déployer votre agent commercial IA
             </CardDescription>
           </CardHeader>
 
           <form onSubmit={handleSignUp} noValidate>
-            <CardContent className="space-y-3.5">
+            <CardContent className="space-y-3.5 px-5">
               {errorMessage && (
-                <Alert variant="destructive">
-                  <AlertTitle>Sign-up Failed</AlertTitle>
-                  <AlertDescription>{errorMessage}</AlertDescription>
+                <Alert variant="destructive" className="rounded-2xl">
+                  <AlertTitle className="text-xs font-semibold">Erreur d&apos;inscription</AlertTitle>
+                  <AlertDescription className="text-xs">{errorMessage}</AlertDescription>
                 </Alert>
               )}
 
               <div className="relative">
                 <Input
-                  label="Your Full Name"
+                  label="Nom complet"
                   type="text"
                   autoComplete="name"
-                  placeholder="Jane Doe"
+                  placeholder="Jean-Luc Fotso"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   error={fieldErrors.fullName}
                   disabled={isLoading}
+                  className="h-10 rounded-2xl text-xs bg-white/90"
                   required
                 />
-                <User className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
+                <User className="pointer-events-none absolute right-3.5 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <Input
-                  label="Company / Workspace Name"
+                  label="Nom de l'entreprise ou boutique"
                   type="text"
-                  placeholder="Acme Retail"
+                  placeholder="Fotso Commerce SARL"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   error={fieldErrors.companyName}
                   disabled={isLoading}
+                  className="h-10 rounded-2xl text-xs bg-white/90"
                   required
                 />
-                <Building2 className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
+                <Building2 className="pointer-events-none absolute right-3.5 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <Input
-                  label="Work Email"
+                  label="Email professionnel"
                   type="email"
                   autoComplete="email"
-                  placeholder="jane@acme.com"
+                  placeholder="contact@fotso.cm"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={fieldErrors.email}
                   disabled={isLoading}
+                  className="h-10 rounded-2xl text-xs bg-white/90"
                   required
                 />
-                <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
+                <Mail className="pointer-events-none absolute right-3.5 top-7.5 h-4 w-4 text-slate-400" />
               </div>
 
               <div className="relative">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-slate-700 mb-1"
+                  className="block text-xs font-medium text-slate-700 mb-1"
                 >
-                  Password (min. 8 characters)
+                  Mot de passe (8 caractères minimum)
                 </label>
                 <div className="relative">
                   <Input
@@ -258,13 +261,14 @@ export default function SignUpPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     error={fieldErrors.password}
                     disabled={isLoading}
+                    className="h-10 rounded-2xl text-xs bg-white/90"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     tabIndex={-1}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="apple-press absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -278,7 +282,7 @@ export default function SignUpPage() {
 
               <div>
                 <Input
-                  label="Confirm Password"
+                  label="Confirmez le mot de passe"
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="••••••••"
@@ -286,29 +290,30 @@ export default function SignUpPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   error={fieldErrors.confirmPassword}
                   disabled={isLoading}
+                  className="h-10 rounded-2xl text-xs bg-white/90"
                   required
                 />
               </div>
             </CardContent>
 
-            <CardFooter className="flex flex-col space-y-3 pt-2">
+            <CardFooter className="flex flex-col space-y-3 pt-3 pb-5 px-5">
               <Button
                 type="submit"
-                className="w-full"
+                className="apple-press w-full rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-medium text-xs h-10 shadow-xs"
                 isLoading={isLoading}
                 disabled={isLoading}
               >
-                <Lock className="mr-2 h-4 w-4" />
-                Create Workspace
+                <Lock className="mr-2 h-3.5 w-3.5" />
+                Créer l&apos;espace de travail
               </Button>
 
-              <div className="text-center text-xs text-slate-500">
-                Already have an account?{" "}
+              <div className="text-center text-xs text-slate-500 font-normal">
+                Vous avez déjà un compte ?{" "}
                 <Link
                   href={ROUTES.LOGIN}
-                  className="font-semibold text-blue-600 hover:text-blue-700"
+                  className="font-medium text-[#0071E3] hover:underline"
                 >
-                  Sign in
+                  Se connecter
                 </Link>
               </div>
             </CardFooter>

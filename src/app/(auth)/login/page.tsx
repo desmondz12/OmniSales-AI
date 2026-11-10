@@ -118,34 +118,34 @@ function LoginForm() {
 
   return (
     <div className="space-y-6">
-      {/* Demo Role Switcher Cards */}
-      <div className="rounded-xl border border-blue-100 bg-blue-50/70 p-4">
-        <div className="flex items-center space-x-2 text-xs font-semibold text-blue-900 mb-2.5">
-          <Sparkles className="h-4 w-4 text-blue-600" />
-          <span>One-Click Role Switcher (Instant Demo Access)</span>
+      {/* Demo Role Switcher Cards: Apple Translucent Capsule Cards */}
+      <div className="rounded-3xl border border-slate-200/60 bg-white/70 backdrop-blur-xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-800 mb-2.5">
+          <Sparkles className="h-3.5 w-3.5 text-[#0071E3]" />
+          <span>Accès Démo Instantané (1 Clic)</span>
         </div>
         <div className="grid gap-2.5 sm:grid-cols-2">
           <button
             type="button"
             onClick={() => handleDemoLogin("business_client")}
             disabled={isLoading || Boolean(isDemoLoading)}
-            className="flex flex-col items-start rounded-lg border border-blue-200/80 bg-white p-3 text-left shadow-2xs hover:border-blue-500 hover:shadow-xs transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="apple-press flex flex-col items-start rounded-2xl border border-slate-200/80 bg-white/90 p-3 text-left shadow-2xs hover:border-[#0071E3] transition-all disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center space-x-2 w-full justify-between">
-              <span className="flex items-center text-xs font-bold text-slate-900">
-                <Building2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-                Business Owner
+              <span className="flex items-center text-xs font-semibold text-slate-900 tracking-tight">
+                <Building2 className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+                Commerçant
               </span>
-              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
+              <span className="rounded-full bg-[#0071E3]/10 px-2 py-0.5 text-[10px] font-semibold text-[#0071E3]">
                 /dashboard
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-slate-500 leading-tight">
-              Musa&apos;s 5-channel AI Sales & Collections workspace
+            <p className="mt-1 text-[11px] text-slate-400 leading-snug">
+              Espace vendeur 5 canaux & recouvrement MoMo/OM
             </p>
             {isDemoLoading === "owner" && (
-              <span className="mt-2 text-[10px] text-blue-600 font-medium animate-pulse">
-                Launching Business Portal...
+              <span className="mt-1.5 text-[10px] text-[#0071E3] font-medium animate-pulse">
+                Connexion en cours...
               </span>
             )}
           </button>
@@ -154,23 +154,23 @@ function LoginForm() {
             type="button"
             onClick={() => handleDemoLogin("super_admin")}
             disabled={isLoading || Boolean(isDemoLoading)}
-            className="flex flex-col items-start rounded-lg border border-purple-200/80 bg-white p-3 text-left shadow-2xs hover:border-purple-500 hover:shadow-xs transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="apple-press flex flex-col items-start rounded-2xl border border-slate-200/80 bg-white/90 p-3 text-left shadow-2xs hover:border-[#5856D6] transition-all disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center space-x-2 w-full justify-between">
-              <span className="flex items-center text-xs font-bold text-slate-900">
-                <ShieldCheck className="mr-1.5 h-3.5 w-3.5 text-purple-600" />
+              <span className="flex items-center text-xs font-semibold text-slate-900 tracking-tight">
+                <ShieldCheck className="mr-1.5 h-3.5 w-3.5 text-[#5856D6]" />
                 Super Admin
               </span>
-              <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700">
+              <span className="rounded-full bg-[#5856D6]/10 px-2 py-0.5 text-[10px] font-semibold text-[#5856D6]">
                 /admin
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-slate-500 leading-tight">
-              SaaS owner platform command center & tenant control
+            <p className="mt-1 text-[11px] text-slate-400 leading-snug">
+              Supervision SaaS, entreprises & audit global
             </p>
             {isDemoLoading === "admin" && (
-              <span className="mt-2 text-[10px] text-purple-600 font-medium animate-pulse">
-                Launching Admin Portal...
+              <span className="mt-1.5 text-[10px] text-[#5856D6] font-medium animate-pulse">
+                Connexion en cours...
               </span>
             )}
           </button>
@@ -178,58 +178,59 @@ function LoginForm() {
       </div>
 
       <div className="relative flex items-center justify-center">
-        <div className="border-t border-slate-200 w-full" />
+        <div className="border-t border-slate-200/80 w-full" />
         <span className="bg-[#F8FAFC] px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-          Or sign in with email
+          Ou avec identifiants
         </span>
       </div>
 
-      {/* Standard Form */}
-      <Card className="border border-slate-200 bg-white shadow-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl">Sign in to your account</CardTitle>
-          <CardDescription>
-            Enter your credentials to access your sales workspace
+      {/* Standard Apple Card */}
+      <Card className="apple-glass-card rounded-3xl border border-white/60 bg-white/80 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-2">
+        <CardHeader className="pb-3 pt-4 px-5">
+          <CardTitle className="text-lg font-semibold tracking-[-0.02em] text-slate-900">Connexion</CardTitle>
+          <CardDescription className="text-xs text-slate-500 font-normal">
+            Saisissez vos identifiants pour ouvrir votre espace commercial
           </CardDescription>
         </CardHeader>
 
         <form onSubmit={handleSignIn} noValidate>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3.5 px-5">
             {errorMessage && (
-              <Alert variant="destructive">
-                <AlertTitle>Sign-in Failed</AlertTitle>
-                <AlertDescription>{errorMessage}</AlertDescription>
+              <Alert variant="destructive" className="rounded-2xl">
+                <AlertTitle className="text-xs font-semibold">Échec de connexion</AlertTitle>
+                <AlertDescription className="text-xs">{errorMessage}</AlertDescription>
               </Alert>
             )}
 
             <div className="relative">
               <Input
-                label="Work Email"
+                label="Email professionnel"
                 type="email"
                 autoComplete="email"
-                placeholder="name@company.com"
+                placeholder="nom@entreprise.cm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 error={fieldErrors.email}
                 disabled={isLoading}
+                className="h-10 rounded-2xl text-xs bg-white/90"
                 required
               />
-              <Mail className="pointer-events-none absolute right-3 top-7.5 h-4 w-4 text-slate-400" />
+              <Mail className="pointer-events-none absolute right-3.5 top-7.5 h-4 w-4 text-slate-400" />
             </div>
 
             <div className="relative">
               <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-slate-700"
+                  className="block text-xs font-medium text-slate-700"
                 >
-                  Password
+                  Mot de passe
                 </label>
                 <Link
                   href={ROUTES.FORGOT_PASSWORD}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-xs text-[#0071E3] hover:underline font-medium"
                 >
-                  Forgot password?
+                  Mot de passe oublié ?
                 </Link>
               </div>
               <div className="relative">
@@ -242,13 +243,14 @@ function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   error={fieldErrors.password}
                   disabled={isLoading}
+                  className="h-10 rounded-2xl text-xs bg-white/90"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="apple-press absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-600 transition-colors"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
@@ -261,24 +263,24 @@ function LoginForm() {
             </div>
           </CardContent>
 
-          <CardFooter className="flex flex-col space-y-3 pt-2">
+          <CardFooter className="flex flex-col space-y-3 pt-3 pb-5 px-5">
             <Button
               type="submit"
-              className="w-full"
+              className="apple-press w-full rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-medium text-xs h-10 shadow-xs"
               isLoading={isLoading}
               disabled={isLoading || Boolean(isDemoLoading)}
             >
-              <Lock className="mr-2 h-4 w-4" />
-              Sign In
+              <Lock className="mr-2 h-3.5 w-3.5" />
+              Se connecter
             </Button>
 
-            <div className="text-center text-xs text-slate-500">
-              Don&apos;t have an account?{" "}
+            <div className="text-center text-xs text-slate-500 font-normal">
+              Pas encore d&apos;espace ?{" "}
               <Link
                 href={ROUTES.SIGNUP}
-                className="font-semibold text-blue-600 hover:text-blue-700"
+                className="font-medium text-[#0071E3] hover:underline"
               >
-                Create a workspace
+                Créer un compte
               </Link>
             </div>
           </CardFooter>
@@ -290,24 +292,24 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F8FAFC] px-4 py-12 text-slate-900 selection:bg-[#0071E3]/15 selection:text-[#0071E3]">
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 mb-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0071E3] text-white shadow-md shadow-[#0071E3]/20 mb-2">
             <Bot className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
             {APP_NAME}
           </h1>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto">
-            AI-powered sales, CRM & collections platform across 5 channels
+          <p className="text-xs text-slate-400 max-w-xs mx-auto font-normal">
+            Plateforme commerciale IA omnicanale & recouvrement de créances
           </p>
         </div>
 
         <React.Suspense
           fallback={
-            <div className="h-64 rounded-xl border border-slate-200 bg-white shadow-xs animate-pulse" />
+            <div className="h-64 rounded-3xl border border-slate-200/60 bg-white/80 shadow-xs animate-pulse" />
           }
         >
           <LoginForm />

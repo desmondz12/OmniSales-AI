@@ -39,28 +39,28 @@ const navItems: NavItem[] = [
     href: "/dashboard/inbox",
     icon: Inbox,
     badge: "3",
-    badgeColor: "bg-rose-500 text-white",
+    badgeColor: "bg-[#FF3B30] text-white",
   },
   {
     title: "Pipeline des Deals",
     href: "/dashboard/deals",
     icon: Layers,
     badge: "8",
-    badgeColor: "bg-blue-100 text-blue-800",
+    badgeColor: "bg-blue-50 text-[#0071E3] border border-blue-200/60",
   },
   {
     title: "Recouvrement & MoMo",
     href: "/dashboard/collections",
     icon: CreditCard,
     badge: "2",
-    badgeColor: "bg-amber-100 text-amber-800",
+    badgeColor: "bg-amber-50 text-[#FF9500] border border-amber-200/60",
   },
   {
     title: "Canaux Connectés",
     href: "/dashboard/channels",
     icon: Radio,
     badge: "5",
-    badgeColor: "bg-emerald-100 text-emerald-800",
+    badgeColor: "bg-emerald-50 text-[#34C759] border border-emerald-200/60",
   },
   {
     title: "Agente IA (Nathalie)",
@@ -91,47 +91,47 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-screen w-64 flex-col border-r border-slate-200/80 bg-white shadow-2xs",
+        "flex h-screen w-64 flex-col border-r border-slate-200/60 bg-white/80 backdrop-blur-2xl shadow-[1px_0_12px_rgba(0,0,0,0.02)] select-none",
         className
       )}
     >
-      {/* Brand Header */}
-      <div className="flex h-16 items-center justify-between border-b border-slate-100 px-6">
+      {/* Brand Header — Apple Minimal Monolith */}
+      <div className="flex h-16 items-center justify-between border-b border-slate-200/50 px-5">
         <Link
           href="/dashboard"
-          className="flex items-center space-x-2.5 font-bold tracking-tight text-slate-900 hover:opacity-90 transition-opacity"
+          className="flex items-center space-x-2.5 tracking-tight text-slate-900 active:scale-[0.98] transition-all"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 font-black text-white shadow-sm shadow-blue-500/25">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0071E3] via-[#0077ED] to-[#5856D6] text-white shadow-xs shadow-blue-500/25">
             <Sparkles className="h-4 w-4" />
           </div>
-          <span className="text-base tracking-tight">{APP_NAME}</span>
+          <span className="text-sm font-bold tracking-tight text-slate-900">{APP_NAME}</span>
         </Link>
-        <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-100">
+        <span className="rounded-full bg-blue-50/80 px-2 py-0.5 text-[10px] font-bold text-[#0071E3] border border-blue-200/50">
           PRO
         </span>
       </div>
 
-      {/* Active Workspace Switcher Tag */}
-      <div className="border-b border-slate-100 px-5 py-3 bg-slate-50/50">
-        <div className="flex items-center justify-between">
+      {/* Active Workspace — Apple Card Material */}
+      <div className="p-3 border-b border-slate-200/40">
+        <div className="flex items-center justify-between rounded-xl bg-slate-100/70 backdrop-blur-md border border-slate-200/50 p-2.5">
           <div className="flex items-center space-x-2 min-w-0">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white shadow-2xs border border-slate-200/60 text-slate-600">
               <Building2 className="h-3.5 w-3.5" />
             </div>
-            <span className="truncate text-xs font-semibold text-slate-800">
-              {tenantName || "Fotso & Sons Commerce Douala"}
+            <span className="truncate text-xs font-semibold text-slate-900 tracking-tight">
+              {tenantName || "Fotso Distribution Douala"}
             </span>
           </div>
-          <span className="shrink-0 rounded-full bg-emerald-100/80 px-1.5 py-0.2 text-[10px] font-bold text-emerald-800">
-            {role || "Owner"}
+          <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-[#34C759] border border-emerald-200/60">
+            {role || "Admin"}
           </span>
         </div>
       </div>
 
-      {/* Main Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-        <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-          Workspace
+      {/* Navigation Links with Apple Fluid Selection */}
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
+        <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          Menu Principal
         </p>
 
         {navItems.map((item) => {
@@ -145,22 +145,22 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150",
+                "group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-120 ease-out active:scale-[0.98]",
                 isActive
-                  ? "bg-blue-600 text-white shadow-xs shadow-blue-500/20"
+                  ? "bg-[#0071E3] text-white shadow-xs shadow-blue-500/25"
                   : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
               )}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2.5">
                 <Icon
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
                     isActive
                       ? "text-white"
-                      : "text-slate-500 group-hover:text-slate-900"
+                      : "text-slate-400 group-hover:text-slate-700"
                   )}
                 />
-                <span>{item.title}</span>
+                <span className="tracking-tight">{item.title}</span>
               </div>
 
               {item.badge && (
@@ -168,7 +168,7 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
                   className={cn(
                     "rounded-full px-2 py-0.5 text-[10px] font-bold",
                     isActive
-                      ? "bg-white/20 text-white"
+                      ? "bg-white/20 text-white backdrop-blur-xs"
                       : item.badgeColor || "bg-slate-100 text-slate-700"
                   )}
                 >
@@ -181,27 +181,27 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
       </div>
 
       {/* Bottom Section: 5 Channels Live Status & Super Admin Switch */}
-      <div className="border-t border-slate-100 p-4 space-y-3 bg-slate-50/40">
+      <div className="border-t border-slate-200/50 p-3 space-y-2.5 bg-slate-50/50 backdrop-blur-md">
         {/* 5 Channels Live Indicators */}
-        <div className="rounded-xl border border-slate-200/70 bg-white p-2.5">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-2.5 shadow-2xs">
           <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1.5">
-            <span>5 Channels Connected</span>
-            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="tracking-tight">Passerelles Actives</span>
+            <span className="flex h-1.5 w-1.5 rounded-full bg-[#34C759] animate-pulse" />
           </div>
-          <div className="grid grid-cols-5 gap-1 text-center">
-            <span className="rounded bg-emerald-50 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-100">
+          <div className="grid grid-cols-5 gap-1 text-center font-mono text-[9px] font-bold">
+            <span className="rounded-lg bg-emerald-50 py-0.5 text-[#34C759] border border-emerald-100">
               WA
             </span>
-            <span className="rounded bg-pink-50 py-0.5 text-[10px] font-bold text-pink-700 border border-pink-100">
+            <span className="rounded-lg bg-pink-50 py-0.5 text-pink-600 border border-pink-100">
               IG
             </span>
-            <span className="rounded bg-blue-50 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-100">
+            <span className="rounded-lg bg-blue-50 py-0.5 text-[#0071E3] border border-blue-100">
               FB
             </span>
-            <span className="rounded bg-slate-100 py-0.5 text-[10px] font-bold text-slate-900 border border-slate-200">
+            <span className="rounded-lg bg-slate-100 py-0.5 text-slate-900 border border-slate-200">
               TT
             </span>
-            <span className="rounded bg-sky-50 py-0.5 text-[10px] font-bold text-sky-700 border border-sky-100">
+            <span className="rounded-lg bg-sky-50 py-0.5 text-sky-600 border border-sky-100">
               TG
             </span>
           </div>
@@ -210,10 +210,10 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
         {/* Quick Switch to Super Admin Portal */}
         <Link
           href="/admin"
-          className="flex items-center justify-center space-x-1.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-blue-600 transition-colors shadow-2xs"
+          className="flex items-center justify-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0071E3] transition-all active:scale-[0.98] shadow-2xs"
         >
-          <Shield className="h-3.5 w-3.5 text-blue-600" />
-          <span>Super Admin Portal</span>
+          <Shield className="h-3.5 w-3.5 text-[#0071E3]" />
+          <span className="tracking-tight">Super Admin Portal</span>
         </Link>
       </div>
     </aside>

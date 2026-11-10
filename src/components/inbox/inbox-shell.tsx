@@ -377,34 +377,36 @@ export function InboxShell({
           ))}
         </div>
 
-        {/* Status Filter Tabs */}
-        <div className="grid grid-cols-4 gap-1 border-b border-slate-100 p-2 text-center bg-white text-[11px] font-semibold text-slate-600">
-          {[
-            { id: "all", label: "All" },
-            { id: "needs_human", label: "Needs You" },
-            { id: "ready_to_pay", label: "To Pay" },
-            { id: "ai_handling", label: "AI Auto" },
-          ].map((st) => (
-            <button
-              key={st.id}
-              type="button"
-              onClick={() => setSelectedStatus(st.id)}
-              className={`rounded-lg py-1 transition-colors ${
-                selectedStatus === st.id
-                  ? "bg-slate-100 text-blue-700 font-bold"
-                  : "hover:bg-slate-50 text-slate-500"
-              }`}
-            >
-              {st.label}
-            </button>
-          ))}
+        {/* Status Filter Tabs — Apple Segmented Control */}
+        <div className="p-2 border-b border-slate-200/50 bg-white/70 backdrop-blur-md">
+          <div className="grid grid-cols-4 gap-1 rounded-xl bg-slate-100/80 p-1 text-center text-[10px] font-bold text-slate-600">
+            {[
+              { id: "all", label: "Tous" },
+              { id: "needs_human", label: "Urgents" },
+              { id: "ready_to_pay", label: "À Payer" },
+              { id: "ai_handling", label: "IA Auto" },
+            ].map((st) => (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => setSelectedStatus(st.id)}
+                className={`rounded-lg py-1 transition-all active:scale-95 ${
+                  selectedStatus === st.id
+                    ? "bg-white text-slate-900 shadow-2xs font-bold"
+                    : "hover:text-slate-900 text-slate-500"
+                }`}
+              >
+                {st.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-100/80">
           {filteredConversations.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">
-              No conversations matching your filters.
+              Aucune conversation pour ce filtre.
             </div>
           ) : (
             filteredConversations.map((conv) => {
@@ -417,10 +419,10 @@ export function InboxShell({
                 <div
                   key={conv.id}
                   onClick={() => setActiveConvId(conv.id)}
-                  className={`group relative flex cursor-pointer flex-col p-4 transition-all duration-150 ${
+                  className={`group relative flex cursor-pointer flex-col p-3.5 transition-all duration-120 ${
                     isSelected
-                      ? "bg-blue-50/50 border-l-4 border-l-blue-600 pl-3.5"
-                      : "hover:bg-slate-50/70"
+                      ? "bg-blue-50/70 border-l-[3px] border-l-[#0071E3] pl-3"
+                      : "hover:bg-slate-50/80"
                   }`}
                 >
                   {/* Top row: Avatar + Name + Timestamp */}
@@ -645,14 +647,14 @@ export function InboxShell({
                   </span>
                 </div>
 
-                {/* Message Content Bubble */}
+                {/* Message Content Bubble — Apple iMessage */}
                 <div
-                  className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-xs sm:text-sm leading-relaxed shadow-xs ${
+                  className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs tracking-tight ${
                     isCustomer
-                      ? "bg-white text-slate-900 border border-slate-200/80 rounded-tl-xs"
+                      ? "bg-slate-100/90 text-slate-900 border border-slate-200/50 rounded-bl-xs"
                       : isAi
-                      ? "bg-blue-50/90 text-blue-950 border border-blue-200/70 rounded-tr-xs"
-                      : "bg-blue-600 text-white rounded-tr-xs"
+                      ? "bg-indigo-50/80 text-indigo-950 border border-indigo-200/50 rounded-br-xs"
+                      : "bg-[#0071E3] text-white rounded-br-xs shadow-xs"
                   }`}
                 >
                   <p className="whitespace-pre-line">{msg.content}</p>
@@ -663,61 +665,61 @@ export function InboxShell({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Action Toolbar */}
-        <div className="border-t border-slate-200/80 bg-white px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar">
+        {/* Quick Action Toolbar — Apple Sub-bar */}
+        <div className="border-t border-slate-200/50 bg-white/80 backdrop-blur-md px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setIsPaymentModalOpen(true)}
-            className="inline-flex shrink-0 items-center rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+            className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0071E3] transition-all active:scale-95"
           >
-            <CreditCard className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-            Send Payment Link
+            <CreditCard className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+            Lien MoMo / OM
           </button>
 
           <button
             type="button"
             onClick={() => setIsInvoiceModalOpen(true)}
-            className="inline-flex shrink-0 items-center rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+            className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#5856D6] transition-all active:scale-95"
           >
-            <FileText className="mr-1.5 h-3.5 w-3.5 text-indigo-600" />
-            Generate Invoice
+            <FileText className="mr-1.5 h-3.5 w-3.5 text-[#5856D6]" />
+            Générer Facture
           </button>
 
           <button
             type="button"
             disabled={isDraftingAi}
             onClick={handleAiDraftReply}
-            className="inline-flex shrink-0 items-center rounded-xl bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+            className="inline-flex shrink-0 items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#0071E3] hover:bg-blue-100 transition-all active:scale-95 border border-blue-200/60"
           >
-            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-            {isDraftingAi ? "Drafting..." : "Let AI Draft Reply"}
+            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+            {isDraftingAi ? "Rédaction..." : "Proposer Réponse IA"}
           </button>
         </div>
 
-        {/* Reply Input Box */}
-        <form onSubmit={handleSendMessage} className="border-t border-slate-200/80 bg-white p-3 sm:p-4">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-2 focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/10 transition-all">
+        {/* Reply Input Box — Apple Floating Input */}
+        <form onSubmit={handleSendMessage} className="border-t border-slate-200/50 bg-white/90 backdrop-blur-md p-3 sm:p-4">
+          <div className="rounded-2xl border border-slate-200/80 bg-slate-100/60 p-2 focus-within:border-[#0071E3] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0071E3]/20 transition-all">
             <textarea
               rows={2}
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={`Reply to ${activeCustomer?.name || "Customer"} on ${activeConversation?.channel_type || "chat"}... (Press ⌘ + Enter to send)`}
-              className="w-full resize-none bg-transparent p-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              placeholder={`Répondre à ${activeCustomer?.name || "Client"} sur ${activeConversation?.channel_type || "chat"}... (⌘ + Entrée pour envoyer)`}
+              className="w-full resize-none bg-transparent p-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none tracking-tight font-medium"
             />
 
-            <div className="flex items-center justify-between border-t border-slate-200/60 pt-2 px-1">
-              <span className="text-[11px] font-semibold text-slate-400">
-                Delivering via {activeConversation?.channel_type?.toUpperCase()} Gateway
+            <div className="flex items-center justify-between border-t border-slate-200/40 pt-2 px-1">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                Passerelle {activeConversation?.channel_type?.toUpperCase()}
               </span>
 
               <Button
                 type="submit"
                 size="sm"
                 disabled={!replyText.trim()}
-                className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 font-semibold text-xs shadow-xs"
+                className="rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white px-4 font-semibold text-xs shadow-xs active:scale-95"
               >
-                <span>Send</span>
+                <span>Envoyer</span>
                 <Send className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </div>

@@ -29,7 +29,7 @@ export function ProfileForm({ userEmail, userId, profile }: ProfileFormProps) {
     setErrorMessage(null);
 
     if (!fullName.trim()) {
-      setFieldError("Display name cannot be empty.");
+      setFieldError("Le nom affiché ne peut pas être vide.");
       return;
     }
     setFieldError(undefined);
@@ -51,80 +51,75 @@ export function ProfileForm({ userEmail, userId, profile }: ProfileFormProps) {
         return;
       }
 
-      setSuccessMessage("Your profile was updated successfully.");
+      setSuccessMessage("Votre profil a été mis à jour avec succès.");
       router.refresh();
     } catch {
-      setErrorMessage("An unexpected error occurred while updating profile.");
+      setErrorMessage("Une erreur est survenue lors de la mise à jour.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {successMessage && (
-        <Alert variant="success">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
-        </Alert>
-      )}
+    <div className="apple-glass-card rounded-3xl border border-slate-200/60 p-6 sm:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {successMessage && (
+          <Alert variant="success" className="rounded-2xl">
+            <AlertTitle className="text-xs font-semibold">Succès</AlertTitle>
+            <AlertDescription className="text-xs">{successMessage}</AlertDescription>
+          </Alert>
+        )}
 
-      {errorMessage && (
-        <Alert variant="destructive">
-          <AlertTitle>Update Failed</AlertTitle>
-          <AlertDescription>{errorMessage}</AlertDescription>
-        </Alert>
-      )}
+        {errorMessage && (
+          <Alert variant="destructive" className="rounded-2xl">
+            <AlertTitle className="text-xs font-semibold">Échec de mise à jour</AlertTitle>
+            <AlertDescription className="text-xs">{errorMessage}</AlertDescription>
+          </Alert>
+        )}
 
-      <div className="relative">
-        <Input
-          label="Full Name"
-          type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          error={fieldError}
-          disabled={isLoading}
-          required
-        />
-        <UserIcon className="pointer-events-none absolute right-3 top-8.5 h-4 w-4 text-slate-500" />
-      </div>
-
-      <div className="relative">
-        <label className="block text-sm font-medium text-slate-400">
-          Email Address
-        </label>
-        <div className="mt-1.5 flex items-center rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-400">
-          <Mail className="mr-2 h-4 w-4 text-slate-500" />
-          <span>{userEmail}</span>
+        <div className="relative">
+          <Input
+            label="Nom complet"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            error={fieldError}
+            disabled={isLoading}
+            className="h-10 rounded-2xl text-xs bg-white/90"
+            required
+          />
+          <UserIcon className="pointer-events-none absolute right-3.5 top-8.5 h-4 w-4 text-slate-400" />
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Email address is managed by your account authentication.
-        </p>
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-400">
-          User Identifier
-        </label>
-        <div className="mt-1.5 flex items-center rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 font-mono text-xs text-slate-500 truncate">
-          <span>{userId}</span>
+        <div className="relative">
+          <label className="block text-xs font-medium text-slate-700 mb-1">
+            Adresse e-mail de connexion
+          </label>
+          <div className="mt-1 flex items-center rounded-2xl border border-slate-200/80 bg-slate-50/70 px-3.5 py-2.5 text-xs text-slate-600">
+            <Mail className="mr-2 h-4 w-4 text-slate-400" />
+            <span>{userEmail}</span>
+          </div>
+          <p className="mt-1 text-[11px] text-slate-400">
+            L&apos;adresse e-mail est liée à votre compte d&apos;authentification Supabase.
+          </p>
         </div>
-      </div>
 
-      <div className="pt-2">
-        <Button
-          type="submit"
-          isLoading={isLoading}
-          disabled={isLoading || fullName.trim() === (profile?.full_name ?? "")}
-        >
-          {successMessage ? (
-            <Check className="mr-2 h-4 w-4 text-emerald-400" />
-          ) : (
-            <Save className="mr-2 h-4 w-4" />
-          )}
-          Update Profile
-        </Button>
-      </div>
-    </form>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            isLoading={isLoading}
+            disabled={isLoading || fullName.trim() === (profile?.full_name ?? "")}
+            className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4 py-2"
+          >
+            {successMessage ? (
+              <Check className="mr-1.5 h-3.5 w-3.5 text-white" />
+            ) : (
+              <Save className="mr-1.5 h-3.5 w-3.5" />
+            )}
+            Mettre à jour le Profil
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }

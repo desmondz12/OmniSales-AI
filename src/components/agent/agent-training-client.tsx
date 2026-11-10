@@ -209,16 +209,16 @@ export function AgentTrainingClient() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center space-x-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              AI Sales Agent Training
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
+              Agent de Vente IA
             </h1>
-            <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-200">
-              <Sparkles className="mr-1 h-3.5 w-3.5 text-blue-600" />
-              Gemini 2.5 Flash Engine
+            <span className="inline-flex items-center rounded-full bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 px-3 py-1 text-xs font-semibold text-purple-700 border border-purple-500/20 shadow-2xs">
+              <Sparkles className="mr-1.5 h-3.5 w-3.5 text-purple-600 animate-pulse" />
+              Apple Intelligence Core • Gemini 2.5
             </span>
           </div>
-          <p className="mt-1 text-xs sm:text-sm text-slate-500">
-            Configure agent personality, sales negotiation rules, product pricing catalog, and human handoff thresholds
+          <p className="mt-1 text-xs sm:text-sm text-slate-500 font-normal">
+            Configurez la voix commerciale, les barèmes de prix FCFA et les seuils d&apos;escalade humaine.
           </p>
         </div>
 
@@ -226,17 +226,17 @@ export function AgentTrainingClient() {
           <Button
             type="button"
             onClick={handleSaveSettings}
-            className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs"
+            className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4 py-2 shadow-xs transition-all"
           >
             {isSaved ? (
               <>
                 <Check className="mr-1.5 h-3.5 w-3.5 text-white" />
-                Saved & Synchronized!
+                Synchronisé & Enregistré !
               </>
             ) : (
               <>
                 <Save className="mr-1.5 h-3.5 w-3.5" />
-                Save AI Configuration
+                Enregistrer la Configuration
               </>
             )}
           </Button>
@@ -250,38 +250,38 @@ export function AgentTrainingClient() {
         {/* ========================================================= */}
         <div className="lg:col-span-7 space-y-6">
           {/* Section 1: Agent Persona & Brand Voice */}
-          <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-5">
+          <div className="apple-glass-card rounded-3xl border border-slate-200/60 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-5">
             <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#0071E3]/10 text-[#0071E3]">
                 <Bot className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  Agent Persona & Brand Voice
+                <h3 className="text-base font-semibold tracking-tight text-slate-900">
+                  Identité & Voix de l&apos;Agent
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Defines greeting style, negotiation tone, and customer engagement persona
+                <p className="text-xs text-slate-500 font-normal">
+                  Définit le style d&apos;accueil, le ton de négociation et la courtoisie commerciale
                 </p>
               </div>
             </div>
 
             {/* Agent Name */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">
-                AI Agent Name
+              <label className="text-xs font-medium text-slate-700">
+                Nom Commercial de l&apos;Agent IA
               </label>
               <input
                 type="text"
                 value={agentName}
                 onChange={(e) => setAgentName(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="mt-1.5 w-full rounded-2xl border border-slate-200/80 bg-white/80 px-3.5 py-2 text-xs font-semibold text-slate-900 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all"
               />
             </div>
 
             {/* Tone Selector */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">
-                Brand Tone Preset
+              <label className="text-xs font-medium text-slate-700">
+                Ton de Communication
               </label>
               <div className="mt-1.5 grid grid-cols-2 gap-2 text-xs">
                 {toneOptions.map((item) => (
@@ -289,14 +289,14 @@ export function AgentTrainingClient() {
                     key={item.id}
                     type="button"
                     onClick={() => setTone(item.id)}
-                    className={`rounded-2xl border p-3 text-left transition-all ${
+                    className={`apple-press rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
                       tone === item.id
-                        ? "border-blue-600 bg-blue-50/60 text-blue-900 ring-2 ring-blue-500/20"
-                        : "border-slate-200 bg-slate-50/40 text-slate-700 hover:bg-slate-100/60"
+                        ? "border-[#0071E3] bg-[#0071E3]/5 text-[#0071E3] shadow-xs"
+                        : "border-slate-200/60 bg-white/60 text-slate-700 hover:bg-slate-50"
                     }`}
                   >
-                    <p className="font-bold text-xs">{item.title}</p>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{item.desc}</p>
+                    <p className="font-semibold text-xs tracking-tight">{item.title}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{item.desc}</p>
                   </button>
                 ))}
               </div>
@@ -304,21 +304,21 @@ export function AgentTrainingClient() {
 
             {/* Custom Guidance Prompt */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">
-                Custom Sales Directives & Guardrails
+              <label className="text-xs font-medium text-slate-700">
+                Consignes Commerciales & Prompts Métier
               </label>
               <textarea
                 rows={3}
                 value={systemPrompt}
                 onChange={(e) => setSystemPrompt(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 p-3 text-xs leading-relaxed text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="mt-1.5 w-full rounded-2xl border border-slate-200/80 bg-white/80 p-3 text-xs leading-relaxed text-slate-900 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all"
               />
             </div>
 
             {/* Language Fluency Switches */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">
-                Langues reconnues (Bilinguisme Cameroun)
+              <label className="text-xs font-medium text-slate-700">
+                Langues Reconnues (Bilinguisme Cameroun)
               </label>
               <div className="mt-2 flex flex-wrap gap-2">
                 {[
@@ -338,10 +338,10 @@ export function AgentTrainingClient() {
                           [lang.key]: !prev[lang.key as keyof typeof languages],
                         }))
                       }
-                      className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
+                      className={`apple-press rounded-2xl border px-3.5 py-1.5 text-xs font-medium transition-all cursor-pointer ${
                         isChecked
-                          ? "border-blue-600 bg-blue-50 text-blue-700 font-bold"
-                          : "border-slate-200 bg-white text-slate-500 hover:bg-slate-50"
+                          ? "border-[#0071E3] bg-[#0071E3] text-white shadow-xs"
+                          : "border-slate-200/80 bg-white/80 text-slate-600 hover:bg-slate-50"
                       }`}
                     >
                       {isChecked ? "✓ " : ""}{lang.label}
@@ -353,18 +353,18 @@ export function AgentTrainingClient() {
           </div>
 
           {/* Section 2: Product & Pricing Catalog */}
-          <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
+          <div className="apple-glass-card rounded-3xl border border-slate-200/60 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#34C759]/10 text-[#34C759]">
                   <DollarSign className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Product Catalog & Pricing Table
+                  <h3 className="text-base font-semibold tracking-tight text-slate-900">
+                    Catalogue Produits & Tarification
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    AI quotes exact inventory prices and applies your custom sales notes
+                  <p className="text-xs text-slate-500 font-normal">
+                    L&apos;IA applique les prix exacts en FCFA et les arguments de vente
                   </p>
                 </div>
               </div>
@@ -372,47 +372,47 @@ export function AgentTrainingClient() {
               <button
                 type="button"
                 onClick={handleAddProduct}
-                className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200/70"
+                className="apple-press inline-flex items-center text-xs font-medium text-[#0071E3] hover:text-[#0077ED] bg-[#0071E3]/10 px-3 py-1.5 rounded-2xl border border-[#0071E3]/20 transition-all cursor-pointer"
               >
                 <Plus className="mr-1 h-3.5 w-3.5" />
-                Add Product
+                Ajouter un Article
               </button>
             </div>
 
             {/* Products Table */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {products.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-3.5 transition-all hover:bg-white"
+                  className="rounded-2xl border border-slate-200/70 bg-white p-3.5 transition-all shadow-[0_1px_4px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)]"
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900">
+                      <h4 className="text-xs font-semibold text-slate-900 tracking-tight">
                         {item.name}
                       </h4>
-                      <span className="text-[10px] uppercase font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.2 rounded mt-1 inline-block">
-                        {item.category} • {item.stock} in stock
+                      <span className="text-[10px] uppercase font-medium text-slate-400 bg-slate-100/80 px-2 py-0.5 rounded-full mt-1 inline-block">
+                        {item.category} • {item.stock} en stock
                       </span>
                     </div>
 
-                    <div className="text-right">
-                      <span className="text-sm font-bold text-slate-900">
+                    <div className="text-right flex items-center space-x-2">
+                      <span className="text-sm font-bold text-[#0071E3] tracking-tight">
                         {item.price.toLocaleString("fr-FR")} FCFA
                       </span>
                       <button
                         type="button"
                         onClick={() => handleRemoveProduct(item.id)}
-                        className="ml-2 text-slate-400 hover:text-rose-600 p-1"
-                        title="Remove product"
+                        className="apple-press text-slate-400 hover:text-[#FF3B30] p-1 rounded-lg transition-colors cursor-pointer"
+                        title="Supprimer le produit"
                       >
-                        <Trash2 className="h-3.5 w-3.5 inline" />
+                        <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   </div>
 
-                  <p className="mt-2 text-xs text-slate-600 leading-relaxed bg-white rounded-lg p-2 border border-slate-100">
-                    <strong className="text-slate-700">AI Pitch Note:</strong> {item.salesNotes}
+                  <p className="mt-2 text-xs text-slate-600 leading-relaxed bg-slate-50/70 rounded-xl p-2.5 border border-slate-100">
+                    <strong className="text-slate-800 font-medium">Argument IA:</strong> {item.salesNotes}
                   </p>
                 </div>
               ))}
@@ -420,17 +420,17 @@ export function AgentTrainingClient() {
           </div>
 
           {/* Section 3: Payment Gateways & Mobile Money Credentials */}
-          <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
+          <div className="apple-glass-card rounded-3xl border border-slate-200/60 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-4">
             <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#0071E3]/10 text-[#0071E3]">
                 <CreditCard className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  Passerelles Mobile Money & Comptes Bancaires (Cameroun)
+                <h3 className="text-base font-semibold tracking-tight text-slate-900">
+                  Passerelles Mobile Money & Comptes Bancaires
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Coordonnées utilisées par l&apos;IA pour générer automatiquement les liens de paiement
+                <p className="text-xs text-slate-500 font-normal">
+                  Coordonnées pour générer les liens de paiement et les QR codes de règlement
                 </p>
               </div>
             </div>
@@ -438,69 +438,70 @@ export function AgentTrainingClient() {
             <div className="space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-slate-700">
+                  <label className="text-xs font-medium text-slate-700">
                     Clé Marchand MTN Mobile Money (MoMo)
                   </label>
                   <input
                     type="password"
                     value={momoMerchantKey}
                     onChange={(e) => setMomoMerchantKey(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="mt-1 w-full rounded-2xl border border-slate-200/80 bg-white/80 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all"
                   />
                 </div>
+
                 <div>
-                  <label className="text-xs font-semibold text-slate-700">
+                  <label className="text-xs font-medium text-slate-700">
                     Clé Partenaire Orange Money Cameroun
                   </label>
                   <input
                     type="password"
                     value={orangeMoneyKey}
                     onChange={(e) => setOrangeMoneyKey(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="mt-1 w-full rounded-2xl border border-slate-200/80 bg-white/80 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-3.5 space-y-2">
+              <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-3.5 space-y-2">
                 <div className="flex items-center space-x-2">
-                  <Building2 className="h-4 w-4 text-blue-600" />
-                  <span className="text-xs font-bold text-slate-800">
-                    Compte Bancaire Professionnel (Virements Directs Cameroun)
+                  <Building2 className="h-4 w-4 text-[#0071E3]" />
+                  <span className="text-xs font-semibold text-slate-800 tracking-tight">
+                    Compte Bancaire Professionnel (Virements Directs)
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs pt-1">
                   <div>
-                    <label className="text-[11px] text-slate-500 font-semibold">Banque</label>
+                    <label className="text-[11px] text-slate-400 font-medium">Banque</label>
                     <input
                       type="text"
                       value={bankAccount.bankName}
                       onChange={(e) =>
                         setBankAccount((prev) => ({ ...prev, bankName: e.target.value }))
                       }
-                      className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800"
+                      className="mt-0.5 w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800"
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-500 font-semibold">Numéro de Compte / RIB</label>
+                    <label className="text-[11px] text-slate-400 font-medium">Numéro de Compte / RIB</label>
                     <input
                       type="text"
                       value={bankAccount.accountNumber}
                       onChange={(e) =>
                         setBankAccount((prev) => ({ ...prev, accountNumber: e.target.value }))
                       }
-                      className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-mono font-bold text-slate-900"
+                      className="mt-0.5 w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs font-mono font-semibold text-slate-900"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-500 font-semibold">Intitulé du Compte</label>
+                  <label className="text-[11px] text-slate-400 font-medium">Intitulé du Compte</label>
                   <input
                     type="text"
                     value={bankAccount.accountName}
                     onChange={(e) =>
                       setBankAccount((prev) => ({ ...prev, accountName: e.target.value }))
                     }
-                    className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800"
+                    className="mt-0.5 w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800"
                   />
                 </div>
               </div>
@@ -508,47 +509,47 @@ export function AgentTrainingClient() {
           </div>
 
           {/* Section 4: Human Handoff Escalation Rules */}
-          <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
+          <div className="apple-glass-card rounded-3xl border border-slate-200/60 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-4">
             <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#FF3B30]/10 text-[#FF3B30]">
                 <ShieldAlert className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-semibold tracking-tight text-slate-900">
                   Règles d&apos;Escalade et Relais Humain
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 font-normal">
                   Quand ces critères sont remplis, l&apos;IA suspend ses réponses et alerte le gérant
                 </p>
               </div>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {[
                 {
                   key: "highValuePayment",
                   label: "Intention de Paiement Élevée (> 250 000 FCFA)",
-                  desc: "Pause et notification immédiate dès qu&apos;un client confirme un gros montant",
+                  desc: "Notification instantanée dès qu'un client confirme un gros montant",
                 },
                 {
                   key: "distressedCustomer",
-                  label: "Sentiment de Colère ou d&apos;Urgence",
-                  desc: "Détecte les réclamations, plaintes de livraison ou menaces de réputation",
+                  label: "Sentiment de Colère ou d'Urgence",
+                  desc: "Détecte les réclamations, litiges de livraison ou mécontentements",
                 },
                 {
                   key: "explicitHumanRequest",
                   label: "Demande Explicite d'un Interlocuteur Humain",
-                  desc: 'Déclenché sur des expressions comme "parler au gérant", "appelez-moi", "conseiller"',
+                  desc: 'Déclenché sur "parler au gérant", "appelez-moi", "conseiller"',
                 },
                 {
                   key: "receiptScreenshot",
                   label: "Capture Reçu Mobile Money / Bordereau Bancaire",
-                  desc: "Alerte le personnel pour vérifier le solde MoMo/OM avant expédition",
+                  desc: "Alerte pour vérifier le solde MoMo/OM avant validation de commande",
                 },
                 {
                   key: "discountOver15",
                   label: "Négociation de Remise Spéciale (> 15%)",
-                  desc: "Empêche les rabais non autorisés sans validation préalable de la direction",
+                  desc: "Empêche les rabais non autorisés sans validation de la direction",
                 },
               ].map((rule) => {
                 const isChecked = handoffRules[rule.key as keyof typeof handoffRules];
@@ -556,7 +557,7 @@ export function AgentTrainingClient() {
                 return (
                   <label
                     key={rule.key}
-                    className="flex items-start space-x-3 rounded-2xl border border-slate-200/70 p-3 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors"
+                    className="flex items-start space-x-3 rounded-2xl border border-slate-200/60 p-3 bg-white/70 hover:bg-white cursor-pointer transition-all duration-150"
                   >
                     <input
                       type="checkbox"
@@ -567,11 +568,11 @@ export function AgentTrainingClient() {
                           [rule.key]: !prev[rule.key as keyof typeof handoffRules],
                         }))
                       }
-                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                      className="mt-0.5 h-4 w-4 rounded-md border-slate-300 text-[#0071E3] focus:ring-[#0071E3]"
                     />
                     <div>
-                      <p className="text-xs font-bold text-slate-900">{rule.label}</p>
-                      <p className="text-[11px] text-slate-500 mt-0.5">{rule.desc}</p>
+                      <p className="text-xs font-semibold text-slate-900 tracking-tight">{rule.label}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{rule.desc}</p>
                     </div>
                   </label>
                 );
@@ -583,31 +584,31 @@ export function AgentTrainingClient() {
         {/* ========================================================= */}
         {/* RIGHT COLUMN: INTERACTIVE SIMULATOR (5 Cols)             */}
         {/* ========================================================= */}
-        <div className="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs sticky top-20 h-[calc(100vh-7rem)]">
+        <div className="lg:col-span-5 flex flex-col justify-between apple-glass-card rounded-3xl border border-slate-200/60 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sticky top-20 h-[calc(100vh-7rem)]">
           <div>
             {/* Simulator Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
               <div className="flex items-center space-x-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs">
+                <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[#0071E3] text-white shadow-xs">
                   <Bot className="h-4 w-4" />
                 </span>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Live Agent Simulator
+                  <h3 className="text-sm font-semibold tracking-tight text-slate-900">
+                    Simulateur en Direct
                   </h3>
-                  <p className="text-[11px] text-slate-500">
-                    Test how your agent responds in real-time
+                  <p className="text-[11px] text-slate-400 font-normal">
+                    Testez les réponses de l&apos;agent en temps réel
                   </p>
                 </div>
               </div>
 
-              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
-                Active Sandbox
+              <span className="rounded-full bg-[#34C759]/10 px-2 py-0.5 text-[10px] font-semibold text-[#248A3D] border border-[#34C759]/20">
+                Sandbox Active
               </span>
             </div>
 
-            {/* Messages Area */}
-            <div className="mt-4 space-y-3 overflow-y-auto max-h-[calc(100vh-20rem)] pr-1">
+            {/* Messages Area (Apple iMessage style) */}
+            <div className="mt-3.5 space-y-2.5 overflow-y-auto max-h-[calc(100vh-21rem)] pr-1">
               {simulatorMessages.map((msg, idx) => {
                 const isCustomer = msg.sender === "customer";
 
@@ -618,21 +619,21 @@ export function AgentTrainingClient() {
                       isCustomer ? "items-start" : "items-end"
                     }`}
                   >
-                    <span className="text-[10px] font-bold text-slate-400 mb-1 px-1">
-                      {isCustomer ? "Customer Simulator" : agentName}
+                    <span className="text-[10px] font-medium text-slate-400 mb-1 px-1">
+                      {isCustomer ? "Client (Simulateur)" : agentName}
                     </span>
                     <div
                       className={`max-w-[88%] rounded-2xl p-3 text-xs leading-relaxed shadow-2xs ${
                         isCustomer
                           ? "bg-slate-100 text-slate-900 rounded-tl-xs"
-                          : "bg-blue-600 text-white rounded-tr-xs"
+                          : "bg-[#0071E3] text-white rounded-tr-xs"
                       }`}
                     >
                       {msg.text}
                     </div>
 
                     {msg.tag && (
-                      <span className="text-[9px] font-mono font-semibold text-slate-400 mt-1">
+                      <span className="text-[9px] font-mono font-medium text-slate-400 mt-0.5">
                         [{msg.tag}]
                       </span>
                     )}
@@ -642,7 +643,7 @@ export function AgentTrainingClient() {
 
               {isSimulating && (
                 <div className="flex items-center space-x-2 text-xs text-slate-400 p-2">
-                  <span className="h-2 w-2 rounded-full bg-blue-500 animate-ping" />
+                  <span className="h-2 w-2 rounded-full bg-[#0071E3] animate-ping" />
                   <span>Nathalie formule la réponse commerciale...</span>
                 </div>
               )}
@@ -650,7 +651,7 @@ export function AgentTrainingClient() {
           </div>
 
           {/* Quick Prompts & Simulator Input */}
-          <div className="pt-4 border-t border-slate-100">
+          <div className="pt-3 border-t border-slate-100">
             {/* Quick Test Chips */}
             <div className="flex items-center space-x-1.5 overflow-x-auto pb-2 no-scrollbar">
               {[
@@ -662,7 +663,7 @@ export function AgentTrainingClient() {
                   key={chip}
                   type="button"
                   onClick={() => setSimulatorInput(chip)}
-                  className="shrink-0 rounded-full bg-slate-50 border border-slate-200 px-2.5 py-1 text-[10px] font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                  className="apple-press shrink-0 rounded-full bg-slate-100/80 border border-slate-200/60 px-3 py-1 text-[10px] font-medium text-slate-600 hover:bg-slate-200/70 hover:text-slate-900 transition-colors cursor-pointer"
                 >
                   {chip}
                 </button>
@@ -675,14 +676,14 @@ export function AgentTrainingClient() {
                 type="text"
                 value={simulatorInput}
                 onChange={(e) => setSimulatorInput(e.target.value)}
-                placeholder="Type a test customer message..."
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+                placeholder="Message test client..."
+                className="flex-1 rounded-2xl border border-slate-200/80 bg-white px-3.5 py-2 text-xs text-slate-900 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all"
               />
               <Button
                 type="submit"
                 size="sm"
                 disabled={!simulatorInput.trim() || isSimulating}
-                className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-3 font-semibold text-xs"
+                className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white px-3.5 font-medium text-xs disabled:opacity-40"
               >
                 <Send className="h-3.5 w-3.5" />
               </Button>

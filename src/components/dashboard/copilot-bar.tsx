@@ -58,9 +58,8 @@ export function CopilotBar({
       setIsListening(false);
     } else {
       setIsListening(true);
-      // Simulate speech recognition capture after 2.5 seconds
       setTimeout(() => {
-        setInput("Follow up with all customers whose payment promises are overdue");
+        setInput("Relancer tous les clients dont les promesses de paiement sont échues aujourd'hui");
         setIsListening(false);
       }, 2500);
     }
@@ -77,8 +76,8 @@ export function CopilotBar({
       setIsProcessing(false);
       setInput("");
 
-      let actionText = "Executed automated action across connected channels.";
-      let responseText = `I have analyzed your instruction: "${currentQuery}".`;
+      let actionText = "Action automatisée exécutée sur les canaux connectés.";
+      let responseText = `J'ai analysé votre consigne : "${currentQuery}".`;
 
       if (
         currentQuery.toLowerCase().includes("overdue") ||
@@ -113,32 +112,32 @@ export function CopilotBar({
 
   return (
     <>
-      {/* Floating Bottom Dock Container */}
-      <div className="fixed bottom-6 left-0 right-0 z-40 mx-auto max-w-4xl px-4 sm:px-6 pointer-events-none">
+      {/* Floating Bottom Dock Container — Apple Dynamic Capsule */}
+      <div className="fixed bottom-6 left-0 right-0 z-40 mx-auto max-w-3xl px-4 sm:px-6 pointer-events-none select-none">
         <div className="pointer-events-auto flex flex-col items-center">
           {/* Quick Suggestion Chips (Fade-in / Floating above bar) */}
-          <div className="mb-2.5 hidden sm:flex items-center space-x-2 overflow-x-auto py-1 px-2 no-scrollbar">
+          <div className="mb-2 hidden sm:flex items-center space-x-1.5 overflow-x-auto py-1 px-1 no-scrollbar">
             {suggestions.map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setInput(s)}
-                className="inline-flex shrink-0 items-center rounded-full bg-white/95 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm border border-slate-200/90 backdrop-blur-md hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all cursor-pointer"
+                className="inline-flex shrink-0 items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs border border-slate-200/70 backdrop-blur-xl hover:bg-white hover:text-[#0071E3] hover:border-blue-200 transition-all active:scale-95 cursor-pointer"
               >
-                <Sparkles className="mr-1.5 h-3 w-3 text-blue-600" />
-                {s}
+                <Sparkles className="mr-1.5 h-3 w-3 text-[#0071E3]" />
+                <span className="tracking-tight">{s}</span>
               </button>
             ))}
           </div>
 
-          {/* Main Floating Glassmorphic Bar */}
+          {/* Main Floating Glass Capsule */}
           <form
             onSubmit={handleSubmit}
-            className="relative flex w-full items-center rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 sm:p-2 shadow-2xl backdrop-blur-xl transition-all duration-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10"
+            className="relative flex w-full items-center rounded-full border border-slate-200/80 bg-white/85 p-1.5 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.12)] backdrop-blur-2xl transition-all duration-200 focus-within:border-[#0071E3] focus-within:ring-2 focus-within:ring-[#0071E3]/20"
           >
-            {/* AI Mascot Glow Icon */}
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs ml-1">
-              <Bot className="h-5 w-5" />
+            {/* AI Mascot Icon */}
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-[#0071E3] to-[#5856D6] text-white shadow-2xs ml-0.5">
+              <Bot className="h-4.5 w-4.5" />
             </div>
 
             {/* Input Field */}
@@ -146,18 +145,18 @@ export function CopilotBar({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask or give an instruction (e.g., 'Follow up with everyone who promised to pay today')..."
-              className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              placeholder="Donnez une consigne IA (ex: 'Relancer les clients en retard de paiement')..."
+              className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none tracking-tight font-medium"
             />
 
             {/* Microphone Toggle Button */}
             <button
               type="button"
               onClick={handleToggleMic}
-              className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:text-slate-900 ${
+              className={`relative flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full text-slate-500 transition-all active:scale-95 ${
                 isListening
-                  ? "bg-rose-500 text-white animate-pulse hover:text-white"
-                  : "hover:bg-slate-100"
+                  ? "bg-[#FF3B30] text-white animate-pulse"
+                  : "hover:bg-slate-100/80 hover:text-slate-900"
               }`}
               title={isListening ? "Listening... click to cancel" : "Voice instruction"}
             >
@@ -173,14 +172,14 @@ export function CopilotBar({
               type="submit"
               disabled={!input.trim() || isProcessing}
               size="sm"
-              className="ml-1.5 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-3.5 font-semibold text-xs shadow-xs"
+              className="ml-1 h-8.5 rounded-full bg-[#0071E3] hover:bg-[#0077ED] text-white px-3.5 font-semibold text-xs shadow-xs active:scale-95"
             >
               {isProcessing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
                 <>
-                  <span className="hidden sm:inline mr-1.5">Execute</span>
-                  <Send className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline mr-1 text-[11px] tracking-tight">Exécuter</span>
+                  <Send className="h-3 w-3" />
                 </>
               )}
             </Button>
@@ -190,48 +189,48 @@ export function CopilotBar({
 
       {/* Execution Result Modal / Notification Card */}
       {activeResult && (
-        <div className="fixed bottom-24 right-4 sm:right-8 z-50 max-w-md w-full animate-in fade-in slide-in-from-bottom-5 duration-300">
-          <div className="rounded-3xl border border-blue-200 bg-white p-5 shadow-2xl ring-1 ring-black/5">
+        <div className="fixed bottom-24 right-4 sm:right-8 z-50 max-w-md w-full animate-in fade-in slide-in-from-bottom-5 duration-200">
+          <div className="rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.14)] backdrop-blur-2xl ring-1 ring-black/5">
             <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <div className="flex items-center space-x-2.5">
+                <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-50 text-[#0071E3]">
                   <Sparkles className="h-4 w-4" />
                 </span>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900">
+                  <h4 className="text-xs font-bold text-slate-900 tracking-tight">
                     OmniSales AI Co-Pilot
                   </h4>
-                  <p className="text-[10px] text-slate-400">{activeResult.timestamp}</p>
+                  <p className="text-[10px] text-slate-400 font-medium">{activeResult.timestamp}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveResult(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-full transition-colors active:scale-95"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-3 rounded-xl bg-slate-50 p-2.5 border border-slate-100">
-              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                Instruction
+            <div className="mt-3 rounded-2xl bg-slate-50/80 p-3 border border-slate-100">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Consigne Demandée
               </p>
-              <p className="text-xs font-medium text-slate-900 mt-0.5">
+              <p className="text-xs font-semibold text-slate-900 mt-0.5 tracking-tight">
                 &ldquo;{activeResult.query}&rdquo;
               </p>
             </div>
 
             <div className="mt-3">
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <p className="text-xs text-slate-700 leading-relaxed tracking-tight">
                 {activeResult.response}
               </p>
             </div>
 
-            <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-800">
-              <div className="flex items-center space-x-1.5">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span className="truncate">{activeResult.actionTaken}</span>
+            <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-50/80 border border-emerald-200/70 px-3 py-2 text-xs font-semibold text-emerald-800">
+              <div className="flex items-center space-x-1.5 min-w-0">
+                <CheckCircle2 className="h-4 w-4 text-[#34C759] shrink-0" />
+                <span className="truncate tracking-tight">{activeResult.actionTaken}</span>
               </div>
             </div>
 
@@ -241,9 +240,9 @@ export function CopilotBar({
                 variant="outline"
                 size="sm"
                 onClick={() => setActiveResult(null)}
-                className="text-xs"
+                className="text-xs rounded-xl"
               >
-                Dismiss
+                Fermer
               </Button>
               {onNavigateInbox && (
                 <Button
@@ -254,10 +253,10 @@ export function CopilotBar({
                     setActiveResult(null);
                     onNavigateInbox();
                   }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"
+                  className="bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold rounded-xl"
                 >
-                  View in Inbox
-                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  <span className="tracking-tight">Voir dans la Boîte</span>
+                  <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </Button>
               )}
             </div>

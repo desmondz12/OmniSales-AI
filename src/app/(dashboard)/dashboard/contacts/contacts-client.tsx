@@ -54,7 +54,6 @@ export function ContactsClient({
   const [isLoading, setIsLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
-
   // Form values for Contact (New or Edit)
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -281,14 +280,14 @@ export function ContactsClient({
       {/* Top Header Actions */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Contacts & Accounts
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
+            Contacts & Entreprises
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            {contacts.length} {contacts.length === 1 ? "contact" : "contacts"} recorded in your workspace
+          <p className="mt-1 text-xs sm:text-sm text-slate-500 font-normal">
+            {contacts.length} {contacts.length === 1 ? "contact enregistré" : "contacts enregistrés"} dans votre espace client
           </p>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5">
           <Button
             variant="outline"
             size="sm"
@@ -296,9 +295,10 @@ export function ContactsClient({
               setErrorMessage(null);
               setIsAddCompanyOpen(true);
             }}
+            className="apple-press rounded-2xl border-slate-200/80 bg-white/80 hover:bg-slate-100/70 text-xs font-medium"
           >
-            <Building2 className="mr-1.5 h-4 w-4" />
-            New Company
+            <Building2 className="mr-1.5 h-3.5 w-3.5 text-slate-500" />
+            Nouvelle Entreprise
           </Button>
           <Button
             size="sm"
@@ -306,43 +306,44 @@ export function ContactsClient({
               resetContactForm();
               setIsAddContactOpen(true);
             }}
+            className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-3.5"
           >
-            <Plus className="mr-1.5 h-4 w-4" />
-            Add Contact
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
+            Ajouter un Contact
           </Button>
         </div>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />
+      {/* Filter and Search Bar: Apple Segmented Glass Bar */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200/60 bg-white/70 backdrop-blur-xl p-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="pointer-events-none absolute left-3.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
           <input
             type="text"
-            placeholder="Search by name, email, or company..."
+            placeholder="Rechercher par nom, email ou entreprise..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-slate-900/60 pl-9 pr-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-2xl border border-slate-200/80 bg-white/80 pl-9 pr-4 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
           />
         </div>
 
-        {/* Status Filters */}
-        <div className="flex flex-wrap gap-1.5">
+        {/* Status Filters (Apple Segmented Style) */}
+        <div className="flex items-center space-x-1 overflow-x-auto p-1 bg-slate-100/70 rounded-2xl no-scrollbar">
           {[
-            { label: "All", value: "all" },
+            { label: "Tous", value: "all" },
             { label: "Leads", value: "lead" },
             { label: "Prospects", value: "prospect" },
-            { label: "Customers", value: "customer" },
-            { label: "Churned", value: "churned" },
+            { label: "Clients", value: "customer" },
+            { label: "Inactifs", value: "churned" },
           ].map((item) => (
             <button
               key={item.value}
               type="button"
               onClick={() => setSelectedStatus(item.value)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`apple-press rounded-xl px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
                 selectedStatus === item.value
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800"
+                  ? "bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.08)]"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               {item.label}
@@ -353,94 +354,94 @@ export function ContactsClient({
 
       {/* Contact List / Table */}
       {filteredContacts.length === 0 ? (
-        <Card className="border-slate-800 bg-slate-900/40">
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800/80 text-slate-500 mb-3">
-              <Users className="h-7 w-7" />
+        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-12 text-center">
+          <CardContent className="flex flex-col items-center justify-center p-0">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-[#0071E3]/10 text-[#0071E3] mb-3">
+              <Users className="h-6 w-6" />
             </div>
             {contacts.length === 0 ? (
               <>
-                <p className="text-base font-semibold text-white">
-                  No contacts in your workspace
+                <p className="text-base font-semibold tracking-tight text-slate-900">
+                  Aucun contact pour l&apos;instant
                 </p>
-                <p className="mt-1 text-xs text-slate-400 max-w-sm">
-                  Start building your sales network by adding your first lead or customer contact.
+                <p className="mt-1 text-xs text-slate-500 max-w-sm">
+                  Commencez à structurer votre portefeuille en créant votre premier contact.
                 </p>
                 <Button
                   size="sm"
-                  className="mt-4"
+                  className="apple-press mt-4 rounded-2xl bg-[#0071E3] text-white text-xs font-medium"
                   onClick={() => {
                     resetContactForm();
                     setIsAddContactOpen(true);
                   }}
                 >
-                  <Plus className="mr-1.5 h-4 w-4" />
-                  Add First Contact
+                  <Plus className="mr-1.5 h-3.5 w-3.5" />
+                  Ajouter un Contact
                 </Button>
               </>
             ) : (
               <>
-                <p className="text-base font-semibold text-white">
-                  No contacts found
+                <p className="text-base font-semibold tracking-tight text-slate-900">
+                  Aucun contact trouvé
                 </p>
-                <p className="mt-1 text-xs text-slate-400 max-w-sm">
-                  No contacts match your current search or status filter. Try resetting your filters.
+                <p className="mt-1 text-xs text-slate-500 max-w-sm">
+                  Aucun contact ne correspond à votre recherche ou filtre actuel.
                 </p>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="mt-4"
+                  className="apple-press mt-4 rounded-2xl text-xs font-medium"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedStatus("all");
                   }}
                 >
-                  Clear Filters
+                  Réinitialiser les filtres
                 </Button>
               </>
             )}
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <div className="overflow-hidden rounded-3xl border border-slate-200/60 bg-white/80 backdrop-blur-xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-300">
-              <thead className="border-b border-slate-800 bg-slate-900 text-xs uppercase tracking-wider text-slate-400">
+            <table className="w-full text-left text-sm text-slate-600">
+              <thead className="border-b border-slate-100 bg-slate-50/50 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="px-6 py-3.5">
                     Contact
                   </th>
                   <th scope="col" className="px-6 py-3.5">
-                    Company
+                    Entreprise
                   </th>
                   <th scope="col" className="px-6 py-3.5">
-                    Status
+                    Statut
                   </th>
                   <th scope="col" className="px-6 py-3.5">
-                    Phone
+                    Téléphone
                   </th>
                   <th scope="col" className="px-6 py-3.5 text-right">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100">
                 {filteredContacts.map((contact) => (
                   <tr
                     key={contact.id}
-                    className="hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-slate-50/60 transition-colors duration-150"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-950 font-bold text-blue-400 border border-blue-900/60">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-[#0071E3]/10 font-semibold text-xs text-[#0071E3] border border-[#0071E3]/20">
                           {contact.first_name.charAt(0)}
                           {contact.last_name.charAt(0)}
                         </div>
                         <div>
-                          <div className="font-medium text-white">
+                          <div className="font-semibold text-xs text-slate-900 tracking-tight">
                             {contact.first_name} {contact.last_name}
                           </div>
-                          <div className="flex items-center space-x-2 text-xs text-slate-400 mt-0.5">
+                          <div className="flex items-center space-x-2 text-[11px] text-slate-400 mt-0.5">
                             <span className="flex items-center">
                               <Mail className="mr-1 h-3 w-3" />
                               {contact.email}
@@ -458,51 +459,51 @@ export function ContactsClient({
 
                     <td className="px-6 py-4 text-xs">
                       {contact.companies?.name ? (
-                        <div className="flex items-center space-x-1.5 text-slate-200">
+                        <div className="flex items-center space-x-1.5 text-slate-800">
                           <Building2 className="h-3.5 w-3.5 text-slate-400" />
                           <span className="font-medium">
                             {contact.companies.name}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-slate-500">—</span>
+                        <span className="text-slate-400">—</span>
                       )}
                     </td>
 
                     <td className="px-6 py-4">
-                      <Badge variant={contact.status} className="capitalize">
+                      <Badge variant={contact.status} className="capitalize rounded-full text-[10px] font-semibold px-2 py-0.5">
                         {contact.status}
                       </Badge>
                     </td>
 
-                    <td className="px-6 py-4 text-xs text-slate-400">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {contact.phone ? (
                         <span className="flex items-center">
-                          <Phone className="mr-1.5 h-3 w-3 text-slate-500" />
+                          <Phone className="mr-1.5 h-3 w-3 text-slate-400" />
                           {contact.phone}
                         </span>
                       ) : (
-                        <span className="text-slate-600">—</span>
+                        <span className="text-slate-400">—</span>
                       )}
                     </td>
 
                     <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
+                      <div className="flex items-center justify-end space-x-1">
                         <button
                           type="button"
                           onClick={() => openEditModal(contact)}
-                          className="rounded p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
-                          aria-label={`Edit ${contact.first_name}`}
+                          className="apple-press rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition-colors cursor-pointer"
+                          aria-label={`Modifier ${contact.first_name}`}
                         >
-                          <Edit2 className="h-4 w-4" />
+                          <Edit2 className="h-3.5 w-3.5" />
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeletingContact(contact)}
-                          className="rounded p-1.5 text-slate-400 hover:bg-red-950/50 hover:text-red-400 transition-colors"
-                          aria-label={`Delete ${contact.first_name}`}
+                          className="apple-press rounded-xl p-1.5 text-slate-400 hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-colors cursor-pointer"
+                          aria-label={`Supprimer ${contact.first_name}`}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     </td>
@@ -520,31 +521,31 @@ export function ContactsClient({
         onClose={() => {
           if (!isLoading) setIsAddContactOpen(false);
         }}
-        title="Add New Contact"
-        description="Enter the lead or customer details to add them to your CRM."
+        title="Ajouter un Contact"
+        description="Renseignez les coordonnées du prospect ou client pour l'ajouter à votre CRM."
       >
         <form onSubmit={handleCreateContact} className="space-y-4">
           {errorMessage && (
             <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>Erreur</AlertTitle>
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <Input
-              label="First Name"
+              label="Prénom"
               type="text"
-              placeholder="Sarah"
+              placeholder="Ex: Sarah"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               disabled={isLoading}
               required
             />
             <Input
-              label="Last Name"
+              label="Nom"
               type="text"
-              placeholder="Connor"
+              placeholder="Ex: Connor"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               disabled={isLoading}
@@ -556,16 +557,16 @@ export function ContactsClient({
             <Input
               label="Email"
               type="email"
-              placeholder="sarah@example.com"
+              placeholder="sarah@example.cm"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
               required
             />
             <Input
-              label="Phone Number"
+              label="Téléphone / WhatsApp"
               type="tel"
-              placeholder="+1 (555) 019-2834"
+              placeholder="+237 6XX XX XX XX"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               disabled={isLoading}
@@ -574,42 +575,42 @@ export function ContactsClient({
 
           <div className="grid gap-3 sm:grid-cols-2">
             <Input
-              label="Job Title"
+              label="Poste / Fonction"
               type="text"
-              placeholder="VP of Sales"
+              placeholder="Directrice des Achats"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               disabled={isLoading}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                Status
+              <label className="block text-xs font-medium text-slate-700 mb-1.5">
+                Statut
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ContactStatus)}
                 disabled={isLoading}
-                className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex h-10 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
               >
-                <option value="lead">Lead</option>
-                <option value="prospect">Prospect</option>
-                <option value="customer">Customer</option>
-                <option value="churned">Churned</option>
+                <option value="lead">Lead (Contact initial)</option>
+                <option value="prospect">Prospect qualifié</option>
+                <option value="customer">Client actif</option>
+                <option value="churned">Inactif</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
-              Company / Account
+            <label className="block text-xs font-medium text-slate-700 mb-1.5">
+              Entreprise associée
             </label>
             <select
               value={companyId}
               onChange={(e) => setCompanyId(e.target.value)}
               disabled={isLoading}
-              className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex h-10 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
             >
-              <option value="">No Company Assigned</option>
+              <option value="">Aucune entreprise associée</option>
               {companies.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -619,30 +620,36 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
-              Notes
+            <label className="block text-xs font-medium text-slate-700 mb-1.5">
+              Notes & Commentaires
             </label>
             <textarea
               rows={3}
-              placeholder="Key notes, context, or meeting summaries..."
+              placeholder="Notes sur les préférences d'achat ou le canal de contact préféré..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               disabled={isLoading}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-2.5 pt-3 border-t border-slate-100">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsAddContactOpen(false)}
               disabled={isLoading}
+              className="apple-press rounded-2xl text-xs font-medium"
             >
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-              Save Contact
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4"
+            >
+              Enregistrer
             </Button>
           </div>
         </form>
@@ -654,20 +661,20 @@ export function ContactsClient({
         onClose={() => {
           if (!isLoading) setEditingContact(null);
         }}
-        title="Edit Contact"
-        description="Update contact information and details."
+        title="Modifier le Contact"
+        description="Mettez à jour les coordonnées et les préférences de votre client."
       >
         <form onSubmit={handleUpdateContact} className="space-y-4">
           {errorMessage && (
             <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>Erreur</AlertTitle>
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <Input
-              label="First Name"
+              label="Prénom"
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
@@ -675,7 +682,7 @@ export function ContactsClient({
               required
             />
             <Input
-              label="Last Name"
+              label="Nom"
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
@@ -694,7 +701,7 @@ export function ContactsClient({
               required
             />
             <Input
-              label="Phone Number"
+              label="Téléphone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -704,41 +711,41 @@ export function ContactsClient({
 
           <div className="grid gap-3 sm:grid-cols-2">
             <Input
-              label="Job Title"
+              label="Poste"
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               disabled={isLoading}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                Status
+              <label className="block text-xs font-medium text-slate-700 mb-1.5">
+                Statut
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ContactStatus)}
                 disabled={isLoading}
-                className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex h-10 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
               >
                 <option value="lead">Lead</option>
                 <option value="prospect">Prospect</option>
-                <option value="customer">Customer</option>
-                <option value="churned">Churned</option>
+                <option value="customer">Client</option>
+                <option value="churned">Inactif</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
-              Company / Account
+            <label className="block text-xs font-medium text-slate-700 mb-1.5">
+              Entreprise
             </label>
             <select
               value={companyId}
               onChange={(e) => setCompanyId(e.target.value)}
               disabled={isLoading}
-              className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex h-10 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
             >
-              <option value="">No Company Assigned</option>
+              <option value="">Aucune entreprise</option>
               {companies.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -748,7 +755,7 @@ export function ContactsClient({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-slate-700 mb-1.5">
               Notes
             </label>
             <textarea
@@ -756,21 +763,27 @@ export function ContactsClient({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               disabled={isLoading}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-2.5 pt-3 border-t border-slate-100">
             <Button
               type="button"
               variant="outline"
               onClick={() => setEditingContact(null)}
               disabled={isLoading}
+              className="apple-press rounded-2xl text-xs font-medium"
             >
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-              Update Contact
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4"
+            >
+              Mettre à jour
             </Button>
           </div>
         </form>
@@ -782,21 +795,21 @@ export function ContactsClient({
         onClose={() => {
           if (!isLoading) setIsAddCompanyOpen(false);
         }}
-        title="Create New Company"
-        description="Add a company account to associate with your contacts."
+        title="Créer une Entreprise"
+        description="Ajoutez un compte d'entreprise pour le rattacher à vos contacts."
       >
         <form onSubmit={handleCreateCompany} className="space-y-4">
           {errorMessage && (
             <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>Erreur</AlertTitle>
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
 
           <Input
-            label="Company Name"
+            label="Nom de l'entreprise"
             type="text"
-            placeholder="Acme Technologies Ltd"
+            placeholder="Ex: Société Camerounaise de Distribution SARL"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             disabled={isLoading}
@@ -804,34 +817,40 @@ export function ContactsClient({
           />
 
           <Input
-            label="Domain / Website"
+            label="Site Web / Domaine"
             type="text"
-            placeholder="acme.com"
+            placeholder="ex: distribution.cm"
             value={companyDomain}
             onChange={(e) => setCompanyDomain(e.target.value)}
             disabled={isLoading}
           />
 
           <Input
-            label="Industry"
+            label="Secteur d'activité"
             type="text"
-            placeholder="SaaS / Fintech / Healthcare"
+            placeholder="Ex: Commerce de gros / BTP / Agroalimentaire"
             value={companyIndustry}
             onChange={(e) => setCompanyIndustry(e.target.value)}
             disabled={isLoading}
           />
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-2.5 pt-3 border-t border-slate-100">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsAddCompanyOpen(false)}
               disabled={isLoading}
+              className="apple-press rounded-2xl text-xs font-medium"
             >
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-              Create Company
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading}
+              className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4"
+            >
+              Créer l&apos;Entreprise
             </Button>
           </div>
         </form>
@@ -843,25 +862,26 @@ export function ContactsClient({
         onClose={() => {
           if (!isLoading) setDeletingContact(null);
         }}
-        title="Delete Contact"
-        description={`Are you sure you want to delete ${deletingContact?.first_name} ${deletingContact?.last_name}? This action cannot be undone.`}
+        title="Supprimer le Contact"
+        description={`Êtes-vous sûr de vouloir supprimer ${deletingContact?.first_name} ${deletingContact?.last_name} ? Cette action est irréversible.`}
       >
         <div className="space-y-4">
           {errorMessage && (
             <Alert variant="destructive">
-              <AlertTitle>Delete Failed</AlertTitle>
+              <AlertTitle>Erreur</AlertTitle>
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
 
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end space-x-2.5 pt-3 border-t border-slate-100">
             <Button
               type="button"
               variant="outline"
               onClick={() => setDeletingContact(null)}
               disabled={isLoading}
+              className="apple-press rounded-2xl text-xs font-medium"
             >
-              Cancel
+              Annuler
             </Button>
             <Button
               type="button"
@@ -869,8 +889,9 @@ export function ContactsClient({
               onClick={handleDeleteContact}
               isLoading={isLoading}
               disabled={isLoading}
+              className="apple-press rounded-2xl bg-[#FF3B30] hover:bg-[#D70015] text-white text-xs font-medium px-4"
             >
-              Delete Contact
+              Supprimer
             </Button>
           </div>
         </div>

@@ -255,96 +255,96 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
         </div>
       )}
 
-      {/* Top Page Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Top Page Header — Apple Minimalist Display */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between select-none">
         <div>
           <div className="flex items-center space-x-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Connected Channels
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+              Passerelles Omnicanales
             </h1>
-            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 border border-emerald-200">
-              <span className="mr-1.5 h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              5 of 5 Active
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-[#34C759] border border-emerald-200/60">
+              <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-[#34C759] animate-pulse" />
+              5 sur 5 Actifs
             </span>
           </div>
-          <p className="mt-1 text-xs sm:text-sm text-slate-500">
-            Link Instagram, Facebook, TikTok, WhatsApp & Telegram via 1-click authorization without manual API keys
+          <p className="mt-0.5 text-xs text-slate-500 tracking-tight">
+            Connectez WhatsApp, Instagram, Messenger, TikTok & Telegram en 1 clic sans copier de clés d&apos;API
           </p>
         </div>
 
         {/* Global Controls */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={() => openTestWebhook("whatsapp")}
-            className="rounded-xl border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs"
+            className="rounded-xl border-slate-200/80 bg-white/90 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs active:scale-95 transition-all"
           >
-            <Code2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-            Send Test Webhook
+            <Code2 className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+            Test Webhook
           </Button>
 
           <button
             type="button"
             onClick={handleToggleGlobalAi}
-            className={`inline-flex items-center rounded-xl px-3.5 py-2 text-xs font-semibold shadow-2xs transition-colors ${
+            className={`inline-flex items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold shadow-2xs transition-all active:scale-95 ${
               globalAiEnabled
-                ? "bg-blue-600 text-white shadow-blue-500/20"
-                : "bg-slate-100 text-slate-600 border border-slate-200"
+                ? "bg-[#0071E3] text-white shadow-blue-500/25"
+                : "bg-slate-100 text-slate-600 border border-slate-200/70"
             }`}
           >
             <Bot className="mr-1.5 h-3.5 w-3.5" />
-            <span>{globalAiEnabled ? "Global AI: Active" : "Global AI: Paused"}</span>
+            <span className="tracking-tight">{globalAiEnabled ? "IA Globale: Active" : "IA Globale: En pause"}</span>
           </button>
         </div>
       </div>
 
-      {/* Gateway Health Overview Banner */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+      {/* Gateway Health Overview Banner — Apple Glass Surface */}
+      <div className="grid gap-4 sm:grid-cols-3 select-none">
+        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Gateway Uptime SLA</span>
-            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+            <span className="tracking-tight">Disponibilité SLA Passerelle</span>
+            <ShieldCheck className="h-4 w-4 text-[#34C759]" />
           </div>
-          <div className="mt-2 text-xl font-bold text-slate-900">99.98%</div>
-          <p className="mt-1 text-[11px] font-medium text-emerald-700">
-            0 dropped webhook events this week
+          <div className="mt-2 text-xl font-bold tracking-tight text-slate-900">99.98%</div>
+          <p className="mt-1 text-[11px] font-semibold text-[#34C759]">
+            0 webhook manqué cette semaine
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Messages Processed Today</span>
-            <MessageSquare className="h-4 w-4 text-blue-600" />
+            <span className="tracking-tight">Messages Traités Aujourd&apos;hui</span>
+            <MessageSquare className="h-4 w-4 text-[#0071E3]" />
           </div>
-          <div className="mt-2 text-xl font-bold text-slate-900">58 Messages</div>
+          <div className="mt-2 text-xl font-bold tracking-tight text-slate-900">58 Messages</div>
           <p className="mt-1 text-[11px] font-medium text-slate-500">
-            52 handled autonomously • 6 escalated
+            52 autonomes • 6 en attente humaine
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
+        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Average API Latency</span>
-            <Radio className="h-4 w-4 text-indigo-600" />
+            <span className="tracking-tight">Latence Moyenne Passerelles</span>
+            <Radio className="h-4 w-4 text-[#5856D6]" />
           </div>
-          <div className="mt-2 text-xl font-bold text-indigo-700">138 ms</div>
+          <div className="mt-2 text-xl font-bold tracking-tight text-[#5856D6]">138 ms</div>
           <p className="mt-1 text-[11px] font-medium text-slate-500">
-            Meta Cloud • TikTok • Telegram Gateways
+            Meta Cloud • TikTok • Telegram
           </p>
         </div>
       </div>
 
       {/* Channel Connection Cards Grid */}
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 select-none">
         {cards.map((ch) => {
           const isAiActive = autoReplyMap[ch.id] ?? true;
 
           return (
             <div
               key={ch.id}
-              className="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm"
+              className="flex flex-col justify-between rounded-3xl border border-slate-200/60 bg-white/85 p-6 backdrop-blur-2xl shadow-[0_2px_16px_rgba(0,0,0,0.02)] transition-all hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
             >
               <div>
                 {/* Card Top: Icon + Channel Status */}

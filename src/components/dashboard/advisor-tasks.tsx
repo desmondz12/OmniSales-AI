@@ -35,12 +35,12 @@ export function AdvisorTasks() {
       description:
         "TikTok et Instagram ont généré 6 nouveaux leads cette nuit à Douala et Yaoundé, dont 4 demandant les tarifs de gros pour les packs revendeurs. Fadimatou Bello a promis de payer vendredi via MTN MoMo.",
       impact: "+320 000 FCFA de pipeline potentiel",
-      actionLabel: "Envoyer catalogue & lien de réduction",
+      actionLabel: "Envoyer catalogue & réduction",
       confidence: 96,
       icon: Megaphone,
       badgeBg: "bg-indigo-50",
-      badgeText: "text-indigo-700",
-      badgeBorder: "border-indigo-200",
+      badgeText: "text-[#5856D6]",
+      badgeBorder: "border-indigo-200/60",
     },
     {
       id: "task-2",
@@ -53,8 +53,8 @@ export function AdvisorTasks() {
       confidence: 98,
       icon: TrendingUp,
       badgeBg: "bg-amber-50",
-      badgeText: "text-amber-800",
-      badgeBorder: "border-amber-200",
+      badgeText: "text-[#FF9500]",
+      badgeBorder: "border-amber-200/60",
     },
     {
       id: "task-3",
@@ -63,12 +63,12 @@ export function AdvisorTasks() {
       description:
         "Un client a envoyé une capture d'écran d'un virement de 180 000 FCFA (Afriland First Bank) au lieu d'utiliser le paiement direct MoMo/Orange Money. Vérifiez le crédit effectif avant expédition.",
       impact: "Éviter une expédition non soldée",
-      actionLabel: "Consulter la pièce jointe dans l'Inbox",
+      actionLabel: "Consulter la capture dans l'Inbox",
       confidence: 94,
       icon: ShieldAlert,
       badgeBg: "bg-rose-50",
-      badgeText: "text-rose-700",
-      badgeBorder: "border-rose-200",
+      badgeText: "text-[#FF3B30]",
+      badgeBorder: "border-rose-200/60",
     },
   ]);
 
@@ -88,122 +88,100 @@ export function AdvisorTasks() {
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs">
+    <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-6 sm:p-7 backdrop-blur-2xl shadow-[0_2px_16px_rgba(0,0,0,0.02)] select-none">
       {/* Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-slate-100">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100">
         <div className="flex items-center space-x-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0071E3] to-[#5856D6] text-white shadow-xs">
             <Sparkles className="h-4 w-4" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-bold tracking-tight text-slate-900">
-                Tâches Conseiller IA (Advisor Tasks)
+              <h3 className="text-base font-bold tracking-tight text-slate-900 sm:text-lg">
+                Recommandations Proactives de l&apos;Agente
               </h3>
-              <span className="inline-flex items-center rounded-full bg-blue-100/80 px-2 py-0.5 text-[11px] font-semibold text-blue-800">
-                Moteur Proactif Cameroun
+              <span className="rounded-full bg-blue-50/80 px-2.5 py-0.5 text-[10px] font-bold text-[#0071E3] border border-blue-200/50">
+                Priorités du Jour
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Recommandations commerciales et financières à fort impact générées par l&apos;analyse de nuit
+            <p className="text-xs text-slate-500 mt-0.5 tracking-tight">
+              Actions recommandées en temps réel d&apos;après les discussions et transactions enregistrées
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs text-slate-500">
-          <span>{tasks.length} opportunités identifiées</span>
-        </div>
+        <span className="text-[11px] font-semibold text-slate-400">
+          {tasks.length - completedTaskIds.length} actions en attente
+        </span>
       </div>
 
       {/* Task Cards Grid */}
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="mt-4 grid gap-3.5 sm:grid-cols-3">
         {tasks.map((task) => {
+          const isDone = completedTaskIds.includes(task.id);
+          const isBusy = executingTaskId === task.id;
           const Icon = task.icon;
-          const isExecuting = executingTaskId === task.id;
-          const isCompleted = completedTaskIds.includes(task.id);
 
           return (
             <div
               key={task.id}
-              className={`group relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 ${
-                isCompleted
-                  ? "border-emerald-200 bg-emerald-50/40"
-                  : "border-slate-200/80 bg-slate-50/40 hover:bg-white hover:border-slate-300 hover:shadow-xs"
+              className={`flex flex-col justify-between rounded-2xl border p-4 transition-all ${
+                isDone
+                  ? "border-emerald-200 bg-emerald-50/40 opacity-75"
+                  : "border-slate-200/70 bg-white/95 shadow-2xs hover:border-slate-300 hover:shadow-xs"
               }`}
             >
               <div>
-                {/* Top Row: Category Badge + Dismiss Button */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between">
                   <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border capitalize ${task.badgeBg} ${task.badgeText} ${task.badgeBorder}`}
+                    className={`inline-flex items-center space-x-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${task.badgeBg} ${task.badgeText} ${task.badgeBorder}`}
                   >
-                    <Icon className="mr-1 h-3 w-3" />
-                    {task.category}
+                    <Icon className="h-3 w-3" />
+                    <span className="capitalize">{task.category}</span>
                   </span>
 
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[11px] font-medium text-slate-400">
-                      {task.confidence}% pertinence
-                    </span>
-                    {!isCompleted && (
-                      <button
-                        type="button"
-                        onClick={() => handleDismissTask(task.id)}
-                        className="text-slate-400 hover:text-slate-600 p-0.5 rounded-md hover:bg-slate-200/60 transition-colors"
-                        title="Ignorer la recommandation"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    )}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleDismissTask(task.id)}
+                    className="text-slate-400 hover:text-slate-600 p-0.5 rounded-full"
+                    title="Masquer cette suggestion"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
                 </div>
 
-                {/* Title */}
-                <h4 className="mt-3 text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <h4 className="mt-2.5 text-xs font-bold text-slate-900 tracking-tight leading-snug">
                   {task.title}
                 </h4>
-
-                {/* Description */}
-                <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                <p className="mt-1 text-[11px] text-slate-500 leading-relaxed tracking-tight line-clamp-3">
                   {task.description}
                 </p>
-
-                {/* Impact Highlight */}
-                <div className="mt-3 inline-flex items-center rounded-lg bg-white/90 border border-slate-200/80 px-2.5 py-1 text-[11px] font-semibold text-slate-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1.5" />
-                  {task.impact}
-                </div>
               </div>
 
-              {/* Bottom Action Button */}
-              <div className="mt-5 pt-3 border-t border-slate-200/60">
-                {isCompleted ? (
-                  <div className="flex items-center justify-center space-x-1.5 rounded-xl bg-emerald-100/80 py-2 px-3 text-xs font-semibold text-emerald-800">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    <span>Action exécutée par l&apos;IA</span>
-                  </div>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="default"
-                    size="sm"
-                    disabled={isExecuting}
-                    onClick={() => handleExecuteTask(task.id)}
-                    className="w-full justify-center rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs shadow-xs transition-colors"
-                  >
-                    {isExecuting ? (
-                      <>
-                        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                        Exécution en cours...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                        {task.actionLabel}
-                      </>
-                    )}
-                  </Button>
-                )}
+              <div className="mt-3.5 pt-3 border-t border-slate-100/80">
+                <p className="text-[11px] font-semibold text-emerald-700 tracking-tight">
+                  {task.impact}
+                </p>
+
+                <div className="mt-2.5">
+                  {isDone ? (
+                    <div className="flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 py-1">
+                      <CheckCircle2 className="h-4 w-4" />
+                      <span>Exécuté avec succès !</span>
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      disabled={isBusy}
+                      size="sm"
+                      onClick={() => handleExecuteTask(task.id)}
+                      className="w-full rounded-xl bg-slate-900 hover:bg-[#0071E3] text-white text-xs font-semibold py-1.5 shadow-2xs transition-all active:scale-95"
+                    >
+                      {isBusy && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
+                      <span className="truncate">{task.actionLabel}</span>
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           );

@@ -33,6 +33,11 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isAddModalOpen, setIsAddModalOpen] = React.useState<boolean>(false);
   const [toastMessage, setToastMessage] = React.useState<string | null>(null);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // New Deal Form State
   const [newTitle, setNewTitle] = React.useState("");
@@ -159,15 +164,35 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
   const getChannelBadge = (ch: ChannelType) => {
     switch (ch) {
       case "whatsapp":
-        return <span className="rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">WhatsApp</span>;
+        return (
+          <span className="inline-flex items-center rounded-full bg-[#34C759]/10 px-2 py-0.5 text-[10px] font-semibold text-[#248A3D] border border-[#34C759]/20">
+            WhatsApp
+          </span>
+        );
       case "instagram":
-        return <span className="rounded bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200">Instagram</span>;
+        return (
+          <span className="inline-flex items-center rounded-full bg-[#FF2D55]/10 px-2 py-0.5 text-[10px] font-semibold text-[#D30F3B] border border-[#FF2D55]/20">
+            Instagram
+          </span>
+        );
       case "messenger":
-        return <span className="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-200">Messenger</span>;
+        return (
+          <span className="inline-flex items-center rounded-full bg-[#0071E3]/10 px-2 py-0.5 text-[10px] font-semibold text-[#0071E3] border border-[#0071E3]/20">
+            Messenger
+          </span>
+        );
       case "tiktok":
-        return <span className="rounded bg-slate-900 px-2 py-0.5 text-[10px] font-bold text-white">TikTok</span>;
+        return (
+          <span className="inline-flex items-center rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-semibold text-white">
+            TikTok
+          </span>
+        );
       case "telegram":
-        return <span className="rounded bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-sky-200">Telegram</span>;
+        return (
+          <span className="inline-flex items-center rounded-full bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold text-sky-600 border border-sky-500/20">
+            Telegram
+          </span>
+        );
       default:
         return null;
     }
@@ -175,10 +200,10 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
 
   return (
     <div className="space-y-6">
-      {/* Toast Notification */}
+      {/* Apple Floating Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xl transition-all">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-2 rounded-2xl bg-slate-900/90 backdrop-blur-xl px-4 py-2.5 text-xs font-medium text-white shadow-2xl border border-white/10 transition-all duration-200">
+          <CheckCircle2 className="h-4 w-4 text-[#34C759]" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -186,23 +211,23 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
       {/* Top Header & Metrics */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center space-x-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              Pipeline des Ventes & Opportunités
+          <div className="flex items-center space-x-2.5">
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
+              Pipeline des Ventes
             </h1>
-            <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700">
+            <span className="rounded-full bg-[#0071E3]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0071E3] border border-[#0071E3]/20">
               {filteredDeals.length} Deals
             </span>
           </div>
-          <p className="mt-1 text-sm text-slate-500">
-            Suivi visuel Kanban des opportunités commerciales omnicanales (WhatsApp, IG, MoMo).
+          <p className="mt-1 text-xs sm:text-sm text-slate-500 font-normal">
+            Suivi visuel des opportunités omnicanales au Cameroun (WhatsApp, IG, MoMo, Orange Money).
           </p>
         </div>
 
         <div className="flex items-center space-x-3">
           <Button
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs"
+            className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-medium text-xs px-4 py-2 shadow-xs transition-all"
           >
             <Plus className="mr-1.5 h-3.5 w-3.5" />
             Nouveau Deal
@@ -210,86 +235,94 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
         </div>
       </div>
 
-      {/* 4 Top KPI Cards (Linear / Donezo Style) */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-xs">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-medium uppercase tracking-wider">Valeur Totale Pipeline</span>
-              <DollarSign className="h-4 w-4 text-blue-600" />
+      {/* 4 Apple Translucent KPI Cards */}
+      <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between text-slate-400 mb-2">
+              <span className="text-[11px] font-medium tracking-wider uppercase">Valeur Totale</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#0071E3]/10 text-[#0071E3]">
+                <DollarSign className="h-4 w-4" />
+              </span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-slate-900">
-              {totalPipelineFCFA.toLocaleString("fr-FR")} <span className="text-xs font-semibold text-slate-500">FCFA</span>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+              {totalPipelineFCFA.toLocaleString("fr-FR")} <span className="text-xs font-normal text-slate-500">FCFA</span>
             </div>
-            <p className="mt-1 text-[11px] text-slate-500">
-              Sur l&apos;ensemble des opportunités actives
+            <p className="mt-1 text-[11px] text-slate-400">
+              Opportunités en cours d&apos;engagement
             </p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-xs">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-medium uppercase tracking-wider">Revenu Pondéré Estimé</span>
-              <Percent className="h-4 w-4 text-indigo-600" />
+        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between text-slate-400 mb-2">
+              <span className="text-[11px] font-medium tracking-wider uppercase">Revenu Pondéré</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#5856D6]/10 text-[#5856D6]">
+                <Percent className="h-4 w-4" />
+              </span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-slate-900">
-              {Math.round(weightedRevenueFCFA).toLocaleString("fr-FR")} <span className="text-xs font-semibold text-slate-500">FCFA</span>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+              {Math.round(weightedRevenueFCFA).toLocaleString("fr-FR")} <span className="text-xs font-normal text-slate-500">FCFA</span>
             </div>
-            <p className="mt-1 text-[11px] text-emerald-600 font-medium">
-              Calculé selon la probabilité de clôture
+            <p className="mt-1 text-[11px] text-[#34C759] font-medium">
+              Calculé sur la probabilité de clôture
             </p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-xs">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-medium uppercase tracking-wider">Acomptes Encaissés</span>
-              <Sparkles className="h-4 w-4 text-amber-500" />
+        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between text-slate-400 mb-2">
+              <span className="text-[11px] font-medium tracking-wider uppercase">Acomptes Reçus</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#FF9500]/10 text-[#FF9500]">
+                <Sparkles className="h-4 w-4" />
+              </span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-slate-900">
-              {depositPaidCount} <span className="text-xs font-medium text-slate-500">commandes</span>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+              {depositPaidCount} <span className="text-xs font-normal text-slate-500">commandes</span>
             </div>
-            <p className="mt-1 text-[11px] text-amber-700 font-medium">
+            <p className="mt-1 text-[11px] text-[#FF9500] font-medium">
               Validés via MTN MoMo / Orange Money
             </p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-xs">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-medium uppercase tracking-wider">Deals Clôturés Gagnés</span>
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
+        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between text-slate-400 mb-2">
+              <span className="text-[11px] font-medium tracking-wider uppercase">Deals Gagnés</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#34C759]/10 text-[#34C759]">
+                <TrendingUp className="h-4 w-4" />
+              </span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-slate-900">
-              {wonDealsCount} <span className="text-xs font-medium text-slate-500">finalisés</span>
+            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+              {wonDealsCount} <span className="text-xs font-normal text-slate-500">finalisés</span>
             </div>
-            <p className="mt-1 text-[11px] text-emerald-700 font-medium">
+            <p className="mt-1 text-[11px] text-[#34C759] font-medium">
               Livrées et soldées ce mois-ci
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs">
+      {/* Filter and Search Bar: Apple Segmented Glass Bar */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200/60 bg-white/70 backdrop-blur-xl p-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
           <Input
             type="text"
             placeholder="Rechercher par client, produit ou entreprise..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 text-xs border-slate-200 rounded-xl"
+            className="pl-9 h-9 text-xs border-slate-200/80 rounded-2xl bg-white/80 focus:bg-white transition-colors"
           />
         </div>
 
-        {/* Channel Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
+        {/* Channel Filter Pills (Apple Segmented Style) */}
+        <div className="flex items-center space-x-1 overflow-x-auto p-1 bg-slate-100/70 rounded-2xl no-scrollbar">
           {[
-            { id: "all", label: "Tous les canaux" },
+            { id: "all", label: "Tous" },
             { id: "whatsapp", label: "WhatsApp" },
             { id: "instagram", label: "Instagram" },
             { id: "messenger", label: "Messenger" },
@@ -299,10 +332,10 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
             <button
               key={ch.id}
               onClick={() => setSelectedChannel(ch.id)}
-              className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              className={`apple-press rounded-xl px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
                 selectedChannel === ch.id
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "bg-slate-100/80 text-slate-600 hover:bg-slate-200/70"
+                  ? "bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.08)]"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               {ch.label}
@@ -312,7 +345,7 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
       </div>
 
       {/* Kanban Board Horizontal Scroll Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 overflow-x-auto pb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 overflow-x-auto pb-4">
         {PIPELINE_COLUMNS.map((column) => {
           const columnDeals = filteredDeals.filter((d) => d.stage === column.id);
           const columnTotal = columnDeals.reduce((sum, d) => sum + d.amount_fcfa, 0);
@@ -320,54 +353,65 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
           return (
             <div
               key={column.id}
-              className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-100/50 p-3 min-w-[260px] h-full"
+              className="flex flex-col rounded-3xl border border-slate-200/50 bg-slate-100/40 backdrop-blur-md p-3 min-w-[260px] h-full"
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/70">
-                <div className="flex items-center space-x-1.5">
-                  <span className={`h-2.5 w-2.5 rounded-full ${column.id === "won" ? "bg-emerald-500" : column.id === "deposit_paid" ? "bg-amber-500" : column.id === "lost" ? "bg-rose-500" : "bg-blue-500"}`} />
-                  <span className="text-xs font-bold text-slate-800 line-clamp-1">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/50">
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      column.id === "won"
+                        ? "bg-[#34C759]"
+                        : column.id === "deposit_paid"
+                        ? "bg-[#FF9500]"
+                        : column.id === "lost"
+                        ? "bg-[#FF3B30]"
+                        : "bg-[#0071E3]"
+                    }`}
+                  />
+                  <span className="text-xs font-semibold text-slate-800 line-clamp-1 tracking-tight">
                     {column.label}
                   </span>
                 </div>
-                <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-slate-600 border border-slate-200 shadow-2xs">
+                <span className="rounded-full bg-white/80 px-2 py-0.5 text-[11px] font-medium text-slate-500 border border-slate-200/60 shadow-2xs">
                   {columnDeals.length}
                 </span>
               </div>
 
               {/* Column Total Amount */}
-              <div className="text-[11px] font-semibold text-slate-500 mb-3">
+              <div className="text-[11px] font-medium text-slate-400 mb-2.5 px-0.5">
                 {columnTotal.toLocaleString("fr-FR")} FCFA
               </div>
 
               {/* Deals Cards in this stage */}
-              <div className="space-y-3 flex-1">
+              <div className="space-y-2.5 flex-1">
                 {columnDeals.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-slate-300/80 p-6 text-center text-xs text-slate-400">
+                  <div className="rounded-2xl border border-dashed border-slate-200 p-6 text-center text-xs text-slate-400">
                     Aucun deal
                   </div>
                 ) : (
                   columnDeals.map((deal) => (
                     <div
                       key={deal.id}
-                      className="group relative rounded-xl border border-slate-200/90 bg-white p-3.5 shadow-xs hover:border-blue-400 hover:shadow-md transition-all"
+                      className="group relative rounded-2xl border border-slate-200/70 bg-white p-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.06)] hover:border-slate-300 transition-all duration-200"
                     >
                       {/* Channel and Probability */}
                       <div className="flex items-center justify-between mb-2">
                         {getChannelBadge(deal.channel_type)}
-                        <span className="text-[11px] font-bold text-slate-500">
+                        <span className="text-[11px] font-semibold text-slate-400">
                           {deal.probability}%
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
+                      <h4 className="text-xs font-semibold text-slate-900 leading-snug line-clamp-2 tracking-tight">
                         {deal.title}
                       </h4>
 
                       {/* Amount in FCFA */}
-                      <div className="mt-2 text-sm font-extrabold text-blue-700">
-                        {deal.amount_fcfa.toLocaleString("fr-FR")} <span className="text-[10px] font-semibold text-slate-600">FCFA</span>
+                      <div className="mt-1.5 text-sm font-bold text-[#0071E3] tracking-tight">
+                        {deal.amount_fcfa.toLocaleString("fr-FR")}{" "}
+                        <span className="text-[10px] font-normal text-slate-400">FCFA</span>
                       </div>
 
                       {/* Customer & Company Details */}
@@ -377,12 +421,12 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                           <span className="line-clamp-1">{deal.customer_name}</span>
                         </div>
                         {deal.company_name && (
-                          <div className="flex items-center space-x-1.5 text-slate-500">
+                          <div className="flex items-center space-x-1.5 text-slate-400">
                             <Building2 className="h-3 w-3 text-slate-400 shrink-0" />
                             <span className="line-clamp-1 text-[10px]">{deal.company_name}</span>
                           </div>
                         )}
-                        <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                        <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
                           <span className="flex items-center space-x-1">
                             <MapPin className="h-2.5 w-2.5 text-slate-400" />
                             <span>{deal.customer_city}</span>
@@ -395,12 +439,12 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                       </div>
 
                       {/* Action Bar to Move Stage */}
-                      <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between opacity-80 group-hover:opacity-100 transition-opacity">
+                      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
                         <button
                           type="button"
                           onClick={() => moveDeal(deal.id, "prev")}
                           disabled={deal.stage === "lead" || deal.stage === "lost"}
-                          className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-800 disabled:opacity-30 cursor-pointer"
+                          className="apple-press rounded-xl p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-800 disabled:opacity-20 cursor-pointer transition-colors"
                           title="Étape précédente"
                         >
                           <ArrowLeft className="h-3.5 w-3.5" />
@@ -409,7 +453,7 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                         <button
                           type="button"
                           onClick={() => markLost(deal.id)}
-                          className="text-[10px] font-medium text-rose-500 hover:text-rose-700 hover:underline cursor-pointer"
+                          className="text-[10px] font-medium text-[#FF3B30] hover:text-[#D70015] cursor-pointer transition-colors"
                         >
                           {deal.stage === "lost" ? "Perdu" : "Abandonner"}
                         </button>
@@ -418,7 +462,7 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                           type="button"
                           onClick={() => moveDeal(deal.id, "next")}
                           disabled={deal.stage === "won" || deal.stage === "lost"}
-                          className="rounded p-1 text-blue-600 hover:bg-blue-50 hover:text-blue-800 disabled:opacity-30 cursor-pointer"
+                          className="apple-press rounded-xl p-1 text-[#0071E3] hover:bg-[#0071E3]/10 disabled:opacity-20 cursor-pointer transition-colors"
                           title="Étape suivante"
                         >
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -433,36 +477,36 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
         })}
       </div>
 
-      {/* Modal: Nouveau Deal */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl">
+      {/* Modal: Nouveau Deal (Rendered only when mounted to protect against hydration drift) */}
+      {mounted && isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 backdrop-blur-md p-4 transition-all">
+          <div className="relative w-full max-w-lg rounded-3xl border border-white/60 bg-white/95 backdrop-blur-2xl p-6 shadow-2xl">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
-              <div className="flex items-center space-x-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+              <div className="flex items-center space-x-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[#0071E3]/10 text-[#0071E3]">
                   <Plus className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Ajouter une opportunité de vente
+                  <h3 className="text-base font-semibold tracking-tight text-slate-900">
+                    Nouveau Deal
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Enregistrez un nouveau deal dans le pipeline OmniSales.
+                  <p className="text-xs text-slate-500 font-normal">
+                    Enregistrez une nouvelle opportunité de vente
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="rounded-xl p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
+                className="apple-press rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer transition-colors"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
             <form onSubmit={handleAddDeal} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-slate-700 mb-1">
                   Intitulé du Deal / Produit *
                 </label>
                 <Input
@@ -470,13 +514,13 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                   placeholder="Ex: Commande 200 sacs de Ciment CPJ"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="h-9 text-xs"
+                  className="h-9 text-xs rounded-2xl border-slate-200"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Montant estimé (FCFA) *
                   </label>
                   <Input
@@ -485,18 +529,18 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                     placeholder="Ex: 550000"
                     value={newAmount}
                     onChange={(e) => setNewAmount(e.target.value)}
-                    className="h-9 text-xs"
+                    className="h-9 text-xs rounded-2xl border-slate-200"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Étape Initiale
                   </label>
                   <select
                     value={newStage}
                     onChange={(e) => setNewStage(e.target.value as DealStage)}
-                    className="w-full h-9 rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-9 rounded-2xl border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
                   >
                     {PIPELINE_COLUMNS.map((col) => (
                       <option key={col.id} value={col.id}>
@@ -509,7 +553,7 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Nom du Client *
                   </label>
                   <Input
@@ -517,32 +561,32 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                     placeholder="Ex: Jean-Pierre Fotso"
                     value={newCustomer}
                     onChange={(e) => setNewCustomer(e.target.value)}
-                    className="h-9 text-xs"
+                    className="h-9 text-xs rounded-2xl border-slate-200"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Entreprise / Établissement
                   </label>
                   <Input
                     placeholder="Ex: BTP du Wouri SARL"
                     value={newCompany}
                     onChange={(e) => setNewCompany(e.target.value)}
-                    className="h-9 text-xs"
+                    className="h-9 text-xs rounded-2xl border-slate-200"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Ville de Livraison
                   </label>
                   <select
                     value={newCity}
                     onChange={(e) => setNewCity(e.target.value as typeof newCity)}
-                    className="w-full h-9 rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-9 rounded-2xl border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
                   >
                     <option value="Douala">Douala</option>
                     <option value="Yaoundé">Yaoundé</option>
@@ -553,13 +597,13 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Canal d&apos;Acquisition
                   </label>
                   <select
                     value={newChannel}
                     onChange={(e) => setNewChannel(e.target.value as ChannelType)}
-                    className="w-full h-9 rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-9 rounded-2xl border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
                   >
                     <option value="whatsapp">WhatsApp Business</option>
                     <option value="instagram">Instagram DMs</option>
@@ -575,13 +619,13 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
                   type="button"
                   variant="outline"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="text-xs"
+                  className="apple-press rounded-2xl text-xs px-4"
                 >
                   Annuler
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"
+                  className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-medium px-4"
                 >
                   Créer l&apos;Opportunité
                 </Button>

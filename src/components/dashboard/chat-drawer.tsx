@@ -253,49 +253,49 @@ function ChatDrawerContent({
   };
 
   return (
-    <div className="relative flex h-full w-full max-w-3xl flex-col bg-white shadow-2xl animate-in slide-in-from-right duration-300">
-      {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-slate-200/80 px-6 py-4">
+    <div className="relative flex h-full w-full max-w-3xl flex-col bg-white/95 backdrop-blur-2xl rounded-l-3xl border-l border-slate-200/70 shadow-[-20px_0_50px_rgba(0,0,0,0.12)] animate-in slide-in-from-right duration-250 select-none">
+      {/* Top Header — Apple Blurred Bar */}
+      <div className="flex items-center justify-between border-b border-slate-200/60 bg-white/80 px-6 py-3.5 backdrop-blur-md">
         <div className="flex items-center space-x-3.5">
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-800 border border-slate-200">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0071E3] to-[#5856D6] text-sm font-bold text-white shadow-xs">
             {customer?.name
               ?.split(" ")
               .map((n) => n[0])
               .join("")
               .slice(0, 2) || "C"}
-            <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#34C759] ring-2 ring-white" />
           </div>
 
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-base font-bold text-slate-900">{customer?.name}</h3>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+              <h3 className="text-sm sm:text-base font-bold tracking-tight text-slate-900">{customer?.name}</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
                 {conversation.channel_type}
               </span>
-              <Badge variant={triageVariant[conversation.triage_tag] || "secondary"} className="capitalize text-[11px]">
+              <Badge variant={triageVariant[conversation.triage_tag] || "secondary"} className="capitalize text-[10px] rounded-full px-2 py-0.5">
                 {conversation.status.replace("_", " ")}
               </Badge>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {customer?.phone || customer?.handle || "Customer contact"} • Last active just now
+            <p className="text-xs text-slate-400 mt-0.5 tracking-tight">
+              {customer?.phone || customer?.handle || "Contact client"} • En ligne
             </p>
           </div>
         </div>
 
         {/* Controls: AI switch + Claim button + Close */}
-        <div className="flex items-center space-x-2.5">
+        <div className="flex items-center space-x-2">
           {/* AI Toggle Button */}
           <button
             type="button"
             onClick={() => setIsAiActive(!isAiActive)}
-            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-all active:scale-95 ${
               isAiActive
-                ? "bg-blue-50 text-blue-700 border border-blue-200"
-                : "bg-amber-50 text-amber-800 border border-amber-200"
+                ? "bg-blue-50 text-[#0071E3] border border-blue-200/60"
+                : "bg-amber-50 text-[#FF9500] border border-amber-200/60"
             }`}
           >
             <Bot className="mr-1.5 h-3.5 w-3.5" />
-            {isAiActive ? "AI Agent: ON" : "AI Paused (Human Mode)"}
+            <span className="tracking-tight">{isAiActive ? "IA Active" : "Mode Humain"}</span>
           </button>
 
           {/* Claim Handoff */}
@@ -304,19 +304,19 @@ function ChatDrawerContent({
             size="sm"
             variant={isClaimed ? "secondary" : "default"}
             onClick={() => setIsClaimed(!isClaimed)}
-            className="text-xs font-semibold h-8"
+            className="text-xs font-semibold h-8 rounded-xl active:scale-95"
           >
             <UserCheck className="mr-1.5 h-3.5 w-3.5" />
-            {isClaimed ? "Assigné à Jean-Luc" : "Prendre en charge"}
+            <span className="tracking-tight">{isClaimed ? "Assigné à Jean-Luc" : "Prendre en main"}</span>
           </Button>
 
           {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors active:scale-95"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -371,12 +371,12 @@ function ChatDrawerContent({
                   </div>
 
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ${
+                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs tracking-tight ${
                       isCustomer
-                        ? "bg-white text-slate-900 border border-slate-200/80 rounded-tl-sm"
+                        ? "bg-slate-100/90 text-slate-900 rounded-bl-xs border border-slate-200/50"
                         : isAi
-                        ? "bg-blue-50/80 text-blue-950 border border-blue-200/60 rounded-tr-sm"
-                        : "bg-blue-600 text-white rounded-tr-sm"
+                        ? "bg-indigo-50/80 text-indigo-950 border border-indigo-200/50 rounded-br-xs"
+                        : "bg-[#0071E3] text-white rounded-br-xs shadow-xs"
                     }`}
                   >
                     {msg.content}
@@ -387,43 +387,43 @@ function ChatDrawerContent({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Actions Bar */}
-          <div className="border-t border-slate-200/80 bg-white px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar">
+          {/* Quick Actions Bar — Apple Sub-Toolbar */}
+          <div className="border-t border-slate-200/50 bg-white/80 backdrop-blur-md px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar">
             <button
               type="button"
               onClick={handleSendPaymentLinkShortcut}
-              className="inline-flex shrink-0 items-center rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+              className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0071E3] transition-all active:scale-95"
             >
-              <CreditCard className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-              Send Payment Link
+              <CreditCard className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+              Lien MoMo / OM
             </button>
 
             <button
               type="button"
               disabled={isGeneratingAiDraft}
               onClick={handleDraftAiReply}
-              className="inline-flex shrink-0 items-center rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+              className="inline-flex shrink-0 items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#0071E3] hover:bg-blue-100 transition-all active:scale-95 border border-blue-200/60"
             >
-              <Sparkles className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-              {isGeneratingAiDraft ? "Drafting..." : "Let AI Draft Reply"}
+              <Sparkles className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
+              {isGeneratingAiDraft ? "Génération..." : "Proposer une Réponse IA"}
             </button>
           </div>
 
-          {/* Reply Input Form */}
-          <form onSubmit={handleSendMessage} className="border-t border-slate-200/80 bg-white p-3 sm:p-4">
+          {/* Reply Input Form — Apple iMessage Pill */}
+          <form onSubmit={handleSendMessage} className="border-t border-slate-200/50 bg-white/90 backdrop-blur-md p-3 sm:p-4">
             <div className="flex items-center space-x-2">
               <input
                 type="text"
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                placeholder={`Reply to ${customer?.name} on ${conversation.channel_type}...`}
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none"
+                placeholder={`Répondre à ${customer?.name} sur ${conversation.channel_type}...`}
+                className="flex-1 rounded-full border border-slate-200/80 bg-slate-100/70 px-4 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0071E3] focus:bg-white focus:outline-none transition-all tracking-tight"
               />
               <Button
                 type="submit"
                 size="sm"
                 disabled={!replyText.trim()}
-                className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 font-semibold text-xs"
+                className="h-9 w-9 rounded-full bg-[#0071E3] hover:bg-[#0077ED] text-white p-0 flex items-center justify-center font-semibold text-xs shadow-xs active:scale-95"
               >
                 <Send className="h-4 w-4" />
               </Button>
