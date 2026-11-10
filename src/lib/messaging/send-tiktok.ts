@@ -5,11 +5,12 @@ import type { OutboundDispatchResult } from "./types";
  */
 export async function sendTikTokMessage(
   recipient: string,
-  text: string
+  text: string,
+  customToken?: string
 ): Promise<OutboundDispatchResult> {
   const startTime = Date.now();
   const cleanSenderId = recipient.replace(/^@/, "").trim();
-  const token = process.env.TIKTOK_ACCESS_TOKEN;
+  const token = customToken || process.env.TIKTOK_ACCESS_TOKEN;
 
   // Simulation mode
   if (!token) {

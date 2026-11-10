@@ -3,17 +3,40 @@
 import * as React from "react";
 import {
   Bot,
+  CheckCircle2,
   Code2,
+  MessageCircle,
   MessageSquare,
   Radio,
   ShieldCheck,
   Smartphone,
+  Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppQRModal } from "./whatsapp-qr-modal";
 import { TelegramTokenModal } from "./telegram-token-modal";
 import { WebhookTestModal } from "./webhook-test-modal";
+import { MetaOAuthModal } from "./meta-oauth-modal";
+import { TikTokOAuthModal } from "./tiktok-oauth-modal";
 import type { Channel, ChannelType } from "@/types/database";
+
+function InstagramIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
 
 interface ChannelsClientProps {
   initialChannels: Channel[];
@@ -35,14 +58,115 @@ interface ChannelCardData {
   status: "connected" | "reconnect_needed";
 }
 
+const DEFAULT_CARDS: ChannelCardData[] = [
+  {
+    id: "ch-wa",
+    type: "whatsapp",
+    title: "WhatsApp Business Cloud",
+    subtitle: "Meta Cloud API v21.0 & QR Pairing",
+    handle: "+237 671 23 45 67",
+    messagesCount: 18,
+    automatedRate: 98,
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+    badgeBg: "bg-emerald-50",
+    badgeText: "text-emerald-700",
+    badgeBorder: "border-emerald-200",
+    status: "connected",
+  },
+  {
+    id: "ch-ig",
+    type: "instagram",
+    title: "Instagram Direct Inbox",
+    subtitle: "Meta OAuth (Seamless DM Authorization)",
+    handle: "@musaretail_ng",
+    messagesCount: 12,
+    automatedRate: 92,
+    iconBg: "bg-pink-50",
+    iconColor: "text-pink-600",
+    badgeBg: "bg-pink-50",
+    badgeText: "text-pink-700",
+    badgeBorder: "border-pink-200",
+    status: "connected",
+  },
+  {
+    id: "ch-fb",
+    type: "messenger",
+    title: "Facebook Messenger",
+    subtitle: "Meta Page Login (Automated Replies)",
+    handle: "Musa Retail Hub Page",
+    messagesCount: 8,
+    automatedRate: 88,
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+    badgeBg: "bg-blue-50",
+    badgeText: "text-blue-700",
+    badgeBorder: "border-blue-200",
+    status: "connected",
+  },
+  {
+    id: "ch-tt",
+    type: "tiktok",
+    title: "TikTok Shop & DMs",
+    subtitle: "TikTok Login Kit (Buyer DMs Authorization)",
+    handle: "@musastore_deals",
+    messagesCount: 14,
+    automatedRate: 100,
+    iconBg: "bg-slate-900",
+    iconColor: "text-white",
+    badgeBg: "bg-slate-100",
+    badgeText: "text-slate-900",
+    badgeBorder: "border-slate-300",
+    status: "connected",
+  },
+  {
+    id: "ch-tg",
+    type: "telegram",
+    title: "Telegram Sales Bot",
+    subtitle: "Telegram Bot API Gateway",
+    handle: "@MusaSalesAgentBot",
+    messagesCount: 6,
+    automatedRate: 85,
+    iconBg: "bg-sky-50",
+    iconColor: "text-sky-600",
+    badgeBg: "bg-sky-50",
+    badgeText: "text-sky-700",
+    badgeBorder: "border-sky-200",
+    status: "connected",
+  },
+];
+
 export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
   const [globalAiEnabled, setGlobalAiEnabled] = React.useState(true);
+
+  // Dynamic cards state reflecting live handles
+  const [cards, setCards] = React.useState<ChannelCardData[]>(() => {
+    return DEFAULT_CARDS.map((card) => {
+      const match = initialChannels.find((c) => c.type === card.type);
+      if (match) {
+        return {
+          ...card,
+          handle: match.handle || card.handle,
+          status: match.status === "connected" ? "connected" : "reconnect_needed",
+        };
+      }
+      return card;
+    });
+  });
 
   // Modal controls
   const [isQrModalOpen, setIsQrModalOpen] = React.useState(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = React.useState(false);
   const [isWebhookModalOpen, setIsWebhookModalOpen] = React.useState(false);
   const [webhookChannelTarget, setWebhookChannelTarget] = React.useState<ChannelType>("whatsapp");
+
+  // Meta & TikTok OAuth Linking Modals
+  const [isMetaModalOpen, setIsMetaModalOpen] = React.useState(false);
+  const [metaChannelTarget, setMetaChannelTarget] = React.useState<"instagram" | "messenger">("instagram");
+  const [isTikTokModalOpen, setIsTikTokModalOpen] = React.useState(false);
+
+  // Success Notification Banner
+  const [successBanner, setSuccessBanner] = React.useState<string | null>(null);
 
   // Per-channel auto-reply map
   const [autoReplyMap, setAutoReplyMap] = React.useState<Record<string, boolean>>(() => {
@@ -52,6 +176,28 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     });
     return map;
   });
+
+  // Handle URL query parameters for OAuth returns
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const connectedParam = params.get("connected");
+    const seamlessParam = params.get("seamless_connect");
+
+    if (connectedParam) {
+      setSuccessBanner(
+        `${connectedParam.toUpperCase()} linked successfully via OAuth! Customer DM permissions are now active.`
+      );
+      setTimeout(() => setSuccessBanner(null), 5000);
+    }
+
+    if (seamlessParam === "instagram" || seamlessParam === "messenger") {
+      setMetaChannelTarget(seamlessParam);
+      setIsMetaModalOpen(true);
+    } else if (seamlessParam === "tiktok") {
+      setIsTikTokModalOpen(true);
+    }
+  }, []);
 
   const handleToggleAutoReply = (channelId: string) => {
     setAutoReplyMap((prev) => ({
@@ -72,91 +218,38 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     });
   };
 
-  const channelCards: ChannelCardData[] = [
-    {
-      id: "ch-wa",
-      type: "whatsapp",
-      title: "WhatsApp Business Cloud",
-      subtitle: "Meta Cloud API v20.0 & QR Pairing",
-      handle: "+234 812 345 6789",
-      messagesCount: 18,
-      automatedRate: 98,
-      iconBg: "bg-emerald-50",
-      iconColor: "text-emerald-600",
-      badgeBg: "bg-emerald-50",
-      badgeText: "text-emerald-700",
-      badgeBorder: "border-emerald-200",
-      status: "connected",
-    },
-    {
-      id: "ch-ig",
-      type: "instagram",
-      title: "Instagram Direct Inbox",
-      subtitle: "Meta Graph API (IG DM Automation)",
-      handle: "@musaretail_ng",
-      messagesCount: 12,
-      automatedRate: 92,
-      iconBg: "bg-pink-50",
-      iconColor: "text-pink-600",
-      badgeBg: "bg-pink-50",
-      badgeText: "text-pink-700",
-      badgeBorder: "border-pink-200",
-      status: "connected",
-    },
-    {
-      id: "ch-fb",
-      type: "messenger",
-      title: "Facebook Messenger",
-      subtitle: "Musa Retail Hub Page (ID: 871263541)",
-      handle: "Musa Retail Hub",
-      messagesCount: 8,
-      automatedRate: 88,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
-      badgeBg: "bg-blue-50",
-      badgeText: "text-blue-700",
-      badgeBorder: "border-blue-200",
-      status: "connected",
-    },
-    {
-      id: "ch-tt",
-      type: "tiktok",
-      title: "TikTok Shop & DMs",
-      subtitle: "TikTok Business Messaging API",
-      handle: "@musastore_deals",
-      messagesCount: 14,
-      automatedRate: 100,
-      iconBg: "bg-slate-900",
-      iconColor: "text-white",
-      badgeBg: "bg-slate-100",
-      badgeText: "text-slate-900",
-      badgeBorder: "border-slate-300",
-      status: "connected",
-    },
-    {
-      id: "ch-tg",
-      type: "telegram",
-      title: "Telegram Sales Bot",
-      subtitle: "Telegram Bot API Gateway",
-      handle: "@MusaSalesAgentBot",
-      messagesCount: 6,
-      automatedRate: 85,
-      iconBg: "bg-sky-50",
-      iconColor: "text-sky-600",
-      badgeBg: "bg-sky-50",
-      badgeText: "text-sky-700",
-      badgeBorder: "border-sky-200",
-      status: "connected",
-    },
-  ];
-
   const openTestWebhook = (channelType: ChannelType) => {
     setWebhookChannelTarget(channelType);
     setIsWebhookModalOpen(true);
   };
 
+  const handleChannelConnected = (
+    channelType: ChannelType,
+    newHandle: string
+  ) => {
+    setCards((prev) =>
+      prev.map((c) =>
+        c.type === channelType
+          ? { ...c, handle: newHandle, status: "connected" }
+          : c
+      )
+    );
+    setSuccessBanner(
+      `${channelType.toUpperCase()} linked successfully (${newHandle}) with messaging permissions!`
+    );
+    setTimeout(() => setSuccessBanner(null), 4000);
+  };
+
   return (
     <div className="space-y-8 pb-20">
+      {/* Success Banner */}
+      {successBanner && (
+        <div className="flex items-center space-x-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-800 shadow-xs animate-in fade-in duration-200">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+          <span>{successBanner}</span>
+        </div>
+      )}
+
       {/* Top Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -170,7 +263,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
             </span>
           </div>
           <p className="mt-1 text-xs sm:text-sm text-slate-500">
-            Manage your live messaging gateways, AI auto-reply toggles, and test incoming webhook listeners
+            Link Instagram, Facebook, TikTok, WhatsApp & Telegram via 1-click authorization without manual API keys
           </p>
         </div>
 
@@ -240,7 +333,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
 
       {/* Channel Connection Cards Grid */}
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {channelCards.map((ch) => {
+        {cards.map((ch) => {
           const isAiActive = autoReplyMap[ch.id] ?? true;
 
           return (
@@ -254,7 +347,15 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                   <div
                     className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${ch.iconBg} ${ch.iconColor}`}
                   >
-                    <Smartphone className="h-6 w-6" />
+                    {ch.type === "instagram" ? (
+                      <InstagramIcon className="h-6 w-6" />
+                    ) : ch.type === "messenger" ? (
+                      <MessageCircle className="h-6 w-6" />
+                    ) : ch.type === "tiktok" ? (
+                      <Video className="h-6 w-6 text-rose-400" />
+                    ) : (
+                      <Smartphone className="h-6 w-6" />
+                    )}
                   </div>
 
                   <div className="flex items-center space-x-2">
@@ -352,14 +453,42 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                   </Button>
                 )}
 
-                {ch.type !== "whatsapp" && ch.type !== "telegram" && (
+                {ch.type === "instagram" && (
                   <Button
                     type="button"
                     size="sm"
-                    onClick={() => openTestWebhook(ch.type)}
-                    className="flex-1 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs font-semibold shadow-xs"
+                    onClick={() => {
+                      setMetaChannelTarget("instagram");
+                      setIsMetaModalOpen(true);
+                    }}
+                    className="flex-1 rounded-xl bg-gradient-to-r from-purple-600 via-rose-600 to-amber-600 hover:opacity-95 text-white text-xs font-semibold shadow-xs"
                   >
-                    Gateway Settings
+                    Link Instagram
+                  </Button>
+                )}
+
+                {ch.type === "messenger" && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      setMetaChannelTarget("messenger");
+                      setIsMetaModalOpen(true);
+                    }}
+                    className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs"
+                  >
+                    Link Page (FB)
+                  </Button>
+                )}
+
+                {ch.type === "tiktok" && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setIsTikTokModalOpen(true)}
+                    className="flex-1 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-semibold shadow-xs"
+                  >
+                    Link TikTok DMs
                   </Button>
                 )}
               </div>
@@ -372,7 +501,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
       <WhatsAppQRModal
         isOpen={isQrModalOpen}
         onClose={() => setIsQrModalOpen(false)}
-        phoneNumber="+234 812 345 6789"
+        phoneNumber="+237 671 23 45 67"
       />
 
       <TelegramTokenModal
@@ -385,6 +514,19 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
         isOpen={isWebhookModalOpen}
         onClose={() => setIsWebhookModalOpen(false)}
         defaultChannel={webhookChannelTarget}
+      />
+
+      <MetaOAuthModal
+        isOpen={isMetaModalOpen}
+        onClose={() => setIsMetaModalOpen(false)}
+        channel={metaChannelTarget}
+        onConnected={(type, handle) => handleChannelConnected(type, handle)}
+      />
+
+      <TikTokOAuthModal
+        isOpen={isTikTokModalOpen}
+        onClose={() => setIsTikTokModalOpen(false)}
+        onConnected={(type, handle) => handleChannelConnected(type, handle)}
       />
     </div>
   );

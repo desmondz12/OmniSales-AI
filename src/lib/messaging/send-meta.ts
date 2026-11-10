@@ -6,19 +6,21 @@ import type { ChannelType, OutboundDispatchResult } from "./types";
 export async function sendMetaSocialMessage(
   channel: "instagram" | "messenger",
   recipientId: string,
-  text: string
+  text: string,
+  customToken?: string
 ): Promise<OutboundDispatchResult> {
   const startTime = Date.now();
   const cleanRecipientId = recipientId.replace(/^@/, "").trim();
 
   const token =
-    channel === "instagram"
+    customToken ||
+    (channel === "instagram"
       ? process.env.INSTAGRAM_ACCESS_TOKEN ||
         process.env.META_PAGE_ACCESS_TOKEN ||
         process.env.META_SYSTEM_USER_TOKEN
       : process.env.MESSENGER_ACCESS_TOKEN ||
         process.env.META_PAGE_ACCESS_TOKEN ||
-        process.env.META_SYSTEM_USER_TOKEN;
+        process.env.META_SYSTEM_USER_TOKEN);
 
   // Simulation mode when token is absent
   if (!token) {

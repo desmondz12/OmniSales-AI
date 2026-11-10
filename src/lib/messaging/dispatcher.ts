@@ -39,9 +39,30 @@ export async function dispatchOutboundMessage(
     };
   }
 
+  // 1. Check for linked channel OAuth credentials in database if available
+  let channelToken: string | undefined;
+  try {
+    const supabase = createAdminClient();
+    const { data: channelRow } = await supabase
+      .from("channels")
+      .select("credentials")
+      .eq("type", channel)
+      .eq("status", "connected")
+      .maybeSingle();
+
+    if (channelRow?.credentials && typeof channelRow.credentials === "object") {
+      const creds = channelRow.credentials as Record<string, unknown>;
+      if (typeof creds.access_token === "string" && creds.access_token) {
+        channelToken = creds.access_token;
+      }
+    }
+  } catch {
+    // Non-fatal if Supabase offline or credentials absent
+  }
+
   let result: OutboundDispatchResult;
 
-  // 1. Channel-specific live dispatch
+  // 2. Channel-specific live dispatch
   switch (channel) {
     case "whatsapp":
       result = await sendWhatsAppMessage(recipient, text);
@@ -52,15 +73,15 @@ export async function dispatchOutboundMessage(
       break;
 
     case "instagram":
-      result = await sendMetaSocialMessage("instagram", recipient, text);
+      result = await sendMetaSocialMessage("instagram", recipient, text, channelToken);
       break;
 
     case "messenger":
-      result = await sendMetaSocialMessage("messenger", recipient, text);
+      result = await sendMetaSocialMessage("messenger", recipient, text, channelToken);
       break;
 
     case "tiktok":
-      result = await sendTikTokMessage(recipient, text);
+      result = await sendTikTokMessage(recipient, text, channelToken);
       break;
 
     default: {
