@@ -7,7 +7,6 @@ import {
   Clock,
   CreditCard,
   FileText,
-  Inbox,
   PanelRightClose,
   PanelRightOpen,
   Search,
@@ -34,6 +33,66 @@ interface InboxShellProps {
   initialCustomers: Customer[];
   initialMessages: Message[];
   initialInvoices: Invoice[];
+}
+
+function ChannelBadgeIcon({ channel }: { channel: ChannelType }) {
+  switch (channel) {
+    case "whatsapp":
+      return (
+        <span
+          className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#25D366] text-white ring-2 ring-white shadow-2xs"
+          title="WhatsApp"
+        >
+          <svg className="h-2 w-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 18.06c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.12 8.12 0 0 1-1.25-4.29c0-4.5 3.66-8.16 8.16-8.16 2.18 0 4.23.85 5.77 2.39a8.11 8.11 0 0 1 2.39 5.77c0 4.5-3.66 8.16-8.16 8.16z" />
+          </svg>
+        </span>
+      );
+    case "instagram":
+      return (
+        <span
+          className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-linear-to-tr from-[#FD1D1D] to-[#833AB4] text-white ring-2 ring-white shadow-2xs"
+          title="Instagram"
+        >
+          <svg className="h-2 w-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+        </span>
+      );
+    case "messenger":
+      return (
+        <span
+          className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#0084FF] text-white ring-2 ring-white shadow-2xs"
+          title="Messenger"
+        >
+          <svg className="h-2 w-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.914 1.455 5.518 3.735 7.208V22l3.37-1.85c.91.25 1.88.39 2.895.39 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2zm1.066 12.443l-2.716-2.898-5.3 2.898 5.83-6.192 2.784 2.898 5.232-2.898-5.83 6.192z" />
+          </svg>
+        </span>
+      );
+    case "tiktok":
+      return (
+        <span
+          className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-slate-900 text-white ring-2 ring-white shadow-2xs"
+          title="TikTok"
+        >
+          <svg className="h-2 w-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.5 6.3 6.3 0 0 0 1.86-4.49V8.78a8.18 8.18 0 0 0 3.91.98V6.69z" />
+          </svg>
+        </span>
+      );
+    case "telegram":
+      return (
+        <span
+          className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#0088cc] text-white ring-2 ring-white shadow-2xs"
+          title="Telegram"
+        >
+          <svg className="h-2 w-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+          </svg>
+        </span>
+      );
+  }
 }
 
 export function InboxShell({
@@ -105,13 +164,15 @@ export function InboxShell({
 
     // Status filter
     if (selectedStatus === "needs_human") {
-      if (conv.status !== "needs_human" && conv.status !== "upset" && conv.status !== "ready_to_pay") {
+      if (
+        conv.status !== "needs_human" &&
+        conv.status !== "upset" &&
+        conv.status !== "ready_to_pay"
+      ) {
         return false;
       }
     } else if (selectedStatus === "ready_to_pay") {
       if (conv.triage_tag !== "ready_to_pay") return false;
-    } else if (selectedStatus === "upset") {
-      if (conv.status !== "upset") return false;
     } else if (selectedStatus === "ai_handling") {
       if (conv.status !== "ai_handling") return false;
     }
@@ -218,19 +279,31 @@ export function InboxShell({
 
     setTimeout(() => {
       setIsDraftingAi(false);
-      if (activeCustomer.name === "Jean-Pierre Fotso" || activeCustomer.name === "Femi Adeleke") {
+      if (
+        activeCustomer.name === "Jean-Pierre Fotso" ||
+        activeCustomer.name === "Femi Adeleke"
+      ) {
         setReplyText(
           "Bonjour M. Fotso, ici Jean-Luc ! Je viens de vérifier notre récapitulatif des transferts MTN MoMo et Afriland. Votre acompte de 550 000 FCFA est bien enregistré et la livraison à Akwa est réservée !"
         );
-      } else if (activeCustomer.name === "Boris Atangana" || activeCustomer.name === "Obinna Eze") {
+      } else if (
+        activeCustomer.name === "Boris Atangana" ||
+        activeCustomer.name === "Obinna Eze"
+      ) {
         setReplyText(
           "Bonjour Boris, ici Jean-Luc personnellement. Je comprends parfaitement l'urgence pour votre événement de 14h à Bastos. Le transporteur express est déjà en route et livre avant 12h45. Code de suivi colis : CM-7821."
         );
-      } else if (activeCustomer.name === "Marie-Claire Ngo" || activeCustomer.name === "Amaka Johnson") {
+      } else if (
+        activeCustomer.name === "Marie-Claire Ngo" ||
+        activeCustomer.name === "Amaka Johnson"
+      ) {
         setReplyText(
           "Bonjour Marie-Claire, ici Jean-Luc ! Pour une commande de 50 pièces de pagnes / tissus brodés, nous offrons un tarif grossiste à 25 000 FCFA l'unité (soit 75 000 FCFA d'économie). Je peux vous envoyer les échantillons par WhatsApp dès maintenant."
         );
-      } else if (activeCustomer.name === "Danielle Ewane" || activeCustomer.name === "Chiamaka Nwosu") {
+      } else if (
+        activeCustomer.name === "Danielle Ewane" ||
+        activeCustomer.name === "Chiamaka Nwosu"
+      ) {
         setReplyText(
           "Bonjour Danielle, bien reçu pour votre promesse de paiement à 16h ! Voici votre lien rapide MoMo / OM pour solder dès réception : https://pay.omnisales.ai/fotso/inv-068. Excellente journée à vous !"
         );
@@ -311,89 +384,78 @@ export function InboxShell({
   );
 
   return (
-    <div className="relative flex h-[calc(100vh-6.5rem)] w-full overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+    <div className="flex h-full w-full overflow-hidden bg-white select-none">
       {/* ========================================================= */}
-      {/* 1. LEFT PANE: CONVERSATION LIST (320px–360px)            */}
+      {/* COL 2: UNIFIED INBOX LIST (Fixed 340px)                   */}
       {/* ========================================================= */}
-      <aside className="flex w-full md:w-80 lg:w-96 shrink-0 flex-col border-r border-slate-200/80 bg-white">
-        {/* Top Header: Title + Unread Count */}
-        <div className="p-4 border-b border-slate-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <Inbox className="h-4 w-4" />
-              </span>
-              <h2 className="text-base font-bold text-slate-900">Unified Inbox</h2>
-            </div>
-            <span className="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-bold text-rose-700 border border-rose-200/80">
-              3 Needs Human
+      <aside className="w-[340px] shrink-0 border-r border-slate-200 flex flex-col h-full bg-white">
+        {/* ROW 1: 60px Locked Header with Title, Badge, and Channel Dropdown */}
+        <div className="h-[60px] shrink-0 border-b border-slate-200 px-4 flex items-center justify-between bg-white">
+          <div className="flex items-center space-x-2 min-w-0">
+            <h2 className="text-sm font-bold text-slate-900 tracking-tight shrink-0">
+              Unified Inbox
+            </h2>
+            <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200/80 whitespace-nowrap">
+              3 Human Needs
             </span>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative mt-3">
-            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+          {/* Compact Channel Filter Dropdown */}
+          <div className="relative">
+            <select
+              value={selectedChannel}
+              onChange={(e) => setSelectedChannel(e.target.value)}
+              className="h-7.5 rounded-lg border border-slate-200 bg-slate-50/80 px-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="all">All Channels (5)</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="messenger">Messenger</option>
+              <option value="tiktok">TikTok</option>
+              <option value="telegram">Telegram</option>
+            </select>
+          </div>
+        </div>
+
+        {/* ROW 2: Sticky Sub-Header with Compact Search & 4 Status Tabs */}
+        <div className="px-3 py-2 border-b border-slate-200 space-y-2 bg-slate-50/60 shrink-0">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search conversations, customers..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-8 pr-3 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="h-7 w-full rounded-lg border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600"
+                className="absolute right-2 top-1.5 text-slate-400 hover:text-slate-600"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
-        </div>
 
-        {/* Channel Filter Pills (Horizontal Scroll) */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto border-b border-slate-100 px-3 py-2 no-scrollbar bg-slate-50/50">
-          {[
-            { id: "all", label: "All Channels" },
-            { id: "whatsapp", label: "WhatsApp" },
-            { id: "instagram", label: "Instagram" },
-            { id: "messenger", label: "Messenger" },
-            { id: "tiktok", label: "TikTok" },
-            { id: "telegram", label: "Telegram" },
-          ].map((ch) => (
-            <button
-              key={ch.id}
-              type="button"
-              onClick={() => setSelectedChannel(ch.id)}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-all ${
-                selectedChannel === ch.id
-                  ? "bg-blue-600 text-white shadow-2xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80"
-              }`}
-            >
-              {ch.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Status Filter Tabs — Apple Segmented Control */}
-        <div className="p-2 border-b border-slate-200/50 bg-white/70 backdrop-blur-md">
-          <div className="grid grid-cols-4 gap-1 rounded-xl bg-slate-100/80 p-1 text-center text-[10px] font-bold text-slate-600">
+          {/* 4 Status Tabs */}
+          <div className="grid grid-cols-4 gap-1 p-0.5 bg-slate-200/60 rounded-lg text-center text-[10px] font-semibold text-slate-600">
             {[
-              { id: "all", label: "Tous" },
-              { id: "needs_human", label: "Urgents" },
-              { id: "ready_to_pay", label: "À Payer" },
-              { id: "ai_handling", label: "IA Auto" },
+              { id: "all", label: "All" },
+              { id: "needs_human", label: "Urgent" },
+              { id: "ready_to_pay", label: "To Pay" },
+              { id: "ai_handling", label: "AI Auto" },
             ].map((st) => (
               <button
                 key={st.id}
                 type="button"
                 onClick={() => setSelectedStatus(st.id)}
-                className={`rounded-lg py-1 transition-all active:scale-95 ${
+                className={`rounded-md py-1 transition-all ${
                   selectedStatus === st.id
                     ? "bg-white text-slate-900 shadow-2xs font-bold"
-                    : "hover:text-slate-900 text-slate-500"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 {st.label}
@@ -403,52 +465,47 @@ export function InboxShell({
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-100/80">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
           {filteredConversations.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">
-              Aucune conversation pour ce filtre.
+              No conversations found for this filter.
             </div>
           ) : (
             filteredConversations.map((conv) => {
               const isSelected = conv.id === activeConvId;
               const customer = conv.customers;
-              const chInfo = channelBadgeInfo[conv.channel_type];
               const isAiActive = aiActiveMap[conv.id] ?? conv.is_ai_active;
 
               return (
                 <div
                   key={conv.id}
                   onClick={() => setActiveConvId(conv.id)}
-                  className={`group relative flex cursor-pointer flex-col p-3.5 transition-all duration-120 ${
+                  className={`group relative flex cursor-pointer flex-col p-3 transition-colors ${
                     isSelected
-                      ? "bg-blue-50/70 border-l-[3px] border-l-[#0071E3] pl-3"
-                      : "hover:bg-slate-50/80"
+                      ? "bg-blue-50/70 border-l-[3px] border-l-blue-600 pl-2.5"
+                      : "hover:bg-slate-50/70"
                   }`}
                 >
                   {/* Top row: Avatar + Name + Timestamp */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2.5 min-w-0">
-                      {/* Avatar */}
+                      {/* Avatar with anchored 14px channel badge */}
                       <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-700 border border-slate-200">
                         {customer?.name
                           ?.split(" ")
                           .map((n) => n[0])
                           .join("")
                           .slice(0, 2) || "C"}
-                        <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+                        {/* 14px channel badge anchored to bottom-right corner of avatar */}
+                        <div className="absolute -bottom-1 -right-1">
+                          <ChannelBadgeIcon channel={conv.channel_type} />
+                        </div>
                       </div>
 
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <span className="text-xs font-bold text-slate-900 truncate block">
                           {customer?.name}
                         </span>
-                        <div className="flex items-center space-x-1 mt-0.5">
-                          <span
-                            className={`rounded px-1.5 py-0.2 text-[9px] font-bold border ${chInfo.bg} ${chInfo.text} ${chInfo.border}`}
-                          >
-                            {chInfo.label}
-                          </span>
-                        </div>
                       </div>
                     </div>
 
@@ -460,7 +517,7 @@ export function InboxShell({
                         })}
                       </span>
                       {conv.unread_count > 0 && (
-                        <div className="mt-1 flex justify-end">
+                        <div className="mt-0.5 flex justify-end">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[9px] font-bold text-white">
                             {conv.unread_count}
                           </span>
@@ -469,13 +526,13 @@ export function InboxShell({
                     </div>
                   </div>
 
-                  {/* Summary / Last Message Preview */}
-                  <p className="mt-2 text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                  {/* Context Summary Preview */}
+                  <p className="mt-1.5 text-xs text-slate-600 line-clamp-2 leading-relaxed">
                     {conv.ai_context_summary}
                   </p>
 
                   {/* Badges footer */}
-                  <div className="mt-2.5 flex items-center justify-between">
+                  <div className="mt-2 flex items-center justify-between">
                     <Badge
                       variant={triageVariantMap[conv.triage_tag] || "secondary"}
                       className="text-[10px] capitalize font-medium py-0 px-2"
@@ -496,29 +553,34 @@ export function InboxShell({
       </aside>
 
       {/* ========================================================= */}
-      {/* 2. CENTER PANE: LIVE CHAT THREAD                         */}
+      {/* COL 3: ACTIVE CHAT CANVAS (Fluid 1fr, min-w-[420px])      */}
       {/* ========================================================= */}
-      <main className="flex flex-1 flex-col justify-between overflow-hidden bg-slate-50/40">
-        {/* Center Header */}
-        <div className="flex items-center justify-between border-b border-slate-200/80 bg-white px-6 py-3.5">
-          <div className="flex items-center space-x-3.5 min-w-0">
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-800 border border-slate-200">
+      <main className="flex-1 min-w-[420px] flex flex-col bg-slate-50/50 h-full overflow-hidden">
+        {/* ROW 1: 60px Locked Header with Un-cramped Details */}
+        <div className="h-[60px] shrink-0 border-b border-slate-200 px-4 flex items-center justify-between bg-white">
+          {/* Left Side: Avatar + Name (no truncation) + Channel Badge + Triage Pill + Phone below */}
+          <div className="flex items-center space-x-3 min-w-0 pr-3">
+            <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 font-bold text-xs text-slate-800 border border-slate-200">
               {activeCustomer?.name
                 ?.split(" ")
                 .map((n) => n[0])
                 .join("")
                 .slice(0, 2) || "C"}
-              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white" />
+              {activeConversation && (
+                <div className="absolute -bottom-1 -right-1">
+                  <ChannelBadgeIcon channel={activeConversation.channel_type} />
+                </div>
+              )}
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 flex flex-col justify-center">
               <div className="flex items-center space-x-2">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 truncate">
+                <h3 className="text-sm font-bold text-slate-900 shrink-0 whitespace-nowrap">
                   {activeCustomer?.name}
                 </h3>
                 {activeConversation && (
                   <span
-                    className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
+                    className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border shrink-0 ${
                       channelBadgeInfo[activeConversation.channel_type].bg
                     } ${channelBadgeInfo[activeConversation.channel_type].text} ${
                       channelBadgeInfo[activeConversation.channel_type].border
@@ -530,25 +592,27 @@ export function InboxShell({
                 {activeConversation && (
                   <Badge
                     variant={triageVariantMap[activeConversation.triage_tag] || "secondary"}
-                    className="capitalize text-[11px]"
+                    className="capitalize text-[10px] font-semibold py-0.5 px-2 shrink-0 whitespace-nowrap"
                   >
-                    {activeConversation.status.replace("_", " ")}
+                    {activeConversation.status === "ready_to_pay"
+                      ? "Ready To Pay"
+                      : activeConversation.status.replace("_", " ")}
                   </Badge>
                 )}
               </div>
-              <p className="text-xs text-slate-500 mt-0.5 truncate">
+              <p className="text-[11px] text-slate-400 font-normal whitespace-nowrap truncate mt-0.5">
                 {activeCustomer?.phone || activeCustomer?.handle || "Customer Contact"} • Live channel connected
               </p>
             </div>
           </div>
 
-          {/* Center Actions: AI Agent toggle + Claim handoff + CRM toggle */}
-          <div className="flex items-center space-x-2">
-            {/* AI Toggle */}
+          {/* Right Side: AI Agent toggle + Take over button + Panel toggle */}
+          <div className="flex items-center space-x-2 shrink-0">
+            {/* AI Toggle Pill */}
             <button
               type="button"
               onClick={handleToggleAi}
-              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold shrink-0 whitespace-nowrap transition-colors ${
                 aiActiveMap[activeConvId]
                   ? "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
                   : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
@@ -556,37 +620,27 @@ export function InboxShell({
               title="Toggle AI automated replies for this conversation"
             >
               <Bot className="mr-1.5 h-3.5 w-3.5" />
-              <span className="hidden sm:inline">
-                {aiActiveMap[activeConvId] ? "AI Agent: ON" : "AI Paused (Human)"}
-              </span>
-              <span className="sm:hidden">
-                {aiActiveMap[activeConvId] ? "AI ON" : "Human"}
-              </span>
+              <span>{aiActiveMap[activeConvId] ? "AI Agent: ON" : "AI Paused"}</span>
             </button>
 
-            {/* Claim Handoff */}
+            {/* Take Over Button */}
             <Button
               type="button"
               size="sm"
               variant={claimedMap[activeConvId] ? "secondary" : "default"}
               onClick={handleToggleClaim}
-              className="text-xs font-semibold h-8 rounded-xl"
+              className="text-xs font-semibold h-8 rounded-xl shrink-0 whitespace-nowrap px-3 bg-blue-600 hover:bg-blue-700 text-white"
             >
               <UserCheck className="mr-1.5 h-3.5 w-3.5" />
-              <span className="hidden sm:inline">
-                {claimedMap[activeConvId] ? "Assigné à Jean-Luc" : "Prendre le relais"}
-              </span>
-              <span className="sm:hidden">
-                {claimedMap[activeConvId] ? "Assigné" : "Prendre"}
-              </span>
+              <span>{claimedMap[activeConvId] ? "Assigné à Jean-Luc" : "Take over"}</span>
             </Button>
 
-            {/* Toggle CRM Sidebar Button */}
+            {/* Toggle CRM Drawer Button */}
             <button
               type="button"
               onClick={() => setShowCrmPanel(!showCrmPanel)}
               className="hidden lg:flex items-center rounded-xl border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-100 transition-colors"
-              title={showCrmPanel ? "Hide Customer CRM profile" : "Show Customer CRM profile"}
+              title={showCrmPanel ? "Hide CRM context drawer" : "Show CRM context drawer"}
             >
               {showCrmPanel ? (
                 <PanelRightClose className="h-4 w-4" />
@@ -598,15 +652,15 @@ export function InboxShell({
         </div>
 
         {/* Live Messages Scroll Area */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
           {/* Context Escalation Card */}
           {activeConversation?.ai_context_summary && (
-            <div className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-3.5 text-xs text-amber-900 shadow-2xs">
+            <div className="rounded-xl border border-amber-200/80 bg-amber-50/70 p-3 text-xs text-amber-900 shadow-2xs">
               <div className="flex items-center space-x-1.5 font-bold">
-                <AlertCircle className="h-4 w-4 text-amber-600" />
+                <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
                 <span>AI Escalation Context</span>
               </div>
-              <p className="mt-1 text-slate-700 leading-relaxed">
+              <p className="mt-1 text-slate-700 leading-relaxed text-xs">
                 {activeConversation.ai_context_summary}
               </p>
             </div>
@@ -647,11 +701,11 @@ export function InboxShell({
                   </span>
                 </div>
 
-                {/* Message Content Bubble — Apple iMessage */}
+                {/* Message Content Bubble */}
                 <div
                   className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs tracking-tight ${
                     isCustomer
-                      ? "bg-slate-100/90 text-slate-900 border border-slate-200/50 rounded-bl-xs"
+                      ? "bg-white text-slate-900 border border-slate-200/80 rounded-bl-xs"
                       : isAi
                       ? "bg-indigo-50/80 text-indigo-950 border border-indigo-200/50 rounded-br-xs"
                       : "bg-[#0071E3] text-white rounded-br-xs shadow-xs"
@@ -665,62 +719,64 @@ export function InboxShell({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Action Toolbar — Apple Sub-bar */}
-        <div className="border-t border-slate-200/50 bg-white/80 backdrop-blur-md px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar">
-          <button
-            type="button"
-            onClick={() => setIsPaymentModalOpen(true)}
-            className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0071E3] transition-all active:scale-95"
-          >
-            <CreditCard className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
-            Lien MoMo / OM
-          </button>
+        {/* DOCKED CHAT COMPOSER TOOLBAR (Unified Structural Block) */}
+        <form onSubmit={handleSendMessage} className="shrink-0 px-4 pb-4">
+          <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden flex flex-col focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all">
+            {/* Merged Quick Action Toolbar Header */}
+            <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-50/80 border-b border-slate-100 overflow-x-auto no-scrollbar">
+              <button
+                type="button"
+                onClick={() => setIsPaymentModalOpen(true)}
+                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 shadow-2xs active:scale-95 transition-all"
+              >
+                <CreditCard className="mr-1.5 h-3 w-3 text-blue-600" />
+                <span>MoMo/OM link</span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => setIsInvoiceModalOpen(true)}
-            className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#5856D6] transition-all active:scale-95"
-          >
-            <FileText className="mr-1.5 h-3.5 w-3.5 text-[#5856D6]" />
-            Générer Facture
-          </button>
+              <button
+                type="button"
+                onClick={() => setIsInvoiceModalOpen(true)}
+                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200 shadow-2xs active:scale-95 transition-all"
+              >
+                <FileText className="mr-1.5 h-3 w-3 text-indigo-600" />
+                <span>Generate Invoice</span>
+              </button>
 
-          <button
-            type="button"
-            disabled={isDraftingAi}
-            onClick={handleAiDraftReply}
-            className="inline-flex shrink-0 items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#0071E3] hover:bg-blue-100 transition-all active:scale-95 border border-blue-200/60"
-          >
-            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
-            {isDraftingAi ? "Rédaction..." : "Proposer Réponse IA"}
-          </button>
-        </div>
+              <button
+                type="button"
+                disabled={isDraftingAi}
+                onClick={handleAiDraftReply}
+                className="inline-flex shrink-0 items-center rounded-lg bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100 shadow-2xs active:scale-95 transition-all"
+              >
+                <Sparkles className="mr-1.5 h-3 w-3 text-blue-600" />
+                <span>{isDraftingAi ? "Drafting..." : "Propose AI Response"}</span>
+              </button>
+            </div>
 
-        {/* Reply Input Box — Apple Floating Input */}
-        <form onSubmit={handleSendMessage} className="border-t border-slate-200/50 bg-white/90 backdrop-blur-md p-3 sm:p-4">
-          <div className="rounded-2xl border border-slate-200/80 bg-slate-100/60 p-2 focus-within:border-[#0071E3] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0071E3]/20 transition-all">
+            {/* Composer Textarea */}
             <textarea
               rows={2}
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={`Répondre à ${activeCustomer?.name || "Client"} sur ${activeConversation?.channel_type || "chat"}... (⌘ + Entrée pour envoyer)`}
-              className="w-full resize-none bg-transparent p-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none tracking-tight font-medium"
+              placeholder={`Reply to ${activeCustomer?.name || "Customer"} on ${activeConversation?.channel_type || "chat"}... (⌘ + Enter to send)`}
+              className="w-full resize-none bg-transparent p-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none tracking-tight font-medium"
             />
 
-            <div className="flex items-center justify-between border-t border-slate-200/40 pt-2 px-1">
+            {/* Bottom Bar: Gateway tag + Send button */}
+            <div className="flex items-center justify-between px-3 py-2 border-t border-slate-100 bg-slate-50/40">
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                Passerelle {activeConversation?.channel_type?.toUpperCase()}
+                {activeConversation?.channel_type?.toUpperCase()} GATEWAY
               </span>
 
               <Button
                 type="submit"
                 size="sm"
                 disabled={!replyText.trim()}
-                className="rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white px-4 font-semibold text-xs shadow-xs active:scale-95"
+                className="rounded-lg bg-[#0071E3] hover:bg-[#0077ED] text-white px-3.5 py-1 font-semibold text-xs shadow-xs active:scale-95"
               >
-                <span>Envoyer</span>
-                <Send className="ml-1.5 h-3.5 w-3.5" />
+                <span>Send</span>
+                <Send className="ml-1.5 h-3 w-3" />
               </Button>
             </div>
           </div>
@@ -728,169 +784,173 @@ export function InboxShell({
       </main>
 
       {/* ========================================================= */}
-      {/* 3. RIGHT PANE: CUSTOMER MEMORY & CRM PROFILE (320px–360px) */}
+      {/* COL 4: RIGHT CRM CONTEXT DRAWER (Fixed 320px)             */}
       {/* ========================================================= */}
       {showCrmPanel && (
-        <aside className="hidden lg:flex w-80 lg:w-88 shrink-0 flex-col overflow-y-auto border-l border-slate-200/80 bg-white p-5 space-y-6 animate-in slide-in-from-right-4 duration-200">
-          {/* Customer Avatar & Bio */}
-          <div className="text-center pb-4 border-b border-slate-100">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 text-lg font-bold text-blue-700 border-2 border-white shadow-sm ring-1 ring-slate-200">
-              {activeCustomer?.name
-                ?.split(" ")
-                .map((n) => n[0])
-                .join("")
-                .slice(0, 2) || "C"}
-            </div>
-
-            <h3 className="mt-3 text-base font-bold text-slate-900">
-              {activeCustomer?.name}
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {activeCustomer?.phone || activeCustomer?.email || "No contact"}
-            </p>
-
-            <div className="mt-2.5 flex items-center justify-center space-x-1.5">
-              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-200">
-                {activeCustomer?.channel_type?.toUpperCase()}
-              </span>
-              <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
-                Verified Buyer
-              </span>
-            </div>
-          </div>
-
-          {/* Financials & Balances */}
-          <div>
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                Financial Profile
-              </h4>
-              <button
-                type="button"
-                onClick={() => setIsPaymentModalOpen(true)}
-                className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
-              >
-                + Link
-              </button>
-            </div>
-
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
-                <span className="text-[11px] text-slate-500">Total Dû</span>
-                <p className="text-sm font-bold text-slate-900 mt-0.5">
-                  {(activeCustomer?.total_owed || 0).toLocaleString("fr-FR")} FCFA
-                </p>
+        <aside className="w-80 shrink-0 border-l border-slate-200 flex flex-col overflow-y-auto bg-white h-full">
+          {/* ROW 1: 60px Locked Header with Compact Profile */}
+          <div className="h-[60px] shrink-0 border-b border-slate-200 px-4 flex items-center justify-between bg-white">
+            <div className="flex items-center space-x-2.5 min-w-0">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-xs text-blue-700 border border-blue-200">
+                {activeCustomer?.name
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .slice(0, 2) || "C"}
               </div>
 
-              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-3">
-                <span className="text-[11px] text-emerald-700">Total Versé</span>
-                <p className="text-sm font-bold text-emerald-900 mt-0.5">
-                  {(activeCustomer?.total_paid || 0).toLocaleString("fr-FR")} FCFA
-                </p>
-              </div>
-            </div>
-
-            {/* Active Promise */}
-            {activeCustomer?.payment_promise_date && (
-              <div className="mt-2.5 rounded-xl border border-amber-200 bg-amber-50/60 p-2.5 text-xs text-amber-900 flex items-center justify-between">
+              <div className="min-w-0 flex flex-col justify-center">
                 <div className="flex items-center space-x-1.5">
-                  <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                  <span>Promesse :</span>
+                  <span className="text-xs font-bold text-slate-900 truncate">
+                    {activeCustomer?.name}
+                  </span>
+                  <span className="rounded-full bg-emerald-50 px-1.5 py-0.2 text-[9px] font-bold text-emerald-700 border border-emerald-200 shrink-0">
+                    Verified Buyer
+                  </span>
                 </div>
-                <span className="font-bold">
-                  {(activeCustomer.payment_promise_amount || 0).toLocaleString("fr-FR")} FCFA
+                <span className="text-[10px] text-slate-400 truncate">
+                  {activeCustomer?.phone || activeCustomer?.email || "No contact info"}
                 </span>
               </div>
-            )}
-          </div>
-
-          {/* AI Customer Memory Facts */}
-          <div>
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                AI Customer Memory
-              </h4>
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" />
             </div>
 
-            <div className="mt-3 space-y-2">
-              {activeCustomer?.ai_memory?.facts && activeCustomer.ai_memory.facts.length > 0 ? (
-                activeCustomer.ai_memory.facts.map((fact, idx) => (
-                  <div
-                    key={idx}
-                    className="rounded-xl border border-blue-100/80 bg-blue-50/40 p-2.5 text-xs text-slate-700 leading-relaxed"
-                  >
-                    • {fact}
-                  </div>
-                ))
-              ) : (
-                <p className="text-xs text-slate-400 italic">No facts extracted yet.</p>
-              )}
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsPaymentModalOpen(true)}
+              className="text-[11px] font-semibold text-blue-600 hover:text-blue-700 shrink-0"
+            >
+              + Link
+            </button>
           </div>
 
-          {/* Customer Objections */}
-          {activeCustomer?.ai_memory?.objections &&
-            activeCustomer.ai_memory.objections.length > 0 && (
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Past Objections Noted
+          {/* Body: Financial Profile, AI Customer Memory, Past Objections, Invoices */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {/* Financial Profile */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Financial Profile
                 </h4>
-                <div className="mt-2 space-y-1.5">
-                  {activeCustomer.ai_memory.objections.map((obj, i) => (
-                    <div
-                      key={i}
-                      className="rounded-xl border border-rose-100 bg-rose-50/60 p-2.5 text-xs text-rose-800"
-                    >
-                      ⚠ {obj}
-                    </div>
-                  ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-2.5">
+                  <span className="text-[10px] text-slate-500 font-medium">Total Due</span>
+                  <p className="text-xs font-bold text-slate-900 mt-0.5">
+                    {(activeCustomer?.total_owed || 0).toLocaleString("fr-FR")} FCFA
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-2.5">
+                  <span className="text-[10px] text-emerald-700 font-medium">Total Paid</span>
+                  <p className="text-xs font-bold text-emerald-900 mt-0.5">
+                    {(activeCustomer?.total_paid || 0).toLocaleString("fr-FR")} FCFA
+                  </p>
                 </div>
               </div>
-            )}
 
-          {/* Recent Invoices */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Invoices ({activeInvoices.length})
-            </h4>
-            <div className="mt-2.5 space-y-2">
-              {activeInvoices.length === 0 ? (
-                <p className="text-xs text-slate-400 italic">No invoices created yet.</p>
-              ) : (
-                activeInvoices.map((inv) => (
-                  <div
-                    key={inv.id}
-                    className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/60 p-2.5 text-xs"
-                  >
-                    <div>
-                      <span className="font-bold text-slate-800">{inv.invoice_number}</span>
-                      <p className="text-[10px] text-slate-500 truncate max-w-[140px]">
-                        {inv.description}
-                      </p>
+              {/* Active Promise */}
+              {activeCustomer?.payment_promise_date && (
+                <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50/60 p-2 text-xs text-amber-900 flex items-center justify-between">
+                  <div className="flex items-center space-x-1.5">
+                    <Clock className="h-3 w-3 text-amber-600 shrink-0" />
+                    <span className="text-[11px] font-medium">Promise :</span>
+                  </div>
+                  <span className="font-bold text-xs">
+                    {(activeCustomer.payment_promise_amount || 0).toLocaleString("fr-FR")} FCFA
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* AI Customer Memory */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  AI Customer Memory
+                </h4>
+                <Sparkles className="h-3 w-3 text-blue-600" />
+              </div>
+
+              <div className="space-y-1.5">
+                {activeCustomer?.ai_memory?.facts && activeCustomer.ai_memory.facts.length > 0 ? (
+                  activeCustomer.ai_memory.facts.map((fact, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-lg border border-blue-100/80 bg-blue-50/40 p-2 text-xs text-slate-700 leading-relaxed"
+                    >
+                      • {fact}
                     </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400 italic">No facts extracted yet.</p>
+                )}
+              </div>
+            </div>
 
-                    <div className="text-right">
-                      <span className="font-bold text-slate-900">
-                        {inv.amount.toLocaleString("fr-FR")} FCFA
-                      </span>
-                      <div className="mt-0.5">
-                        <span
-                          className={`rounded px-1.5 py-0.2 text-[9px] font-bold capitalize ${
-                            inv.status === "paid"
-                              ? "bg-emerald-100 text-emerald-800"
-                              : inv.status === "overdue"
-                              ? "bg-rose-100 text-rose-800"
-                              : "bg-amber-100 text-amber-800"
-                          }`}
-                        >
-                          {inv.status}
+            {/* Past Objections Noted */}
+            {activeCustomer?.ai_memory?.objections &&
+              activeCustomer.ai_memory.objections.length > 0 && (
+                <div>
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Past Objections Noted
+                  </h4>
+                  <div className="space-y-1.5">
+                    {activeCustomer.ai_memory.objections.map((obj, i) => (
+                      <div
+                        key={i}
+                        className="rounded-lg border border-rose-100 bg-rose-50/60 p-2 text-xs text-rose-800"
+                      >
+                        ⚠ {obj}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            {/* Invoices List */}
+            <div>
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                Invoices ({activeInvoices.length})
+              </h4>
+              <div className="space-y-2">
+                {activeInvoices.length === 0 ? (
+                  <p className="text-xs text-slate-400 italic">No invoices created yet.</p>
+                ) : (
+                  activeInvoices.map((inv) => (
+                    <div
+                      key={inv.id}
+                      className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/60 p-2.5 text-xs"
+                    >
+                      <div>
+                        <span className="font-bold text-slate-800">{inv.invoice_number}</span>
+                        <p className="text-[10px] text-slate-500 truncate max-w-[120px]">
+                          {inv.description}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="font-bold text-slate-900">
+                          {inv.amount.toLocaleString("fr-FR")} FCFA
                         </span>
+                        <div className="mt-0.5">
+                          <span
+                            className={`rounded px-1.5 py-0.2 text-[9px] font-bold capitalize ${
+                              inv.status === "paid"
+                                ? "bg-emerald-100 text-emerald-800"
+                                : inv.status === "overdue"
+                                ? "bg-rose-100 text-rose-800"
+                                : "bg-amber-100 text-amber-800"
+                            }`}
+                          >
+                            {inv.status}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </aside>

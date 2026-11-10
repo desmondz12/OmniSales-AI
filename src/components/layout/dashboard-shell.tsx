@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { MobileNav } from "./mobile-nav";
@@ -22,6 +23,8 @@ export function DashboardShell({
   children,
 }: DashboardShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const pathname = usePathname();
+  const isInbox = pathname === "/dashboard/inbox";
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] text-slate-900 antialiased">
@@ -41,7 +44,7 @@ export function DashboardShell({
       />
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden h-screen">
         <Header
           userEmail={userEmail}
           profile={profile}
@@ -49,9 +52,15 @@ export function DashboardShell({
           membership={membership}
           onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="mx-auto max-w-7xl">{children}</div>
-        </main>
+        {isInbox ? (
+          <main className="flex-1 h-[calc(100vh-4rem)] overflow-hidden flex flex-col p-0">
+            {children}
+          </main>
+        ) : (
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <div className="mx-auto max-w-7xl">{children}</div>
+          </main>
+        )}
       </div>
     </div>
   );

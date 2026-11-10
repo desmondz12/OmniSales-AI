@@ -62,7 +62,7 @@ export default async function InboxPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="h-full w-full">
       <InboxShell
         initialConversations={conversations}
         initialCustomers={customers}

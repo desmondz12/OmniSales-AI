@@ -91,7 +91,7 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-screen w-64 flex-col border-r border-slate-200/60 bg-white/80 backdrop-blur-2xl shadow-[1px_0_12px_rgba(0,0,0,0.02)] select-none",
+        "flex h-screen w-60 shrink-0 flex-col border-r border-slate-200 bg-white/80 backdrop-blur-2xl shadow-[1px_0_12px_rgba(0,0,0,0.02)] select-none",
         className
       )}
     >
