@@ -436,9 +436,9 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     size="sm"
                     onClick={() => setIsQrModalOpen(true)}
-                    className="flex-1 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white text-xs font-semibold shadow-xs"
+                    className="flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs"
                   >
-                    Configure / QR
+                    Link WhatsApp QR
                   </Button>
                 )}
 
@@ -447,9 +447,9 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
                     type="button"
                     size="sm"
                     onClick={() => setIsTelegramModalOpen(true)}
-                    className="flex-1 rounded-xl bg-slate-900 hover:bg-sky-600 text-white text-xs font-semibold shadow-xs"
+                    className="flex-1 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold shadow-xs"
                   >
-                    Bot Token & Ping
+                    Link Telegram QR
                   </Button>
                 )}
 
@@ -502,12 +502,14 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
         isOpen={isQrModalOpen}
         onClose={() => setIsQrModalOpen(false)}
         phoneNumber="+237 671 23 45 67"
+        onConnected={(type, handle) => handleChannelConnected(type, handle)}
       />
 
       <TelegramTokenModal
         isOpen={isTelegramModalOpen}
         onClose={() => setIsTelegramModalOpen(false)}
         botUsername="@MusaSalesAgentBot"
+        onConnected={(type, handle) => handleChannelConnected(type, handle)}
       />
 
       <WebhookTestModal
