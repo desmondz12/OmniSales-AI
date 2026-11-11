@@ -14,7 +14,6 @@ import {
   Radio,
   Settings,
   Shield,
-  Sparkles,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -95,43 +94,40 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
         className
       )}
     >
-      {/* Brand Header — Apple Minimal Monolith */}
-      <div className="flex h-16 items-center justify-between border-b border-slate-200/50 px-5">
+      {/* Brand Header */}
+      <div className="flex h-16 items-center border-b border-slate-200/80 px-4">
         <Link
           href="/dashboard"
-          className="flex items-center space-x-2.5 tracking-tight text-slate-900 active:scale-[0.98] transition-all"
+          className="flex items-center space-x-2.5 tracking-tight text-slate-900"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0071E3] via-[#0077ED] to-[#5856D6] text-white shadow-xs shadow-blue-500/25">
-            <Sparkles className="h-4 w-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0071E3] text-white shadow-xs">
+            <Bot className="h-4 w-4" />
           </div>
-          <span className="text-sm font-bold tracking-tight text-slate-900">{APP_NAME}</span>
+          <span className="text-sm font-semibold tracking-tight text-slate-900">{APP_NAME}</span>
         </Link>
-        <span className="rounded-full bg-blue-50/80 px-2 py-0.5 text-[10px] font-bold text-[#0071E3] border border-blue-200/50">
-          PRO
-        </span>
       </div>
 
-      {/* Active Workspace — Apple Card Material */}
-      <div className="p-3 border-b border-slate-200/40">
-        <div className="flex items-center justify-between rounded-xl bg-slate-100/70 backdrop-blur-md border border-slate-200/50 p-2.5">
+      {/* Active Workspace */}
+      <div className="p-3 border-b border-slate-200/60">
+        <div className="flex items-center justify-between rounded-lg bg-slate-100/80 border border-slate-200/60 p-2">
           <div className="flex items-center space-x-2 min-w-0">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white shadow-2xs border border-slate-200/60 text-slate-600">
-              <Building2 className="h-3.5 w-3.5" />
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-white shadow-2xs border border-slate-200/60 text-slate-600">
+              <Building2 className="h-3 w-3" />
             </div>
-            <span className="truncate text-xs font-semibold text-slate-900 tracking-tight">
+            <span className="truncate text-xs font-medium text-slate-900">
               {tenantName || "Fotso Distribution Douala"}
             </span>
           </div>
-          <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-[#34C759] border border-emerald-200/60">
+          <span className="shrink-0 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 border border-emerald-200/60">
             {role || "Admin"}
           </span>
         </div>
       </div>
 
-      {/* Navigation Links with Apple Fluid Selection */}
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
-        <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-          Menu Principal
+      {/* Navigation Links */}
+      <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-1">
+        <p className="px-2 pb-1.5 text-[10px] font-semibold text-slate-400">
+          Menu principal
         </p>
 
         {navItems.map((item) => {
@@ -145,31 +141,31 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-120 ease-out active:scale-[0.98]",
+                "group flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-medium transition-colors",
                 isActive
-                  ? "bg-[#0071E3] text-white shadow-xs shadow-blue-500/25"
-                  : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
+                  ? "bg-[#0071E3] text-white"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               )}
             >
               <div className="flex items-center space-x-2.5">
                 <Icon
                   className={cn(
-                    "h-4 w-4 shrink-0 transition-colors",
+                    "h-4 w-4 shrink-0",
                     isActive
                       ? "text-white"
-                      : "text-slate-400 group-hover:text-slate-700"
+                      : "text-slate-400 group-hover:text-slate-600"
                   )}
                 />
-                <span className="tracking-tight">{item.title}</span>
+                <span>{item.title}</span>
               </div>
 
               {item.badge && (
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                    "rounded-md px-1.5 py-0.5 text-[10px] font-medium",
                     isActive
-                      ? "bg-white/20 text-white backdrop-blur-xs"
-                      : item.badgeColor || "bg-slate-100 text-slate-700"
+                      ? "bg-white/20 text-white"
+                      : item.badgeColor || "bg-slate-100 text-slate-600"
                   )}
                 >
                   {item.badge}
@@ -181,27 +177,27 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
       </div>
 
       {/* Bottom Section: 5 Channels Live Status & Super Admin Switch */}
-      <div className="border-t border-slate-200/50 p-3 space-y-2.5 bg-slate-50/50 backdrop-blur-md">
+      <div className="border-t border-slate-200/80 p-3 space-y-2 bg-slate-50/70">
         {/* 5 Channels Live Indicators */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/90 p-2.5 shadow-2xs">
-          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1.5">
-            <span className="tracking-tight">Passerelles Actives</span>
-            <span className="flex h-1.5 w-1.5 rounded-full bg-[#34C759] animate-pulse" />
+        <div className="rounded-lg border border-slate-200 bg-white p-2.5 shadow-2xs">
+          <div className="flex items-center justify-between text-[11px] font-medium text-slate-700 mb-1.5">
+            <span>Passerelles actives</span>
+            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
           </div>
-          <div className="grid grid-cols-5 gap-1 text-center font-mono text-[9px] font-bold">
-            <span className="rounded-lg bg-emerald-50 py-0.5 text-[#34C759] border border-emerald-100">
+          <div className="grid grid-cols-5 gap-1 text-center font-mono text-[9px] font-medium">
+            <span className="rounded bg-emerald-50 py-0.5 text-emerald-700 border border-emerald-100">
               WA
             </span>
-            <span className="rounded-lg bg-pink-50 py-0.5 text-pink-600 border border-pink-100">
+            <span className="rounded bg-pink-50 py-0.5 text-pink-700 border border-pink-100">
               IG
             </span>
-            <span className="rounded-lg bg-blue-50 py-0.5 text-[#0071E3] border border-blue-100">
+            <span className="rounded bg-blue-50 py-0.5 text-blue-700 border border-blue-100">
               FB
             </span>
-            <span className="rounded-lg bg-slate-100 py-0.5 text-slate-900 border border-slate-200">
+            <span className="rounded bg-slate-100 py-0.5 text-slate-800 border border-slate-200">
               TT
             </span>
-            <span className="rounded-lg bg-sky-50 py-0.5 text-sky-600 border border-sky-100">
+            <span className="rounded bg-sky-50 py-0.5 text-sky-700 border border-sky-100">
               TG
             </span>
           </div>
@@ -210,10 +206,10 @@ export function Sidebar({ tenantName, role, className }: SidebarProps) {
         {/* Quick Switch to Super Admin Portal */}
         <Link
           href="/admin"
-          className="flex items-center justify-center space-x-1.5 rounded-xl border border-slate-200/80 bg-white py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0071E3] transition-all active:scale-[0.98] shadow-2xs"
+          className="flex items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs"
         >
-          <Shield className="h-3.5 w-3.5 text-[#0071E3]" />
-          <span className="tracking-tight">Super Admin Portal</span>
+          <Shield className="h-3.5 w-3.5 text-slate-500" />
+          <span>Super Admin</span>
         </Link>
       </div>
     </aside>

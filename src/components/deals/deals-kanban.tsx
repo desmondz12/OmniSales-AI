@@ -7,12 +7,12 @@ import {
   Building2,
   Calendar,
   CheckCircle2,
+  CreditCard,
   DollarSign,
   MapPin,
   Percent,
   Plus,
   Search,
-  Sparkles,
   TrendingUp,
   User,
   X,
@@ -227,7 +227,7 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
         <div className="flex items-center space-x-3">
           <Button
             onClick={() => setIsAddModalOpen(true)}
-            className="apple-press rounded-2xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-medium text-xs px-4 py-2 shadow-xs transition-all"
+            className="rounded-lg bg-[#0071E3] hover:bg-[#0077ED] text-white font-medium text-xs px-3.5 py-1.5 shadow-xs transition-colors"
           >
             <Plus className="mr-1.5 h-3.5 w-3.5" />
             Nouveau Deal
@@ -235,71 +235,71 @@ export function DealsKanban({ initialDeals }: DealsKanbanProps) {
         </div>
       </div>
 
-      {/* 4 Apple Translucent KPI Cards */}
-      <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
-        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+      {/* 4 KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
           <CardContent className="p-0">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-[11px] font-medium tracking-wider uppercase">Valeur Totale</span>
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#0071E3]/10 text-[#0071E3]">
+              <span className="text-xs font-medium text-slate-500">Valeur totale</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-[#0071E3]">
                 <DollarSign className="h-4 w-4" />
               </span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+            <div className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
               {totalPipelineFCFA.toLocaleString("fr-FR")} <span className="text-xs font-normal text-slate-500">FCFA</span>
             </div>
-            <p className="mt-1 text-[11px] text-slate-400">
+            <p className="mt-1 text-[11px] text-slate-500">
               Opportunités en cours d&apos;engagement
             </p>
           </CardContent>
         </Card>
 
-        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+        <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
           <CardContent className="p-0">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-[11px] font-medium tracking-wider uppercase">Revenu Pondéré</span>
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#5856D6]/10 text-[#5856D6]">
+              <span className="text-xs font-medium text-slate-500">Revenu pondéré</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
                 <Percent className="h-4 w-4" />
               </span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+            <div className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
               {Math.round(weightedRevenueFCFA).toLocaleString("fr-FR")} <span className="text-xs font-normal text-slate-500">FCFA</span>
             </div>
-            <p className="mt-1 text-[11px] text-[#34C759] font-medium">
+            <p className="mt-1 text-[11px] text-emerald-700 font-medium">
               Calculé sur la probabilité de clôture
             </p>
           </CardContent>
         </Card>
 
-        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+        <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
           <CardContent className="p-0">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-[11px] font-medium tracking-wider uppercase">Acomptes Reçus</span>
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#FF9500]/10 text-[#FF9500]">
-                <Sparkles className="h-4 w-4" />
+              <span className="text-xs font-medium text-slate-500">Acomptes reçus</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                <CreditCard className="h-4 w-4" />
               </span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+            <div className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
               {depositPaidCount} <span className="text-xs font-normal text-slate-500">commandes</span>
             </div>
-            <p className="mt-1 text-[11px] text-[#FF9500] font-medium">
+            <p className="mt-1 text-[11px] text-amber-700 font-medium">
               Validés via MTN MoMo / Orange Money
             </p>
           </CardContent>
         </Card>
 
-        <Card className="apple-glass-card rounded-3xl border border-slate-200/60 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all">
+        <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
           <CardContent className="p-0">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-[11px] font-medium tracking-wider uppercase">Deals Gagnés</span>
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#34C759]/10 text-[#34C759]">
+              <span className="text-xs font-medium text-slate-500">Deals gagnés</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
                 <TrendingUp className="h-4 w-4" />
               </span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+            <div className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums">
               {wonDealsCount} <span className="text-xs font-normal text-slate-500">finalisés</span>
             </div>
-            <p className="mt-1 text-[11px] text-[#34C759] font-medium">
+            <p className="mt-1 text-[11px] text-emerald-700 font-medium">
               Livrées et soldées ce mois-ci
             </p>
           </CardContent>

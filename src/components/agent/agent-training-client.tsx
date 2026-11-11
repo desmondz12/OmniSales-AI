@@ -11,7 +11,6 @@ import {
   Save,
   Send,
   ShieldAlert,
-  Sparkles,
   Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -212,9 +211,8 @@ export function AgentTrainingClient() {
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-slate-900">
               Agent de Vente IA
             </h1>
-            <span className="inline-flex items-center rounded-full bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 px-3 py-1 text-xs font-semibold text-purple-700 border border-purple-500/20 shadow-2xs">
-              <Sparkles className="mr-1.5 h-3.5 w-3.5 text-purple-600 animate-pulse" />
-              Apple Intelligence Core • Gemini 2.5
+            <span className="inline-flex items-center rounded-md bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 border border-slate-200">
+              Inférence commerciale • Gemini 2.5
             </span>
           </div>
           <p className="mt-1 text-xs sm:text-sm text-slate-500 font-normal">

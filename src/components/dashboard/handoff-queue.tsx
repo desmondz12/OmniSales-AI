@@ -95,32 +95,32 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-6 sm:p-7 backdrop-blur-2xl shadow-[0_2px_16px_rgba(0,0,0,0.02)] select-none">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs select-none">
       {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100">
         <div>
           <div className="flex items-center space-x-2">
-            <h3 className="text-base font-bold tracking-tight text-slate-900 sm:text-lg">
-              À Traiter en Priorité
+            <h3 className="text-base font-semibold tracking-tight text-slate-900">
+              À traiter en priorité
             </h3>
-            <span className="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-[10px] font-bold text-[#FF3B30] border border-rose-200/60">
-              <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-[#FF3B30] animate-pulse" />
-              {priorityQueue.length} Relais Urgents
+            <span className="inline-flex items-center rounded-md bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-700 border border-rose-200">
+              <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose-500" />
+              {priorityQueue.length} relais urgents
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5 tracking-tight">
-            Conversations détectées par l&apos;IA nécessitant votre intervention (dépôt imminent, réclamation ou négociation)
+          <p className="text-xs text-slate-500 mt-0.5">
+            Conversations détectées nécessitant votre intervention (dépôt imminent, réclamation ou négociation)
           </p>
         </div>
 
-        <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium">
+        <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 font-normal">
           <Clock className="h-3.5 w-3.5 text-slate-400" />
           <span>Objectif: &lt; 15 min</span>
         </div>
       </div>
 
       {/* Escalation Queue Table / List */}
-      <div className="mt-3 divide-y divide-slate-100/80">
+      <div className="mt-2 divide-y divide-slate-100">
         {priorityQueue.map((item) => {
           const customerName = item.customers?.name || "Client";
           const isUpset = item.status === "upset";
@@ -129,17 +129,17 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
           return (
             <div
               key={item.id}
-              className="group flex flex-col sm:flex-row sm:items-center justify-between py-3.5 transition-all hover:bg-slate-50/80 rounded-2xl px-3 -mx-3"
+              className="group flex flex-col sm:flex-row sm:items-center justify-between py-3 transition-colors hover:bg-slate-50 rounded-xl px-2.5 -mx-2.5"
             >
               <div className="flex items-start space-x-3 min-w-0">
                 {/* Status Dot */}
                 <span className="mt-1.5 flex h-2 w-2 shrink-0 rounded-full">
                   <span
-                    className={`h-2 w-2 rounded-full ring-2 ring-white shadow-2xs ${
+                    className={`h-2 w-2 rounded-full ${
                       isReadyToPay
-                        ? "bg-[#34C759]"
+                        ? "bg-emerald-500"
                         : isUpset
-                        ? "bg-[#FF3B30]"
+                        ? "bg-rose-500"
                         : "bg-[#0071E3]"
                     }`}
                   />
@@ -148,26 +148,26 @@ export function HandoffQueue({ conversations, onReviewHandoff }: HandoffQueuePro
                 {/* Info block */}
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight truncate">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-900 truncate">
                       {customerName}
                     </span>
                     {getChannelBadge(item.channel_type)}
                     {getTriageBadge(item.triage_tag)}
                   </div>
-                  <p className="text-xs text-slate-600 mt-0.5 line-clamp-1 tracking-tight leading-relaxed">
+                  <p className="text-xs text-slate-600 mt-0.5 line-clamp-1 leading-relaxed">
                     {item.ai_context_summary}
                   </p>
                 </div>
               </div>
 
               {/* Action Button */}
-              <div className="mt-3 sm:mt-0 flex items-center justify-end shrink-0 pl-4">
+              <div className="mt-2.5 sm:mt-0 flex items-center justify-end shrink-0 pl-4">
                 <button
                   type="button"
                   onClick={() => onReviewHandoff(item)}
-                  className="inline-flex items-center text-xs font-semibold text-[#0071E3] hover:text-white bg-blue-50/80 hover:bg-[#0071E3] px-3 py-1.5 rounded-xl border border-blue-200/50 transition-all active:scale-95 shadow-2xs"
+                  className="inline-flex items-center text-xs font-medium text-[#0071E3] hover:text-white bg-blue-50 hover:bg-[#0071E3] px-3 py-1.5 rounded-lg border border-blue-200 transition-colors shadow-2xs"
                 >
-                  <span className="tracking-tight">Ouvrir l&apos;Échange</span>
+                  <span>Ouvrir l&apos;échange</span>
                   <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </button>
               </div>

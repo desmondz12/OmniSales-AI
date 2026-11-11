@@ -11,7 +11,6 @@ import {
   PanelRightOpen,
   Search,
   Send,
-  Sparkles,
   UserCheck,
   X,
 } from "lucide-react";
@@ -608,11 +607,11 @@ export function InboxShell({
 
           {/* Right Side: AI Agent toggle + Take over button + Panel toggle */}
           <div className="flex items-center space-x-2 shrink-0">
-            {/* AI Toggle Pill */}
+            {/* AI Toggle Button */}
             <button
               type="button"
               onClick={handleToggleAi}
-              className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold shrink-0 whitespace-nowrap transition-colors ${
+              className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium shrink-0 whitespace-nowrap transition-colors ${
                 aiActiveMap[activeConvId]
                   ? "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
                   : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
@@ -629,7 +628,7 @@ export function InboxShell({
               size="sm"
               variant={claimedMap[activeConvId] ? "secondary" : "default"}
               onClick={handleToggleClaim}
-              className="text-xs font-semibold h-8 rounded-xl shrink-0 whitespace-nowrap px-3 bg-blue-600 hover:bg-blue-700 text-white"
+              className="text-xs font-medium h-8 rounded-lg shrink-0 whitespace-nowrap px-3 bg-[#0071E3] hover:bg-[#0077ED] text-white shadow-xs"
             >
               <UserCheck className="mr-1.5 h-3.5 w-3.5" />
               <span>{claimedMap[activeConvId] ? "Assigné à Jean-Luc" : "Take over"}</span>
@@ -639,7 +638,7 @@ export function InboxShell({
             <button
               type="button"
               onClick={() => setShowCrmPanel(!showCrmPanel)}
-              className="hidden lg:flex items-center rounded-xl border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-100 transition-colors"
+              className="hidden lg:flex items-center rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs"
               title={showCrmPanel ? "Hide CRM context drawer" : "Show CRM context drawer"}
             >
               {showCrmPanel ? (
@@ -703,11 +702,11 @@ export function InboxShell({
 
                 {/* Message Content Bubble */}
                 <div
-                  className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs tracking-tight ${
+                  className={`max-w-[85%] sm:max-w-[75%] rounded-xl px-3.5 py-2 text-xs sm:text-sm leading-relaxed ${
                     isCustomer
-                      ? "bg-white text-slate-900 border border-slate-200/80 rounded-bl-xs"
+                      ? "bg-white text-slate-900 border border-slate-200 rounded-bl-xs shadow-2xs"
                       : isAi
-                      ? "bg-indigo-50/80 text-indigo-950 border border-indigo-200/50 rounded-br-xs"
+                      ? "bg-slate-100 text-slate-900 border border-slate-200/80 rounded-br-xs"
                       : "bg-[#0071E3] text-white rounded-br-xs shadow-xs"
                   }`}
                 >
@@ -721,35 +720,35 @@ export function InboxShell({
 
         {/* DOCKED CHAT COMPOSER TOOLBAR (Unified Structural Block) */}
         <form onSubmit={handleSendMessage} className="shrink-0 px-4 pb-4">
-          <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden flex flex-col focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all">
+          <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden flex flex-col focus-within:border-[#0071E3] focus-within:ring-1 focus-within:ring-[#0071E3]/20 transition-colors">
             {/* Merged Quick Action Toolbar Header */}
-            <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-50/80 border-b border-slate-100 overflow-x-auto no-scrollbar">
+            <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-50 border-b border-slate-100 overflow-x-auto no-scrollbar">
               <button
                 type="button"
                 onClick={() => setIsPaymentModalOpen(true)}
-                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 shadow-2xs active:scale-95 transition-all"
+                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50 hover:text-[#0071E3] shadow-2xs transition-colors"
               >
-                <CreditCard className="mr-1.5 h-3 w-3 text-blue-600" />
-                <span>MoMo/OM link</span>
+                <CreditCard className="mr-1.5 h-3 w-3 text-[#0071E3]" />
+                <span>Lien MoMo/OM</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setIsInvoiceModalOpen(true)}
-                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200 shadow-2xs active:scale-95 transition-all"
+                className="inline-flex shrink-0 items-center rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 shadow-2xs transition-colors"
               >
                 <FileText className="mr-1.5 h-3 w-3 text-indigo-600" />
-                <span>Generate Invoice</span>
+                <span>Facture</span>
               </button>
 
               <button
                 type="button"
                 disabled={isDraftingAi}
                 onClick={handleAiDraftReply}
-                className="inline-flex shrink-0 items-center rounded-lg bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100 shadow-2xs active:scale-95 transition-all"
+                className="inline-flex shrink-0 items-center rounded-lg bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-medium text-[#0071E3] hover:bg-blue-100 shadow-2xs transition-colors"
               >
-                <Sparkles className="mr-1.5 h-3 w-3 text-blue-600" />
-                <span>{isDraftingAi ? "Drafting..." : "Propose AI Response"}</span>
+                <Bot className="mr-1.5 h-3 w-3 text-[#0071E3]" />
+                <span>{isDraftingAi ? "Rédaction..." : "Proposer réponse IA"}</span>
               </button>
             </div>
 
@@ -759,23 +758,23 @@ export function InboxShell({
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={`Reply to ${activeCustomer?.name || "Customer"} on ${activeConversation?.channel_type || "chat"}... (⌘ + Enter to send)`}
-              className="w-full resize-none bg-transparent p-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none tracking-tight font-medium"
+              placeholder={`Répondre à ${activeCustomer?.name || "Client"} sur ${activeConversation?.channel_type || "chat"}... (⌘ + Entrée pour envoyer)`}
+              className="w-full resize-none bg-transparent p-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none font-normal"
             />
 
             {/* Bottom Bar: Gateway tag + Send button */}
-            <div className="flex items-center justify-between px-3 py-2 border-t border-slate-100 bg-slate-50/40">
-              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                {activeConversation?.channel_type?.toUpperCase()} GATEWAY
+            <div className="flex items-center justify-between px-3 py-2 border-t border-slate-100 bg-slate-50/50">
+              <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                Passerelle {activeConversation?.channel_type?.toUpperCase()}
               </span>
 
               <Button
                 type="submit"
                 size="sm"
                 disabled={!replyText.trim()}
-                className="rounded-lg bg-[#0071E3] hover:bg-[#0077ED] text-white px-3.5 py-1 font-semibold text-xs shadow-xs active:scale-95"
+                className="rounded-lg bg-[#0071E3] hover:bg-[#0077ED] text-white px-3.5 py-1 font-medium text-xs shadow-xs"
               >
-                <span>Send</span>
+                <span>Envoyer</span>
                 <Send className="ml-1.5 h-3 w-3" />
               </Button>
             </div>
@@ -791,7 +790,7 @@ export function InboxShell({
           {/* ROW 1: 60px Locked Header with Compact Profile */}
           <div className="h-[60px] shrink-0 border-b border-slate-200 px-4 flex items-center justify-between bg-white">
             <div className="flex items-center space-x-2.5 min-w-0">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-xs text-blue-700 border border-blue-200">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 font-semibold text-xs text-[#0071E3] border border-blue-200">
                 {activeCustomer?.name
                   ?.split(" ")
                   .map((n) => n[0])
@@ -801,15 +800,15 @@ export function InboxShell({
 
               <div className="min-w-0 flex flex-col justify-center">
                 <div className="flex items-center space-x-1.5">
-                  <span className="text-xs font-bold text-slate-900 truncate">
+                  <span className="text-xs font-semibold text-slate-900 truncate">
                     {activeCustomer?.name}
                   </span>
-                  <span className="rounded-full bg-emerald-50 px-1.5 py-0.2 text-[9px] font-bold text-emerald-700 border border-emerald-200 shrink-0">
-                    Verified Buyer
+                  <span className="rounded bg-emerald-50 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-700 border border-emerald-200 shrink-0">
+                    Client vérifié
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-400 truncate">
-                  {activeCustomer?.phone || activeCustomer?.email || "No contact info"}
+                  {activeCustomer?.phone || activeCustomer?.email || "Pas de coordonnées"}
                 </span>
               </div>
             </div>
@@ -817,9 +816,9 @@ export function InboxShell({
             <button
               type="button"
               onClick={() => setIsPaymentModalOpen(true)}
-              className="text-[11px] font-semibold text-blue-600 hover:text-blue-700 shrink-0"
+              className="text-[11px] font-medium text-[#0071E3] hover:text-[#0077ED] shrink-0"
             >
-              + Link
+              + Lien
             </button>
           </div>
 
@@ -828,22 +827,22 @@ export function InboxShell({
             {/* Financial Profile */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                  Financial Profile
+                <h4 className="text-[11px] font-semibold text-slate-500">
+                  Profil financier
                 </h4>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-2.5">
-                  <span className="text-[10px] text-slate-500 font-medium">Total Due</span>
-                  <p className="text-xs font-bold text-slate-900 mt-0.5">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-2.5">
+                  <span className="text-[10px] text-slate-500 font-medium">Restant dû</span>
+                  <p className="text-xs font-semibold text-slate-900 mt-0.5 tabular-nums">
                     {(activeCustomer?.total_owed || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-2.5">
-                  <span className="text-[10px] text-emerald-700 font-medium">Total Paid</span>
-                  <p className="text-xs font-bold text-emerald-900 mt-0.5">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-2.5">
+                  <span className="text-[10px] text-emerald-700 font-medium">Déjà encaissé</span>
+                  <p className="text-xs font-semibold text-emerald-800 mt-0.5 tabular-nums">
                     {(activeCustomer?.total_paid || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>
@@ -854,9 +853,9 @@ export function InboxShell({
                 <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50/60 p-2 text-xs text-amber-900 flex items-center justify-between">
                   <div className="flex items-center space-x-1.5">
                     <Clock className="h-3 w-3 text-amber-600 shrink-0" />
-                    <span className="text-[11px] font-medium">Promise :</span>
+                    <span className="text-[11px] font-medium">Promesse :</span>
                   </div>
-                  <span className="font-bold text-xs">
+                  <span className="font-semibold text-xs tabular-nums">
                     {(activeCustomer.payment_promise_amount || 0).toLocaleString("fr-FR")} FCFA
                   </span>
                 </div>
@@ -866,10 +865,9 @@ export function InboxShell({
             {/* AI Customer Memory */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                  AI Customer Memory
+                <h4 className="text-[11px] font-semibold text-slate-500">
+                  Mémoire client
                 </h4>
-                <Sparkles className="h-3 w-3 text-blue-600" />
               </div>
 
               <div className="space-y-1.5">
@@ -877,13 +875,13 @@ export function InboxShell({
                   activeCustomer.ai_memory.facts.map((fact, idx) => (
                     <div
                       key={idx}
-                      className="rounded-lg border border-blue-100/80 bg-blue-50/40 p-2 text-xs text-slate-700 leading-relaxed"
+                      className="rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs text-slate-700 leading-relaxed"
                     >
                       • {fact}
                     </div>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-400 italic">No facts extracted yet.</p>
+                  <p className="text-xs text-slate-400 italic">Aucune note enregistrée.</p>
                 )}
               </div>
             </div>
@@ -892,16 +890,16 @@ export function InboxShell({
             {activeCustomer?.ai_memory?.objections &&
               activeCustomer.ai_memory.objections.length > 0 && (
                 <div>
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Past Objections Noted
+                  <h4 className="text-[11px] font-semibold text-slate-500 mb-2">
+                    Objections formulées
                   </h4>
                   <div className="space-y-1.5">
                     {activeCustomer.ai_memory.objections.map((obj, i) => (
                       <div
                         key={i}
-                        className="rounded-lg border border-rose-100 bg-rose-50/60 p-2 text-xs text-rose-800"
+                        className="rounded-lg border border-rose-200 bg-rose-50/50 p-2 text-xs text-rose-800"
                       >
-                        ⚠ {obj}
+                        • {obj}
                       </div>
                     ))}
                   </div>
@@ -910,32 +908,32 @@ export function InboxShell({
 
             {/* Invoices List */}
             <div>
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                Invoices ({activeInvoices.length})
+              <h4 className="text-[11px] font-semibold text-slate-500 mb-2">
+                Factures ({activeInvoices.length})
               </h4>
               <div className="space-y-2">
                 {activeInvoices.length === 0 ? (
-                  <p className="text-xs text-slate-400 italic">No invoices created yet.</p>
+                  <p className="text-xs text-slate-400 italic">Aucune facture émise.</p>
                 ) : (
                   activeInvoices.map((inv) => (
                     <div
                       key={inv.id}
-                      className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/60 p-2.5 text-xs"
+                      className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs"
                     >
                       <div>
-                        <span className="font-bold text-slate-800">{inv.invoice_number}</span>
+                        <span className="font-semibold text-slate-800">{inv.invoice_number}</span>
                         <p className="text-[10px] text-slate-500 truncate max-w-[120px]">
                           {inv.description}
                         </p>
                       </div>
 
                       <div className="text-right">
-                        <span className="font-bold text-slate-900">
+                        <span className="font-semibold text-slate-900 tabular-nums">
                           {inv.amount.toLocaleString("fr-FR")} FCFA
                         </span>
                         <div className="mt-0.5">
                           <span
-                            className={`rounded px-1.5 py-0.2 text-[9px] font-bold capitalize ${
+                            className={`rounded px-1.5 py-0.2 text-[9px] font-semibold capitalize ${
                               inv.status === "paid"
                                 ? "bg-emerald-100 text-emerald-800"
                                 : inv.status === "overdue"

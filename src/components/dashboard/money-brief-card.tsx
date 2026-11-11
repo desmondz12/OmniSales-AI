@@ -8,7 +8,6 @@ import {
   MessageSquare,
   Pause,
   Play,
-  Sparkles,
   Volume2,
 } from "lucide-react";
 
@@ -55,32 +54,25 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white/80 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] transition-all select-none">
-      {/* Decorative ambient Apple aura */}
-      <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
-
-      {/* Top Header: Mascot Avatar + Greeting + Tag */}
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 select-none shadow-xs">
+      {/* Top Header: Mascot Avatar + Context Date + Controls */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center space-x-3.5">
-          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0071E3] via-[#0077ED] to-[#5856D6] text-white shadow-md shadow-blue-500/20 ring-4 ring-white">
-            <Bot className="h-6 w-6" />
-            <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#34C759] ring-2 ring-white">
-              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-            </span>
+        <div className="flex items-center space-x-3">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0071E3] text-white shadow-xs">
+            <Bot className="h-5 w-5" />
+            <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-white" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-                Bonjour, {ownerName}.
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
+                Brief commercial · Douala &amp; Yaoundé
               </h2>
-              <span className="inline-flex items-center rounded-full bg-blue-50/80 px-2.5 py-0.5 text-[10px] font-bold text-[#0071E3] border border-blue-200/50 backdrop-blur-xs">
-                <Sparkles className="mr-1 h-3 w-3 text-[#0071E3]" />
-                Le Brief Matinal • Executive AI
+              <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200">
+                08:00
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5 tracking-tight">
-              Synthèse intelligente omnicanale (Cameroun • Douala &amp; Yaoundé) • 08:00
+            <p className="text-xs text-slate-500 mt-0.5">
+              Synthèse omnicanale pour {ownerName} • 5 canaux connectés
             </p>
           </div>
         </div>
@@ -90,10 +82,10 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
           <button
             type="button"
             onClick={handleToggleSpeech}
-            className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-xs transition-all active:scale-95 ${
+            className={`inline-flex items-center rounded-lg px-3 py-1.5 text-xs font-medium shadow-2xs transition-colors ${
               isPlayingAudio
-                ? "bg-[#0071E3] text-white shadow-blue-500/25 ring-2 ring-blue-400 ring-offset-1"
-                : "bg-white text-slate-800 border border-slate-200/80 hover:bg-slate-50"
+                ? "bg-[#0071E3] text-white"
+                : "bg-white text-slate-800 border border-slate-200 hover:bg-slate-50"
             }`}
             title="Listen to 30s executive audio brief"
           >
@@ -110,7 +102,7 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
             ) : (
               <>
                 <Play className="mr-1.5 h-3.5 w-3.5 fill-current text-[#0071E3]" />
-                <span>Écouter · 30s</span>
+                <span>Écouter le brief · 30s</span>
                 <Volume2 className="ml-1.5 h-3.5 w-3.5 text-slate-400" />
               </>
             )}
@@ -119,54 +111,54 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
           <button
             type="button"
             onClick={() => onOpenCopilot?.("Explique-moi ce que je dois faire avec Jean-Pierre et Boris aujourd'hui")}
-            className="inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:text-[#0071E3] hover:border-blue-200 transition-all active:scale-95 shadow-xs"
+            className="inline-flex items-center rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-200 hover:bg-slate-50 hover:text-[#0071E3] transition-colors shadow-2xs"
           >
-            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
-            Questions IA
+            <MessageSquare className="mr-1.5 h-3.5 w-3.5 text-slate-500" />
+            <span>Consignes IA</span>
           </button>
         </div>
       </div>
 
       {/* The Natural Language Executive Summary */}
-      <div className="mt-5 rounded-2xl bg-slate-50/70 p-4 sm:p-5 backdrop-blur-md border border-slate-100">
-        <p className="text-sm sm:text-[15px] font-normal leading-relaxed text-slate-800 tracking-tight">
-          <strong className="text-[#0071E3] font-semibold">Trois clients ont besoin de vous aujourd&apos;hui :</strong>{" "}
-          <span className="text-slate-900 font-semibold">Jean-Pierre Fotso</span> est prêt à verser son acompte de{" "}
-          <strong className="text-slate-900 font-semibold">550 000 FCFA</strong> par MTN MoMo,{" "}
-          <span className="text-slate-900 font-semibold">Boris Atangana</span> est contrarié par son colis à Yaoundé, et{" "}
-          <span className="text-slate-900 font-semibold">Marie-Claire Ngo</span> souhaite négocier un tarif de gros pour Bonanjo.{" "}
-          <strong className="text-slate-900 font-semibold">1 200 000 FCFA</strong> restent dus sur quatre clients, dont deux en retard.{" "}
-          <span className="text-[#34C759] font-semibold">Danielle a payé 300 000 FCFA hier via Orange Money</span> et je l&apos;ai réconcilié automatiquement. J&apos;ai géré{" "}
-          <strong className="text-slate-900 font-semibold">14 réponses cette nuit</strong> sur 5 canaux en français et anglais.
+      <div className="mt-4 rounded-xl bg-slate-50 p-4 border border-slate-100">
+        <p className="text-sm font-normal leading-relaxed text-slate-800">
+          <strong className="text-[#0071E3] font-medium">Trois clients ont besoin de vous aujourd&apos;hui :</strong>{" "}
+          <span className="text-slate-900 font-medium">Jean-Pierre Fotso</span> est prêt à verser son acompte de{" "}
+          <strong className="text-slate-900 font-medium tabular-nums">550 000 FCFA</strong> par MTN MoMo,{" "}
+          <span className="text-slate-900 font-medium">Boris Atangana</span> est contrarié par son colis à Yaoundé, et{" "}
+          <span className="text-slate-900 font-medium">Marie-Claire Ngo</span> souhaite négocier un tarif de gros pour Bonanjo.{" "}
+          <strong className="text-slate-900 font-medium tabular-nums">1 200 000 FCFA</strong> restent dus sur quatre clients, dont deux en retard.{" "}
+          <span className="text-emerald-700 font-medium">Danielle a versé 300 000 FCFA hier via Orange Money</span> et l&apos;encaissement a été réconcilié. Le système a traité{" "}
+          <strong className="text-slate-900 font-medium tabular-nums">14 réponses cette nuit</strong> sur 5 canaux en français et anglais.
         </p>
       </div>
 
       {/* 4 Inline Metric Columns inside the brief card */}
-      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Metric 1 */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/95 p-4 backdrop-blur-xs shadow-2xs hover:shadow-xs transition-all">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Créances Clients</span>
-            <DollarSign className="h-3.5 w-3.5 text-[#FF9500]" />
+            <span>Créances clients</span>
+            <DollarSign className="h-3.5 w-3.5 text-amber-600" />
           </div>
-          <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
+          <div className="mt-1.5 flex items-baseline">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-slate-900 tabular-nums">
               1 200 000 FCFA
             </span>
           </div>
-          <p className="mt-1 text-[11px] font-semibold text-[#FF9500]">
+          <p className="mt-1 text-[11px] font-medium text-amber-700">
             4 clients (2 en retard)
           </p>
         </div>
 
         {/* Metric 2 */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/95 p-4 backdrop-blur-xs shadow-2xs hover:shadow-xs transition-all">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Encaissé Hier</span>
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#34C759]" />
+            <span>Encaissé hier</span>
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
           </div>
-          <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-[#34C759]">
+          <div className="mt-1.5 flex items-baseline">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-emerald-700 tabular-nums">
               300 000 FCFA
             </span>
           </div>
@@ -176,13 +168,13 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
         </div>
 
         {/* Metric 3 */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/95 p-4 backdrop-blur-xs shadow-2xs hover:shadow-xs transition-all">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Conversations</span>
+            <span>Conversations</span>
             <MessageSquare className="h-3.5 w-3.5 text-[#0071E3]" />
           </div>
-          <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
+          <div className="mt-1.5 flex items-baseline space-x-1.5">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-slate-900 tabular-nums">
               8
             </span>
             <span className="text-xs text-slate-400">échanges</span>
@@ -193,18 +185,18 @@ export function MoneyBriefCard({ ownerName, onOpenCopilot }: MoneyBriefCardProps
         </div>
 
         {/* Metric 4 */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/95 p-4 backdrop-blur-xs shadow-2xs hover:shadow-xs transition-all">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Géré par l&apos;IA</span>
-            <Bot className="h-3.5 w-3.5 text-[#5856D6]" />
+            <span>Automatisé IA</span>
+            <Bot className="h-3.5 w-3.5 text-indigo-600" />
           </div>
-          <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-[#5856D6]">
+          <div className="mt-1.5 flex items-baseline space-x-1.5">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-slate-900 tabular-nums">
               14
             </span>
             <span className="text-xs text-slate-400">réponses</span>
           </div>
-          <p className="mt-1 text-[11px] font-semibold text-[#FF3B30]">
+          <p className="mt-1 text-[11px] font-medium text-rose-600">
             3 requièrent validation
           </p>
         </div>
