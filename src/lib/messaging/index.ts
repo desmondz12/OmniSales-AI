@@ -4,3 +4,4 @@ export * from "./send-telegram";
 export * from "./send-meta";
 export * from "./send-tiktok";
 export * from "./dispatcher";
+export * from "./persist-message";

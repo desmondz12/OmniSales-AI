@@ -23,3 +23,20 @@ export function createClient() {
 
   return client;
 }
+
+/**
+ * Returns a Supabase browser client, or null if configuration is absent.
+ * Safe for components that degrade gracefully when offline or in mock mode.
+ */
+export function getSafeBrowserClient() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("your-supabase-url")) {
+      return null;
+    }
+    return createClient();
+  } catch {
+    return null;
+  }
+}

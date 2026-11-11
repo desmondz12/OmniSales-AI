@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getSafeBrowserClient } from "@/lib/supabase/client";
 import { PaymentLinkModal } from "./payment-link-modal";
 import { InvoiceModal } from "./invoice-modal";
 import type {
@@ -105,6 +106,10 @@ export function InboxShell({
   const [selectedStatus, setSelectedStatus] = React.useState<string>("all");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
 
+  // Live Conversations Store
+  const [conversations, setConversations] =
+    React.useState<Conversation[]>(initialConversations);
+
   // Active Selected Conversation
   const [activeConvId, setActiveConvId] = React.useState<string>(
     initialConversations[0]?.id || ""
@@ -112,6 +117,9 @@ export function InboxShell({
 
   // Messages Store (keyed by conversation_id)
   const [messages, setMessages] = React.useState<Message[]>(initialMessages);
+
+  // Live Realtime Connection State
+  const [isRealtimeConnected, setIsRealtimeConnected] = React.useState(false);
 
   // Right CRM Sidebar Toggle
   const [showCrmPanel, setShowCrmPanel] = React.useState(true);
@@ -129,7 +137,7 @@ export function InboxShell({
 
   // Active Conversation Object
   const activeConversation =
-    initialConversations.find((c) => c.id === activeConvId) || initialConversations[0];
+    conversations.find((c) => c.id === activeConvId) || conversations[0];
 
   // Active Customer Object
   const activeCustomer =
@@ -154,8 +162,80 @@ export function InboxShell({
     return map;
   });
 
+  // Supabase Realtime WebSocket Listener
+  React.useEffect(() => {
+    const supabase = getSafeBrowserClient();
+    if (!supabase) return;
+
+    // 1. Subscribe to Live Messages
+    const messagesChannel = supabase
+      .channel("inbox-live-messages")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages" },
+        (payload) => {
+          const newMsg = payload.new as Message;
+          setMessages((prev) => {
+            // Deduplicate if already added optimistically
+            if (
+              prev.some(
+                (m) =>
+                  m.id === newMsg.id ||
+                  (m.content === newMsg.content &&
+                    m.sender_type === newMsg.sender_type &&
+                    Math.abs(
+                      new Date(m.created_at).getTime() -
+                        new Date(newMsg.created_at).getTime()
+                    ) < 4000)
+              )
+            ) {
+              return prev;
+            }
+            return [...prev, newMsg];
+          });
+
+          // Bump last message time in conversations list
+          setConversations((prev) =>
+            prev.map((c) =>
+              c.id === newMsg.conversation_id
+                ? { ...c, last_message_at: newMsg.created_at }
+                : c
+            )
+          );
+        }
+      )
+      .subscribe((status) => {
+        setIsRealtimeConnected(status === "SUBSCRIBED");
+      });
+
+    // 2. Subscribe to Live Conversations Updates
+    const convsChannel = supabase
+      .channel("inbox-live-conversations")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "conversations" },
+        (payload) => {
+          if (payload.eventType === "UPDATE") {
+            const updated = payload.new as Conversation;
+            setConversations((prev) =>
+              prev.map((c) => (c.id === updated.id ? { ...c, ...updated } : c))
+            );
+          } else if (payload.eventType === "INSERT") {
+            const newConv = payload.new as Conversation;
+            setConversations((prev) => [newConv, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(messagesChannel);
+      supabase.removeChannel(convsChannel);
+    };
+  }, []);
+
   // Filter conversations
-  const filteredConversations = initialConversations.filter((conv) => {
+  const filteredConversations = conversations.filter((conv) => {
     // Channel filter
     if (selectedChannel !== "all" && conv.channel_type !== selectedChannel) {
       return false;
@@ -388,14 +468,30 @@ export function InboxShell({
       {/* COL 2: UNIFIED INBOX LIST (Fixed 340px)                   */}
       {/* ========================================================= */}
       <aside className="w-[340px] shrink-0 border-r border-slate-200 flex flex-col h-full bg-white">
-        {/* ROW 1: 60px Locked Header with Title, Badge, and Channel Dropdown */}
+        {/* ROW 1: 60px Locked Header with Title, Realtime Indicator, and Channel Dropdown */}
         <div className="h-[60px] shrink-0 border-b border-slate-200 px-4 flex items-center justify-between bg-white">
           <div className="flex items-center space-x-2 min-w-0">
-            <h2 className="text-sm font-bold text-slate-900 tracking-tight shrink-0">
+            <h2 className="text-sm font-semibold text-slate-900 tracking-tight shrink-0">
               Unified Inbox
             </h2>
-            <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200/80 whitespace-nowrap">
-              3 Human Needs
+            <span
+              className={`flex items-center rounded-md px-1.5 py-0.5 text-[9px] font-medium border ${
+                isRealtimeConnected
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  : "bg-slate-100 text-slate-500 border-slate-200"
+              }`}
+              title={
+                isRealtimeConnected
+                  ? "Supabase Realtime connecté (mises à jour en direct)"
+                  : "Connexion Supabase Realtime..."
+              }
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full mr-1 ${
+                  isRealtimeConnected ? "bg-emerald-500" : "bg-slate-400"
+                }`}
+              />
+              {isRealtimeConnected ? "Realtime" : "Sync"}
             </span>
           </div>
 

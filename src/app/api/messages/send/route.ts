@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { checkRateLimit } from "@/lib/security";
 import type { ChannelType } from "@/types/database";
 
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
       recipient,
       text,
       channel,
-      workspaceId = "ws-fotso-douala",
+      workspaceId = "f7d05015-fecc-4602-816c-ad5bf96e144f",
       senderName = "Jean-Luc (Gérant)",
       senderType = "human",
     } = body;
@@ -68,11 +69,49 @@ export async function POST(request: NextRequest) {
       metadata: { sent_via_api: true },
     });
 
+    let messageId = dispatchResult.messageId || `msg-${Date.now()}`;
+
+    // 3. Persist to live Supabase database
+    try {
+      const supabaseAdmin = createAdminClient();
+      const { data: dbMsg, error: dbErr } = await supabaseAdmin
+        .from("messages")
+        .insert({
+          conversation_id: conversationId,
+          workspace_id: workspaceId,
+          sender_type: senderType as "customer" | "ai" | "human",
+          sender_name: senderName,
+          content: text.trim(),
+          channel_type: channel,
+          metadata: {
+            delivered: dispatchResult.delivered,
+            simulated: dispatchResult.simulated,
+            latencyMs: dispatchResult.latencyMs,
+            messageId: dispatchResult.messageId,
+          },
+        })
+        .select()
+        .single();
+
+      if (dbMsg?.id) {
+        messageId = dbMsg.id;
+        // Bump conversation timestamp
+        await supabaseAdmin
+          .from("conversations")
+          .update({ last_message_at: new Date().toISOString() })
+          .eq("id", conversationId);
+      } else if (dbErr) {
+        console.warn("Supabase messages insert note:", dbErr.message);
+      }
+    } catch (dbErr) {
+      console.warn("Supabase persistence note:", dbErr);
+    }
+
     return NextResponse.json({
       success: dispatchResult.success,
       dispatchResult,
       message: {
-        id: dispatchResult.messageId || `msg-${Date.now()}`,
+        id: messageId,
         conversation_id: conversationId,
         workspace_id: workspaceId,
         sender_type: senderType,
