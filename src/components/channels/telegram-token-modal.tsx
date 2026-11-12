@@ -11,10 +11,10 @@ import {
   Send,
   Shield,
   Smartphone,
-  Sparkles,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QRCodeSVG } from "./qr-code-svg";
 
 interface TelegramTokenModalProps {
   isOpen: boolean;
@@ -31,7 +31,7 @@ export function TelegramTokenModal({
 }: TelegramTokenModalProps) {
   const [tab, setTab] = React.useState<"qr" | "bot_token">("qr");
   const [username, setUsername] = React.useState(
-    botUsername || "@MusaSalesAgentBot"
+    botUsername || "@FotsoSalesAgentBot"
   );
   const [editUsername, setEditUsername] = React.useState(false);
   const [token, setToken] = React.useState(
@@ -42,6 +42,10 @@ export function TelegramTokenModal({
   >("idle");
   const [secondsLeft, setSecondsLeft] = React.useState(30);
   const [isCopied, setIsCopied] = React.useState(false);
+
+  // Dynamic Telegram deep link
+  const cleanUsername = username.replace(/^@/, "");
+  const deepLinkUrl = `https://t.me/${cleanUsername}?start=connect_omnisales_${Date.now()}`;
 
   // Countdown timer for QR code validity
   React.useEffect(() => {
@@ -59,8 +63,6 @@ export function TelegramTokenModal({
 
   if (!isOpen) return null;
 
-  const deepLinkUrl = `https://t.me/${username.replace(/^@/, "")}?start=connect_omnisales_${Date.now()}`;
-
   const handleCopyLink = () => {
     navigator.clipboard.writeText(deepLinkUrl);
     setIsCopied(true);
@@ -72,7 +74,7 @@ export function TelegramTokenModal({
 
     setTimeout(() => {
       setPairingState("syncing");
-    }, 1000);
+    }, 900);
 
     setTimeout(async () => {
       try {
@@ -82,7 +84,7 @@ export function TelegramTokenModal({
           body: JSON.stringify({
             channel: "telegram",
             handle: username,
-            accountName: "Telegram Sales Bot",
+            accountName: "Telegram Sales Agent",
             scopes: ["bot_messages", "bot_commands"],
           }),
         });
@@ -95,70 +97,78 @@ export function TelegramTokenModal({
           setTimeout(() => {
             onClose();
             setPairingState("idle");
-          }, 1500);
+          }, 1400);
         } else {
           setPairingState("idle");
         }
-      } catch {
+      } catch (err) {
+        console.error("Telegram connection error:", err);
         setPairingState("idle");
       }
-    }, 2200);
+    }, 1800);
   };
 
-  const handleSaveToken = async () => {
+  const handleSaveToken = async (e: React.FormEvent) => {
+    e.preventDefault();
     setPairingState("syncing");
+
     try {
-      await fetch("/api/channels/connect", {
+      const res = await fetch("/api/channels/connect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           channel: "telegram",
           handle: username,
+          accountName: "Telegram Sales Bot (Token)",
           accessToken: token,
-          accountName: "Telegram Sales Bot",
+          scopes: ["bot_messages", "bot_commands"],
         }),
       });
 
-      setPairingState("success");
-      if (onConnected) {
-        onConnected("telegram", username);
-      }
-      setTimeout(() => {
-        onClose();
+      if (res.ok) {
+        setPairingState("success");
+        if (onConnected) {
+          onConnected("telegram", username);
+        }
+        setTimeout(() => {
+          onClose();
+          setPairingState("idle");
+        }, 1200);
+      } else {
         setPairingState("idle");
-      }, 1000);
+      }
     } catch {
       setPairingState("idle");
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-      <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+      <div className="relative w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 shadow-sm border border-sky-100">
-              <Send className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+              <Send className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <h3 className="text-base font-bold text-slate-900">
-                  Telegram Sales Gateway
+                  Connexion Telegram Bot
                 </h3>
                 <span className="inline-flex items-center rounded-md bg-sky-50 px-2 py-0.5 text-[10px] font-semibold text-sky-700 border border-sky-200">
-                  QR Link
+                  QR Direct
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Scan QR code with Telegram to pair your bot & chat channel instantly
+                Scannez le QR code pour ouvrir et activer le bot dans Telegram
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -177,7 +187,7 @@ export function TelegramTokenModal({
           >
             <span className="flex items-center justify-center space-x-1.5">
               <QrCode className="h-3.5 w-3.5 text-sky-600" />
-              <span>QR Code Link (Instant)</span>
+              <span>QR Code Deep Link (Recommandé)</span>
             </span>
           </button>
           <button
@@ -189,104 +199,57 @@ export function TelegramTokenModal({
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            Bot Token (Advanced)
+            Token BotFather
           </button>
         </div>
 
         {/* Tab Content */}
         {tab === "qr" ? (
           <div className="mt-5 flex flex-col items-center text-center">
-            {/* Visual High-Resolution Telegram QR Code */}
-            <div className="relative flex h-52 w-52 items-center justify-center rounded-2xl border-2 border-dashed border-sky-300 bg-sky-50/50 p-4">
-              <div className="relative flex h-44 w-44 flex-col items-center justify-center rounded-xl bg-white p-3 shadow-sm border border-slate-100">
-                {/* SVG QR Pattern */}
-                <svg
-                  className="w-full h-full text-slate-900"
-                  viewBox="0 0 100 100"
-                  fill="currentColor"
-                >
-                  {/* Outer corner markers */}
-                  <rect x="5" y="5" width="28" height="28" rx="4" />
-                  <rect x="9" y="9" width="20" height="20" fill="white" />
-                  <rect x="13" y="13" width="12" height="12" rx="2" />
+            {/* Visual Crisp SVG QR Code */}
+            <div className="relative flex h-52 w-52 items-center justify-center rounded-2xl border border-slate-200 bg-white p-3 shadow-xs">
+              <QRCodeSVG
+                value={deepLinkUrl}
+                size={180}
+                fgColor="#0f172a"
+                bgColor="#ffffff"
+              />
 
-                  <rect x="67" y="5" width="28" height="28" rx="4" />
-                  <rect x="71" y="9" width="20" height="20" fill="white" />
-                  <rect x="75" y="13" width="12" height="12" rx="2" />
-
-                  <rect x="5" y="67" width="28" height="28" rx="4" />
-                  <rect x="9" y="71" width="20" height="20" fill="white" />
-                  <rect x="13" y="75" width="12" height="12" rx="2" />
-
-                  {/* Dense data modules */}
-                  <rect x="36" y="10" width="6" height="5" />
-                  <rect x="46" y="8" width="5" height="6" />
-                  <rect x="56" y="14" width="6" height="5" />
-                  <rect x="42" y="24" width="5" height="5" />
-                  <rect x="52" y="22" width="6" height="6" />
-
-                  <rect x="10" y="38" width="5" height="6" />
-                  <rect x="22" y="44" width="6" height="5" />
-                  <rect x="12" y="54" width="6" height="5" />
-                  <rect x="26" y="52" width="5" height="6" />
-
-                  <rect x="68" y="38" width="6" height="6" />
-                  <rect x="78" y="44" width="6" height="5" />
-                  <rect x="88" y="38" width="5" height="6" />
-                  <rect x="72" y="54" width="7" height="5" />
-
-                  <rect x="38" y="68" width="6" height="6" />
-                  <rect x="48" y="76" width="6" height="6" />
-                  <rect x="58" y="70" width="5" height="5" />
-                  <rect x="40" y="86" width="6" height="6" />
-                  <rect x="54" y="84" width="6" height="6" />
-
-                  <rect x="68" y="70" width="6" height="5" />
-                  <rect x="78" y="78" width="6" height="6" />
-                  <rect x="86" y="70" width="6" height="6" />
-                  <rect x="70" y="86" width="6" height="6" />
-                  <rect x="84" y="84" width="6" height="6" />
-                </svg>
-
-                {/* Center Telegram icon badge */}
-                <div className="absolute inset-0 m-auto flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500 text-white shadow-md ring-4 ring-white">
-                  <Send className="h-5 w-5" />
-                </div>
-              </div>
-
-              {/* Pairing In-Progress Overlay */}
+              {/* Pairing Overlay states */}
               {pairingState !== "idle" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white/95 backdrop-blur-xs p-4 text-center">
                   {pairingState === "scanning" && (
                     <>
-                      <Smartphone className="h-8 w-8 text-sky-500 animate-bounce" />
+                      <Smartphone className="h-8 w-8 text-sky-600 animate-bounce" />
                       <p className="mt-2 text-xs font-bold text-slate-900">
-                        Telegram Scan Detected
+                        Scan Telegram reçu...
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        Authorizing session...
+                        Liaison du bot de vente
                       </p>
                     </>
                   )}
+
                   {pairingState === "syncing" && (
                     <>
-                      <Send className="h-8 w-8 text-sky-600 animate-pulse" />
+                      <Send className="h-8 w-8 text-sky-600" />
                       <p className="mt-2 text-xs font-bold text-slate-900">
-                        Pairing Bot Gateway
+                        Configuration du Webhook...
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        Linking {username}...
+                        Synchronisation avec OmniSales
                       </p>
                     </>
                   )}
+
                   {pairingState === "success" && (
                     <>
-                      <CheckCircle2 className="h-8 w-8 text-emerald-600" />
-                      <p className="mt-2 text-xs font-bold text-emerald-800">
-                        Telegram Linked!
+                      <CheckCircle2 className="h-8 w-8 text-sky-600" />
+                      <p className="mt-2 text-xs font-bold text-sky-900">
+                        Telegram Connecté !
                       </p>
-                      <p className="text-[11px] text-emerald-700">
-                        Bot messages active on OmniSales AI
+                      <p className="text-[11px] text-sky-700 font-mono">
+                        {username}
                       </p>
                     </>
                   )}
@@ -294,22 +257,15 @@ export function TelegramTokenModal({
               )}
             </div>
 
-            {/* Timer and Refresh */}
+            {/* Timer info */}
             <div className="mt-3 flex items-center space-x-2 text-xs text-slate-500">
-              <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
-              <span>QR code valid for {secondsLeft}s</span>
-              <button
-                type="button"
-                onClick={() => setSecondsLeft(30)}
-                className="text-sky-600 hover:text-sky-700 font-semibold"
-              >
-                Refresh
-              </button>
+              <span className="h-2 w-2 rounded-full bg-sky-500" />
+              <span>Session active pendant {secondsLeft}s</span>
             </div>
 
             {/* Bot Username Editor */}
-            <div className="mt-3 w-full max-w-sm rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs flex items-center justify-between">
-              <span className="text-slate-500 font-medium">Linking Bot:</span>
+            <div className="mt-3 w-full max-w-sm rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs flex items-center justify-between">
+              <span className="text-slate-500 font-medium">Nom du Bot :</span>
               {editUsername ? (
                 <input
                   type="text"
@@ -323,53 +279,41 @@ export function TelegramTokenModal({
                 <span
                   onClick={() => setEditUsername(true)}
                   className="font-mono font-bold text-slate-900 cursor-pointer hover:underline"
-                  title="Click to edit bot username"
+                  title="Cliquer pour modifier le handle du bot"
                 >
                   {username}
                 </span>
               )}
             </div>
 
-            {/* Step-by-Step Instructions */}
-            <div className="mt-4 rounded-2xl bg-slate-50 border border-slate-100 p-3.5 text-left text-xs text-slate-600 space-y-1.5 w-full">
-              <p className="font-bold text-slate-800 flex items-center">
-                <Shield className="mr-1.5 h-3.5 w-3.5 text-sky-600" />
-                How to link Telegram via QR:
-              </p>
-              <p>1. Open Telegram on your phone or computer</p>
-              <p>2. Scan this QR code with your camera or tap link below</p>
-              <p>3. Tap <strong>Start</strong> to grant OmniSales AI message permissions</p>
-            </div>
-
-            {/* Direct Open Link & Copy */}
-            <div className="mt-2.5 flex items-center justify-center space-x-3 text-[11px]">
-              <a
-                href={deepLinkUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center text-sky-600 hover:text-sky-700 font-medium underline"
-              >
-                <span>Open direct in Telegram</span>
-                <ExternalLink className="ml-1 h-3 w-3" />
-              </a>
-              <span className="text-slate-300">•</span>
+            {/* Copyable link fallback */}
+            <div className="mt-2 w-full max-w-sm flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600">
+              <span className="truncate font-mono text-[11px] text-sky-700 mr-2">
+                {deepLinkUrl}
+              </span>
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="inline-flex items-center text-slate-500 hover:text-slate-800 font-medium"
+                className="shrink-0 text-slate-500 hover:text-slate-800"
+                title="Copier le lien direct Telegram"
               >
                 {isCopied ? (
-                  <>
-                    <Check className="mr-1 h-3 w-3 text-emerald-600" />
-                    <span>Copied!</span>
-                  </>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" />
                 ) : (
-                  <>
-                    <Copy className="mr-1 h-3 w-3" />
-                    <span>Copy Deep Link</span>
-                  </>
+                  <Copy className="h-3.5 w-3.5" />
                 )}
               </button>
+            </div>
+
+            {/* Step instructions */}
+            <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-3.5 text-left text-xs text-slate-600 space-y-1.5 w-full">
+              <p className="font-bold text-slate-800 flex items-center">
+                <Shield className="mr-1.5 h-3.5 w-3.5 text-sky-600" />
+                Instructions de connexion Telegram :
+              </p>
+              <p>1. Scannez ce QR code avec votre appareil photo</p>
+              <p>2. L'application Telegram s'ouvre sur votre bot</p>
+              <p>3. Appuyez sur <strong>Démarrer (Start)</strong> pour synchroniser</p>
             </div>
 
             {/* Instant Pairing Button */}
@@ -378,64 +322,62 @@ export function TelegramTokenModal({
                 type="button"
                 disabled={pairingState !== "idle"}
                 onClick={handleSimulateScan}
-                className="w-full rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-xs py-2.5 shadow-sm"
+                className="w-full rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs py-2.5 shadow-xs"
               >
-                <Sparkles className="mr-1.5 h-4 w-4" />
                 {pairingState === "idle"
-                  ? "Instant QR Scan & Link Telegram"
-                  : "Pairing in progress..."}
+                  ? "Valider la Connexion Telegram"
+                  : "Connexion en cours..."}
               </Button>
             </div>
           </div>
         ) : (
-          <div className="mt-5 space-y-4 text-left">
+          <form onSubmit={handleSaveToken} className="mt-5 space-y-4 text-left">
             <div>
               <label className="text-xs font-semibold text-slate-700">
-                Telegram Bot API Token (from @BotFather)
+                Identifiant du bot Telegram (@handle)
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="@MonBotVente_bot"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-sky-500 focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-700">
+                Token d'API Telegram BotFather
               </label>
               <input
                 type="password"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-sky-500 focus:bg-white focus:outline-none"
+                placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-mono text-slate-900 focus:border-sky-500 focus:bg-white focus:outline-none"
               />
             </div>
 
-            <div className="rounded-xl bg-sky-50 border border-sky-200/80 p-3 text-xs text-sky-900">
-              <div className="flex items-center space-x-1.5 font-bold">
-                <CheckCircle2 className="h-4 w-4 text-sky-600" />
-                <span>Telegram Webhook Target</span>
-              </div>
-              <p className="mt-1 font-mono text-[11px] text-sky-800 break-all">
-                https://omnisales.ai/api/webhooks/telegram
-              </p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 space-y-1">
+              <span className="font-semibold text-slate-800">
+                Comment obtenir un token Telegram :
+              </span>
+              <p>1. Ouvrez Telegram et cherchez <span className="font-mono text-sky-700">@BotFather</span></p>
+              <p>2. Envoyez la commande <span className="font-mono text-slate-800">/newbot</span> et suivez les instructions</p>
+              <p>3. Collez la clé HTTP API délivrée ci-dessus</p>
             </div>
-          </div>
+
+            <div className="pt-2">
+              <Button
+                type="submit"
+                disabled={pairingState !== "idle"}
+                className="w-full rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2.5 shadow-xs"
+              >
+                {pairingState === "syncing" ? "Enregistrement..." : "Enregistrer et Activer le Bot Telegram"}
+              </Button>
+            </div>
+          </form>
         )}
-
-        {/* Modal Actions */}
-        <div className="mt-6 flex items-center justify-end space-x-2.5 border-t border-slate-100 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={onClose}
-            className="text-xs rounded-xl"
-          >
-            Close
-          </Button>
-
-          {tab === "bot_token" && (
-            <Button
-              type="button"
-              size="sm"
-              onClick={handleSaveToken}
-              className="rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-xs shadow-xs"
-            >
-              Save Bot Token
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );
