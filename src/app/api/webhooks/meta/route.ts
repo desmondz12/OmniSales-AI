@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { processCustomerMessage } from "@/lib/ai/process-message-service";
 import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
+import { persistInboundWebhookMessage } from "@/lib/messaging/inbound-handler";
 import { checkRateLimit, verifyMetaSignature } from "@/lib/security";
 import type { ChannelType } from "@/types/database";
 
@@ -93,17 +94,27 @@ export async function POST(request: NextRequest) {
       messageText = messaging?.message?.text || "";
     }
 
-    // 5. In-process AI processing (Safe, high-performance, no deadlock)
+    // 5. Persist inbound customer message to Supabase & Realtime WebSocket
+    const inboundRecord = await persistInboundWebhookMessage({
+      channel,
+      senderId,
+      senderName,
+      senderPhone: senderId.startsWith("+") || /^\d+$/.test(senderId) ? senderId : undefined,
+      text: messageText,
+      workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
+    });
+
+    // 6. In-process AI processing (Safe, high-performance, no deadlock)
     const aiResult = await processCustomerMessage({
       channel,
       messageText,
       customerName: senderName,
       customerHandle: senderId,
       customerPhone: senderId.startsWith("+") ? senderId : undefined,
-      workspaceId: "ws-fotso-douala",
+      workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
     });
 
-    // 6. Live Outbound Message Dispatch: transmit AI reply back to the customer's phone/app
+    // 7. Live Outbound Message Dispatch: transmit AI reply back to the customer's phone/app
     let outboundResult = null;
     if (aiResult.replyText && senderId) {
       try {
@@ -111,7 +122,8 @@ export async function POST(request: NextRequest) {
           channel,
           recipient: senderId,
           text: aiResult.replyText,
-          workspaceId: "ws-fotso-douala",
+          conversationId: inboundRecord.conversationId || undefined,
+          workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
           senderType: "ai",
           senderName: "Nathalie (IA)",
           metadata: {

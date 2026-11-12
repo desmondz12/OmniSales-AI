@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { processCustomerMessage } from "@/lib/ai/process-message-service";
 import { dispatchOutboundMessage } from "@/lib/messaging/dispatcher";
+import { persistInboundWebhookMessage } from "@/lib/messaging/inbound-handler";
 import { checkRateLimit, verifyTelegramSecret } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
@@ -45,16 +46,26 @@ export async function POST(request: NextRequest) {
     const senderHandle = message.from?.username ? `@${message.from.username}` : `tg_${chatId}`;
     const messageText = message.text || message.caption || "";
 
-    // 3. In-process AI processing
+    // 3. Persist inbound message to Supabase & Realtime WebSocket
+    const inboundRecord = await persistInboundWebhookMessage({
+      channel: "telegram",
+      senderId: String(chatId),
+      senderName,
+      senderHandle,
+      text: messageText,
+      workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
+    });
+
+    // 4. In-process AI processing
     const aiResult = await processCustomerMessage({
       channel: "telegram",
       messageText,
       customerName: senderName,
       customerHandle: senderHandle,
-      workspaceId: "ws-fotso-douala",
+      workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
     });
 
-    // 4. Live Outbound Message Dispatch: transmit AI reply back to Telegram chat
+    // 5. Live Outbound Message Dispatch: transmit AI reply back to Telegram chat
     let outboundResult = null;
     if (aiResult.replyText && chatId) {
       try {
@@ -62,7 +73,8 @@ export async function POST(request: NextRequest) {
           channel: "telegram",
           recipient: String(chatId),
           text: aiResult.replyText,
-          workspaceId: "ws-fotso-douala",
+          conversationId: inboundRecord.conversationId || undefined,
+          workspaceId: "f7d05015-fecc-4602-816c-ad5bf96e144f",
           senderType: "ai",
           senderName: "Nathalie (IA)",
           metadata: {
