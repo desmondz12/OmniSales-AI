@@ -5,15 +5,31 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Support standard webhook payloads from MTN MoMo, Orange Money, or Campay
+    // Support standard webhook payloads from Campay, NotchPay, MTN MoMo, and Orange Money
+    const notchData = body?.data && typeof body.data === "object" ? body.data : null;
     const transactionId =
-      body.transactionId || body.reference || body.order_id || body.external_reference;
-    const amount = Number(body.amount || body.value || 0);
+      body.external_reference ||
+      notchData?.merchant_reference ||
+      body.transactionId ||
+      body.reference ||
+      body.order_id;
+    const amount = Number(notchData?.amount || body.amount || body.value || 0);
+    const rawStatus = String(
+      notchData?.status || body.status || ""
+    ).toUpperCase();
     const status =
-      body.status === "SUCCESSFUL" || body.status === "SUCCESS" || body.status === "paid"
+      rawStatus === "SUCCESSFUL" ||
+      rawStatus === "SUCCESS" ||
+      rawStatus === "COMPLETE" ||
+      rawStatus === "PAID"
         ? "paid"
         : "failed";
-    const providerReference = body.financialTransactionId || body.operator_id || body.pay_token;
+    const providerReference =
+      body.operator_tx_id ||
+      notchData?.reference ||
+      body.financialTransactionId ||
+      body.operator_id ||
+      body.pay_token;
 
     if (!transactionId) {
       return NextResponse.json(
