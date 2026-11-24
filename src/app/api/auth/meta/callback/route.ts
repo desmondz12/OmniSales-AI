@@ -108,53 +108,138 @@ export async function GET(req: NextRequest) {
 
     const pagesRes = await fetch(pagesUrl.toString());
     const pagesData = await pagesRes.json();
+    const pages: Array<{
+      id: string;
+      name?: string;
+      access_token?: string;
+      instagram_business_account?: {
+        id: string;
+        username?: string;
+        name?: string;
+      };
+    }> = pagesRes.ok && Array.isArray(pagesData.data) ? pagesData.data : [];
 
-    if (!pagesRes.ok || !pagesData.data || pagesData.data.length === 0) {
+    // 3b. For Instagram Business Login (where Meta prompts for Business Portfolio + Instagram account
+    //     without selecting a Facebook Page), resolve the IG account via debug_token granular_scopes
+    //     or /me/businesses when /me/accounts returns empty.
+    let resolvedPage = pages[0] || null;
+    let igAccount = resolvedPage?.instagram_business_account || null;
+
+    if (state.channel === "instagram" && !igAccount?.id) {
+      // Try finding a page that has instagram_business_account attached
+      const pageWithIg = pages.find((p) => p.instagram_business_account?.id);
+      if (pageWithIg) {
+        resolvedPage = pageWithIg;
+        igAccount = pageWithIg.instagram_business_account || null;
+      }
+    }
+
+    if (state.channel === "instagram" && !igAccount?.id) {
+      try {
+        const debugUrl = new URL("https://graph.facebook.com/v21.0/debug_token");
+        debugUrl.searchParams.set("input_token", longLivedUserToken);
+        debugUrl.searchParams.set("access_token", `${appId}|${appSecret}`);
+        const debugRes = await fetch(debugUrl.toString());
+        const debugJson = await debugRes.json();
+
+        const granularScopes: Array<{ scope?: string; target_ids?: string[] }> =
+          debugJson?.data?.granular_scopes || [];
+        const igTargetId = granularScopes
+          .filter(
+            (s) =>
+              s.scope === "instagram_basic" ||
+              s.scope === "instagram_manage_messages"
+          )
+          .flatMap((s) => s.target_ids || [])[0];
+
+        if (igTargetId) {
+          const igRes = await fetch(
+            `https://graph.facebook.com/v21.0/${igTargetId}?fields=id,username,name&access_token=${encodeURIComponent(
+              longLivedUserToken
+            )}`
+          );
+          const igJson = await igRes.json();
+          if (igRes.ok && igJson?.id) {
+            igAccount = {
+              id: igJson.id,
+              username: igJson.username,
+              name: igJson.name,
+            };
+          }
+        }
+      } catch (debugErr) {
+        console.warn("[Meta OAuth] debug_token IG lookup warning:", debugErr);
+      }
+    }
+
+    if (state.channel === "instagram" && !igAccount?.id) {
+      try {
+        const bizRes = await fetch(
+          `https://graph.facebook.com/v21.0/me/businesses?fields=id,name,instagram_accounts{id,username}&access_token=${encodeURIComponent(
+            longLivedUserToken
+          )}`
+        );
+        const bizJson = await bizRes.json();
+        const firstIg = bizJson?.data
+          ?.flatMap((b: { instagram_accounts?: { data?: Array<{ id: string; username?: string }> } }) => b.instagram_accounts?.data || [])
+          ?.[0];
+        if (firstIg?.id) {
+          igAccount = {
+            id: firstIg.id,
+            username: firstIg.username,
+          };
+        }
+      } catch (bizErr) {
+        console.warn("[Meta OAuth] me/businesses IG lookup warning:", bizErr);
+      }
+    }
+
+    if (state.channel === "messenger" && !resolvedPage) {
       return redirectWithError(
         "no_facebook_page_found",
         "No Facebook Page was found or selected. Please grant access to at least one Facebook Page."
       );
     }
 
-    const primaryPage = pagesData.data[0];
-    const pageId: string = primaryPage.id;
-    const pageName: string = primaryPage.name || "Facebook Page";
+    if (state.channel === "instagram" && !igAccount?.id) {
+      return redirectWithError(
+        "no_instagram_business_account",
+        "Could not find an authorized Instagram Business account. Make sure your Instagram account is a Business/Professional account linked to your Facebook Page or Business Portfolio."
+      );
+    }
+
+    const pageId: string | null = resolvedPage?.id || null;
+    const pageName: string = resolvedPage?.name || "Instagram Business";
     const pageAccessToken: string =
-      primaryPage.access_token || longLivedUserToken;
-    const igAccount = primaryPage.instagram_business_account;
+      resolvedPage?.access_token || longLivedUserToken;
     const igUsername: string | null = igAccount?.username
       ? `@${igAccount.username}`
       : null;
 
-    if (state.channel === "instagram" && !igAccount?.id) {
-      return redirectWithError(
-        "no_instagram_business_account",
-        `Page "${pageName}" does not have a linked Instagram Business account.`
-      );
-    }
-
-    // 4. Subscribe the Page to Meta webhooks for live DM delivery
-    try {
-      await fetch(
-        `https://graph.facebook.com/v21.0/${pageId}/subscribed_apps`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${pageAccessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            subscribed_fields: [
-              "messages",
-              "messaging_postbacks",
-              "message_deliveries",
-              "message_reads",
-            ],
-          }),
-        }
-      );
-    } catch (subscribeErr) {
-      console.warn("[Meta OAuth] Webhook subscription warning:", subscribeErr);
+    // 4. Subscribe the Page to Meta webhooks for live DM delivery (when a Page is linked)
+    if (pageId) {
+      try {
+        await fetch(
+          `https://graph.facebook.com/v21.0/${pageId}/subscribed_apps`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${pageAccessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              subscribed_fields: [
+                "messages",
+                "messaging_postbacks",
+                "message_deliveries",
+                "message_reads",
+              ],
+            }),
+          }
+        );
+      } catch (subscribeErr) {
+        console.warn("[Meta OAuth] Webhook subscription warning:", subscribeErr);
+      }
     }
 
     // 5. Persist real credentials into Supabase channels table (update existing or insert)
@@ -181,9 +266,10 @@ export async function GET(req: NextRequest) {
         page_name: pageName,
         ig_business_id: igAccount?.id || null,
         ig_handle: igUsername,
-        available_pages: pagesData.data.map(
-          (p: { id: string; name: string }) => ({ id: p.id, name: p.name })
-        ),
+        available_pages: pages.map((p) => ({
+          id: p.id,
+          name: p.name || "Page",
+        })),
         connected_at: new Date().toISOString(),
       },
       last_synced_at: new Date().toISOString(),
