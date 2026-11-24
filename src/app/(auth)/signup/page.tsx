@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bot, Building2, CheckCircle2, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { usePostHog } from "posthog-js/react";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,6 +22,7 @@ import { APP_NAME, ROUTES } from "@/lib/constants";
 
 export default function SignUpPage() {
   const router = useRouter();
+  const posthog = usePostHog();
   const [fullName, setFullName] = React.useState("");
   const [companyName, setCompanyName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -106,6 +109,10 @@ export default function SignUpPage() {
         }
         return;
       }
+
+      posthog?.capture("auth_email_signup_success", {
+        has_session: Boolean(data.session),
+      });
 
       if (data.session) {
         router.push("/dashboard");
@@ -196,6 +203,20 @@ export default function SignUpPage() {
                   <AlertDescription className="text-xs">{errorMessage}</AlertDescription>
                 </Alert>
               )}
+
+              <SocialAuthButtons
+                mode="signup"
+                redirectTo="/dashboard"
+                disabled={isLoading}
+                onError={(msg) => setErrorMessage(msg || null)}
+              />
+
+              <div className="relative flex items-center justify-center py-0.5">
+                <div className="border-t border-slate-200/80 w-full" />
+                <span className="bg-white px-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                  Ou créer avec un e-mail
+                </span>
+              </div>
 
               <div className="relative">
                 <Input

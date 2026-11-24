@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { PostHogProvider } from "@/components/providers/posthog-provider";
 
 export const metadata: Metadata = {
   title: "OmniSales AI — Ventes & Recouvrement IA Omnicanal",
@@ -17,7 +18,7 @@ export default function RootLayout({
         className="min-h-screen bg-slate-50 text-slate-900 antialiased"
         suppressHydrationWarning
       >
-        {children}
+        <PostHogProvider>{children}</PostHogProvider>
       </body>
     </html>
   );

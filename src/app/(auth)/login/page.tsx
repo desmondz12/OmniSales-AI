@@ -14,6 +14,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { usePostHog } from "posthog-js/react";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +33,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+  const posthog = usePostHog();
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -85,6 +88,7 @@ function LoginForm() {
         return;
       }
 
+      posthog?.capture("auth_email_signin_success");
       router.push(redirectTo);
       router.refresh();
     } catch {
@@ -100,6 +104,7 @@ function LoginForm() {
     setErrorMessage(null);
 
     try {
+      posthog?.capture("auth_demo_login", { role });
       const res = await fetch("/api/auth/demo-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -201,6 +206,20 @@ function LoginForm() {
                 <AlertDescription className="text-xs">{errorMessage}</AlertDescription>
               </Alert>
             )}
+
+            <SocialAuthButtons
+              mode="signin"
+              redirectTo={redirectTo}
+              disabled={isLoading || Boolean(isDemoLoading)}
+              onError={(msg) => setErrorMessage(msg || null)}
+            />
+
+            <div className="relative flex items-center justify-center py-0.5">
+              <div className="border-t border-slate-200/80 w-full" />
+              <span className="bg-white px-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                Ou par e-mail
+              </span>
+            </div>
 
             <div className="relative">
               <Input
