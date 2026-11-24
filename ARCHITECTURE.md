@@ -31,8 +31,8 @@
 | Channel | Auth / Connection Method | Live Webhook / Endpoint | Required Env Vars |
 | :--- | :--- | :--- | :--- |
 | **Telegram** | Bot Token (`@NissiExploits_bot`) | `/api/webhooks/telegram` (Live `setWebhook` registered) | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_USERNAME` |
-| **Facebook Messenger** | Meta OAuth (`/api/auth/meta/authorize?channel=messenger`) | `/api/auth/meta/callback` + `/api/webhooks/meta` | `META_APP_ID` (`3928037137326579`), `META_APP_SECRET`, `META_VERIFY_TOKEN` |
-| **Instagram Direct** | Meta OAuth (`/api/auth/meta/authorize?channel=instagram`) | `/api/auth/meta/callback` + `/api/webhooks/meta` | `META_APP_ID`, `META_APP_SECRET`, `META_VERIFY_TOKEN` |
+| **Facebook Messenger** | Meta OAuth (`/api/auth/meta/authorize?channel=messenger`) | `/api/auth/meta/callback` + `/api/webhooks/meta` | `META_APP_ID` (`3928037137326579`), `META_APP_SECRET`, `META_VERIFY_TOKEN`, `META_CONFIG_ID_MESSENGER` (`1533991485222574`) |
+| **Instagram Direct** | Meta OAuth (`/api/auth/meta/authorize?channel=instagram`) | `/api/auth/meta/callback` + `/api/webhooks/meta` | `META_APP_ID`, `META_APP_SECRET`, `META_VERIFY_TOKEN`, `META_CONFIG_ID_INSTAGRAM` (`1881983053242613`) |
 | **TikTok DMs** | TikTok OAuth v2 (`/api/auth/tiktok/authorize`) | `/api/auth/tiktok/callback` + `/api/webhooks/tiktok` | `TIKTOK_CLIENT_KEY`, `TIKTOK_CLIENT_SECRET` (pending app creation) |
 | **WhatsApp** | Cloud API / QR | `/api/webhooks/meta` | `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN` (pending Meta WhatsApp setup) |
 
