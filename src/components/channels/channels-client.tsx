@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  AlertCircle,
   Bot,
   CheckCircle2,
   MessageCircle,
@@ -140,6 +141,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
   >("messenger");
   const [isTikTokModalOpen, setIsTikTokModalOpen] = React.useState(false);
   const [successBanner, setSuccessBanner] = React.useState<string | null>(null);
+  const [errorBanner, setErrorBanner] = React.useState<string | null>(null);
 
   const [autoReplyMap, setAutoReplyMap] = React.useState<Record<string, boolean>>(() => {
     const map: Record<string, boolean> = {};
@@ -157,10 +159,21 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     const connectedParam = params.get("connected");
+    const handleParam = params.get("handle");
+    const errorParam = params.get("error");
+    const errorDescParam = params.get("error_description");
     const seamlessParam = params.get("seamless_connect");
 
+    if (errorParam) {
+      setErrorBanner(
+        errorDescParam || `Connection failed (${errorParam}). Please try again.`
+      );
+    }
+
     if (connectedParam) {
-      setSuccessBanner(`${connectedParam.toUpperCase()} account connected!`);
+      setSuccessBanner(
+        `${connectedParam.toUpperCase()} account connected${handleParam ? ` (${handleParam})` : ""}!`
+      );
       setTimeout(() => setSuccessBanner(null), 5000);
     }
 
@@ -228,6 +241,13 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
 
   return (
     <div className="space-y-6 pb-16">
+      {errorBanner && (
+        <div className="flex items-center space-x-2.5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-semibold text-red-800 shadow-xs">
+          <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
+          <span>{errorBanner}</span>
+        </div>
+      )}
+
       {successBanner && (
         <div className="flex items-center space-x-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-800 shadow-xs">
           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />

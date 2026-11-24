@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { ChannelsClient } from "@/components/channels/channels-client";
-import { DEMO_CHANNELS } from "@/lib/data/seed-data";
 import type { Channel } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function ChannelsPage() {
   const supabase = await createClient();
 
-  let channels: Channel[] = DEMO_CHANNELS;
+  let channels: Channel[] = [];
 
   try {
     const { data: liveChannels } = await supabase
@@ -16,11 +15,11 @@ export default async function ChannelsPage() {
       .select("*")
       .order("created_at", { ascending: true });
 
-    if (liveChannels && liveChannels.length > 0) {
+    if (liveChannels) {
       channels = liveChannels as unknown as Channel[];
     }
   } catch (error) {
-    console.error("Using seed fallback for Channels:", error);
+    console.error("Failed to fetch live channels:", error);
   }
 
   return <ChannelsClient initialChannels={channels} />;
