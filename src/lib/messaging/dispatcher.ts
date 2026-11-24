@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DEFAULT_WORKSPACE_ID } from "@/lib/constants";
 import { sendWhatsAppMessage } from "./send-whatsapp";
 import { sendTelegramMessage } from "./send-telegram";
 import { sendMetaSocialMessage } from "./send-meta";
@@ -19,7 +20,7 @@ export async function dispatchOutboundMessage(
     recipient,
     text,
     conversationId,
-    workspaceId = "ws-fotso-douala",
+    workspaceId = DEFAULT_WORKSPACE_ID,
     senderType = "human",
     senderName = senderType === "ai" ? "Nathalie (IA)" : "Jean-Luc (Gérant)",
     metadata = {},

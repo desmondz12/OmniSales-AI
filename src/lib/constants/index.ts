@@ -1,1 +1,7 @@
-export { APP_NAME, APP_DESCRIPTION, APP_VERSION, ROUTES } from "./app";
+export {
+  APP_NAME,
+  APP_DESCRIPTION,
+  APP_VERSION,
+  DEFAULT_WORKSPACE_ID,
+  ROUTES,
+} from "./app";

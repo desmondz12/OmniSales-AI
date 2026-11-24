@@ -581,6 +581,63 @@ export interface Database {
         };
         Relationships: [];
       };
+      deals: {
+        Row: {
+          id: string;
+          workspace_id: string;
+          title: string;
+          amount_fcfa: number;
+          stage: string;
+          probability: number;
+          customer_name: string;
+          customer_phone: string | null;
+          customer_city: string;
+          company_name: string | null;
+          channel_type: ChannelType;
+          assigned_to: string;
+          notes: string | null;
+          expected_close_date: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          workspace_id: string;
+          title: string;
+          amount_fcfa: number;
+          stage: string;
+          probability?: number;
+          customer_name: string;
+          customer_phone?: string | null;
+          customer_city?: string;
+          company_name?: string | null;
+          channel_type: ChannelType;
+          assigned_to?: string;
+          notes?: string | null;
+          expected_close_date?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          workspace_id?: string;
+          title?: string;
+          amount_fcfa?: number;
+          stage?: string;
+          probability?: number;
+          customer_name?: string;
+          customer_phone?: string | null;
+          customer_city?: string;
+          company_name?: string | null;
+          channel_type?: ChannelType;
+          assigned_to?: string;
+          notes?: string | null;
+          expected_close_date?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;

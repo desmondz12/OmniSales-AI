@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DEFAULT_WORKSPACE_ID } from "@/lib/constants";
 import type { ChannelType } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
       accountName,
       accessToken,
       scopes = [],
-      workspaceId = "ws-fotso-douala",
+      workspaceId = DEFAULT_WORKSPACE_ID,
     } = body;
 
     if (!channel) {
@@ -62,13 +63,13 @@ export async function POST(req: NextRequest) {
     const generatedHandle =
       handle ||
       (channel === "instagram"
-        ? "@musaretail_ng"
+        ? "@nissiexploits_cm"
         : channel === "messenger"
-        ? "Musa Retail Hub Page"
+        ? "Nissi Exploits Douala"
         : channel === "tiktok"
-        ? "@musastore_deals"
+        ? "@nissiexploits"
         : channel === "telegram"
-        ? "@MusaSalesAgentBot"
+        ? "@NissiExploits_bot"
         : "+237 671 23 45 67");
 
     const channelDisplayName =

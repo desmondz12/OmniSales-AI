@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DEFAULT_WORKSPACE_ID } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest) {
 
   let state: OAuthState = {
     channel: "instagram",
-    workspaceId: "ws-fotso-douala",
+    workspaceId: DEFAULT_WORKSPACE_ID,
     timestamp: Date.now(),
   };
 

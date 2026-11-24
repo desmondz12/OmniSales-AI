@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { DEFAULT_WORKSPACE_ID } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const channel = searchParams.get("channel") || "instagram";
-  const workspaceId = searchParams.get("workspaceId") || "ws-fotso-douala";
+  const workspaceId = searchParams.get("workspaceId") || DEFAULT_WORKSPACE_ID;
 
   const appId = process.env.META_APP_ID || process.env.FACEBOOK_APP_ID;
   const appUrl =
