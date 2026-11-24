@@ -55,7 +55,7 @@ const navItems: NavItem[] = [
     badgeColor: "bg-amber-50 text-[#FF9500] border border-amber-200/60",
   },
   {
-    title: "Canaux Connectés",
+    title: "Connect Accounts",
     href: "/dashboard/channels",
     icon: Radio,
     badge: "5",

@@ -215,7 +215,7 @@ export function Header({
                   className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
                   <Radio className="h-4 w-4 text-slate-400" />
-                  <span>Passerelles Canaux (5)</span>
+                  <span>Connect Accounts</span>
                 </Link>
               </div>
 

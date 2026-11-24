@@ -4,18 +4,13 @@ import * as React from "react";
 import {
   Bot,
   CheckCircle2,
-  Code2,
   MessageCircle,
-  MessageSquare,
-  Radio,
-  ShieldCheck,
   Smartphone,
   Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppQRModal } from "./whatsapp-qr-modal";
 import { TelegramTokenModal } from "./telegram-token-modal";
-import { WebhookTestModal } from "./webhook-test-modal";
 import { MetaOAuthModal } from "./meta-oauth-modal";
 import { TikTokOAuthModal } from "./tiktok-oauth-modal";
 import type { Channel, ChannelType } from "@/types/database";
@@ -42,96 +37,79 @@ interface ChannelsClientProps {
   initialChannels: Channel[];
 }
 
-interface ChannelCardData {
+interface AccountCardData {
   id: string;
   type: ChannelType;
   title: string;
-  subtitle: string;
+  description: string;
+  defaultHandle: string;
   handle: string;
-  messagesCount: number;
-  automatedRate: number;
   iconBg: string;
   iconColor: string;
-  badgeBg: string;
-  badgeText: string;
-  badgeBorder: string;
-  status: "connected" | "reconnect_needed";
+  buttonClass: string;
+  status: "connected" | "not_connected";
 }
 
-const DEFAULT_CARDS: ChannelCardData[] = [
+const ACCOUNT_CARDS: AccountCardData[] = [
   {
     id: "ch-wa",
     type: "whatsapp",
-    title: "WhatsApp Business Cloud",
-    subtitle: "Meta Cloud API v21.0 & QR Pairing",
+    title: "WhatsApp",
+    description: "Reply to customer WhatsApp messages automatically.",
+    defaultHandle: "+237 671 23 45 67",
     handle: "+237 671 23 45 67",
-    messagesCount: 18,
-    automatedRate: 98,
-    iconBg: "bg-emerald-50",
+    iconBg: "bg-emerald-50 border-emerald-100",
     iconColor: "text-emerald-600",
-    badgeBg: "bg-emerald-50",
-    badgeText: "text-emerald-700",
-    badgeBorder: "border-emerald-200",
-    status: "connected",
+    buttonClass: "bg-emerald-600 hover:bg-emerald-700 text-white",
+    status: "not_connected",
   },
   {
     id: "ch-ig",
     type: "instagram",
-    title: "Instagram Direct Inbox",
-    subtitle: "Meta OAuth (Seamless DM Authorization)",
-    handle: "@musaretail_ng",
-    messagesCount: 12,
-    automatedRate: 92,
-    iconBg: "bg-pink-50",
+    title: "Instagram",
+    description: "Auto-reply to Instagram DMs and post comments.",
+    defaultHandle: "@nissiexploits",
+    handle: "@nissiexploits",
+    iconBg: "bg-pink-50 border-pink-100",
     iconColor: "text-pink-600",
-    badgeBg: "bg-pink-50",
-    badgeText: "text-pink-700",
-    badgeBorder: "border-pink-200",
-    status: "connected",
+    buttonClass:
+      "bg-gradient-to-r from-purple-600 via-rose-600 to-amber-500 hover:opacity-95 text-white",
+    status: "not_connected",
   },
   {
     id: "ch-fb",
     type: "messenger",
     title: "Facebook Messenger",
-    subtitle: "Meta Page Login (Automated Replies)",
-    handle: "Musa Retail Hub Page",
-    messagesCount: 8,
-    automatedRate: 88,
-    iconBg: "bg-blue-50",
+    description: "Connect your Facebook Page to reply in Messenger.",
+    defaultHandle: "Nissi Exploits",
+    handle: "Nissi Exploits",
+    iconBg: "bg-blue-50 border-blue-100",
     iconColor: "text-blue-600",
-    badgeBg: "bg-blue-50",
-    badgeText: "text-blue-700",
-    badgeBorder: "border-blue-200",
-    status: "connected",
+    buttonClass: "bg-[#1877F2] hover:bg-[#166FE5] text-white",
+    status: "not_connected",
   },
   {
     id: "ch-tt",
     type: "tiktok",
-    title: "TikTok Shop & DMs",
-    subtitle: "TikTok Login Kit (Buyer DMs Authorization)",
-    handle: "@musastore_deals",
-    messagesCount: 14,
-    automatedRate: 100,
-    iconBg: "bg-slate-900",
+    title: "TikTok",
+    description: "Reply to TikTok DMs and shop inquiries automatically.",
+    defaultHandle: "@nissiexploits",
+    handle: "@nissiexploits",
+    iconBg: "bg-slate-900 border-slate-800",
     iconColor: "text-white",
-    badgeBg: "bg-slate-100",
-    badgeText: "text-slate-900",
-    badgeBorder: "border-slate-300",
-    status: "connected",
+    buttonClass: "bg-slate-900 hover:bg-black text-white",
+    status: "not_connected",
   },
   {
     id: "ch-tg",
     type: "telegram",
-    title: "Telegram Sales Bot",
-    subtitle: "Telegram Bot API Gateway",
-    handle: "@MusaSalesAgentBot",
-    messagesCount: 6,
-    automatedRate: 85,
-    iconBg: "bg-sky-50",
+    title: "Telegram",
+    description: "Connect your Telegram bot for instant customer chat.",
+    defaultHandle: "@NissiExploits_bot",
+    handle: "@NissiExploits_bot",
+    iconBg: "bg-sky-50 border-sky-100",
     iconColor: "text-sky-600",
-    badgeBg: "bg-sky-50",
-    badgeText: "text-sky-700",
-    badgeBorder: "border-sky-200",
+    buttonClass: "bg-sky-500 hover:bg-sky-600 text-white",
     status: "connected",
   },
 ];
@@ -139,15 +117,14 @@ const DEFAULT_CARDS: ChannelCardData[] = [
 export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
   const [globalAiEnabled, setGlobalAiEnabled] = React.useState(true);
 
-  // Dynamic cards state reflecting live handles
-  const [cards, setCards] = React.useState<ChannelCardData[]>(() => {
-    return DEFAULT_CARDS.map((card) => {
+  const [cards, setCards] = React.useState<AccountCardData[]>(() => {
+    return ACCOUNT_CARDS.map((card) => {
       const match = initialChannels.find((c) => c.type === card.type);
       if (match) {
         return {
           ...card,
-          handle: match.handle || card.handle,
-          status: match.status === "connected" ? "connected" : "reconnect_needed",
+          handle: match.handle || card.defaultHandle,
+          status: match.status === "connected" ? "connected" : "not_connected",
         };
       }
       return card;
@@ -157,29 +134,24 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
   // Modal controls
   const [isQrModalOpen, setIsQrModalOpen] = React.useState(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = React.useState(false);
-  const [isWebhookModalOpen, setIsWebhookModalOpen] = React.useState(false);
-  const [webhookChannelTarget, setWebhookChannelTarget] = React.useState<ChannelType>("whatsapp");
-
-  // Meta & TikTok OAuth Linking Modals
   const [isMetaModalOpen, setIsMetaModalOpen] = React.useState(false);
-  const [metaChannelTarget, setMetaChannelTarget] = React.useState<"instagram" | "messenger">("instagram");
+  const [metaChannelTarget, setMetaChannelTarget] = React.useState<
+    "instagram" | "messenger"
+  >("messenger");
   const [isTikTokModalOpen, setIsTikTokModalOpen] = React.useState(false);
-
-  // Success Notification Banner
   const [successBanner, setSuccessBanner] = React.useState<string | null>(null);
 
-  // Per-channel auto-reply map
   const [autoReplyMap, setAutoReplyMap] = React.useState<Record<string, boolean>>(() => {
     const map: Record<string, boolean> = {};
-    initialChannels.forEach((ch) => {
-      map[ch.id] = ch.ai_auto_reply;
+    ACCOUNT_CARDS.forEach((card) => {
+      const match = initialChannels.find((c) => c.type === card.type);
+      map[card.id] = match ? match.ai_auto_reply : true;
     });
     return map;
   });
 
   const [mounted, setMounted] = React.useState(false);
 
-  // Handle URL query parameters for OAuth returns
   React.useEffect(() => {
     setMounted(true);
     if (typeof window === "undefined") return;
@@ -188,9 +160,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     const seamlessParam = params.get("seamless_connect");
 
     if (connectedParam) {
-      setSuccessBanner(
-        `${connectedParam.toUpperCase()} linked successfully via OAuth! Customer DM permissions are now active.`
-      );
+      setSuccessBanner(`${connectedParam.toUpperCase()} account connected!`);
       setTimeout(() => setSuccessBanner(null), 5000);
     }
 
@@ -223,12 +193,7 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
     });
   };
 
-  const openTestWebhook = (channelType: ChannelType) => {
-    setWebhookChannelTarget(channelType);
-    setIsWebhookModalOpen(true);
-  };
-
-  const handleChannelConnected = (
+  const handleAccountConnected = (
     channelType: ChannelType,
     newHandle: string
   ) => {
@@ -239,303 +204,187 @@ export function ChannelsClient({ initialChannels }: ChannelsClientProps) {
           : c
       )
     );
-    setSuccessBanner(
-      `${channelType.toUpperCase()} linked successfully (${newHandle}) with messaging permissions!`
-    );
+    setSuccessBanner(`${channelType.toUpperCase()} connected (${newHandle})!`);
     setTimeout(() => setSuccessBanner(null), 4000);
   };
 
+  const handleConnectClick = (type: ChannelType) => {
+    if (type === "whatsapp") {
+      setIsQrModalOpen(true);
+    } else if (type === "telegram") {
+      setIsTelegramModalOpen(true);
+    } else if (type === "instagram") {
+      setMetaChannelTarget("instagram");
+      setIsMetaModalOpen(true);
+    } else if (type === "messenger") {
+      setMetaChannelTarget("messenger");
+      setIsMetaModalOpen(true);
+    } else if (type === "tiktok") {
+      setIsTikTokModalOpen(true);
+    }
+  };
+
+  const connectedCount = cards.filter((c) => c.status === "connected").length;
+
   return (
-    <div className="space-y-8 pb-20">
-      {/* Success Banner */}
+    <div className="space-y-6 pb-16">
       {successBanner && (
-        <div className="flex items-center space-x-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-800 shadow-xs animate-in fade-in duration-200">
+        <div className="flex items-center space-x-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-800 shadow-xs">
           <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
           <span>{successBanner}</span>
         </div>
       )}
 
-      {/* Top Page Header — Apple Minimalist Display */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between select-none">
+      {/* Simple Page Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center space-x-2.5">
             <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-              Passerelles Omnicanales
+              Connect Accounts
             </h1>
-            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-[#34C759] border border-emerald-200/60">
-              <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-[#34C759] animate-pulse" />
-              5 sur 5 Actifs
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 border border-emerald-200/70">
+              {connectedCount} of {cards.length} connected
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-slate-500 tracking-tight">
-            Connectez WhatsApp, Instagram, Messenger, TikTok & Telegram en 1 clic sans copier de clés d&apos;API
+          <p className="mt-1 text-xs text-slate-500">
+            Click Connect on any platform to link your account in one step.
           </p>
         </div>
 
-        {/* Global Controls */}
-        <div className="flex items-center space-x-2.5">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => openTestWebhook("whatsapp")}
-            className="rounded-xl border-slate-200/80 bg-white/90 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs active:scale-95 transition-all"
-          >
-            <Code2 className="mr-1.5 h-3.5 w-3.5 text-[#0071E3]" />
-            Test Webhook
-          </Button>
-
-          <button
-            type="button"
-            onClick={handleToggleGlobalAi}
-            className={`inline-flex items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold shadow-2xs transition-all active:scale-95 ${
-              globalAiEnabled
-                ? "bg-[#0071E3] text-white shadow-blue-500/25"
-                : "bg-slate-100 text-slate-600 border border-slate-200/70"
-            }`}
-          >
-            <Bot className="mr-1.5 h-3.5 w-3.5" />
-            <span className="tracking-tight">{globalAiEnabled ? "IA Globale: Active" : "IA Globale: En pause"}</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleToggleGlobalAi}
+          className={`inline-flex items-center rounded-xl px-3.5 py-2 text-xs font-semibold shadow-2xs transition-all cursor-pointer ${
+            globalAiEnabled
+              ? "bg-[#0071E3] text-white"
+              : "bg-slate-100 text-slate-600 border border-slate-200"
+          }`}
+        >
+          <Bot className="mr-1.5 h-3.5 w-3.5" />
+          <span>{globalAiEnabled ? "AI Auto-Reply: On" : "AI Auto-Reply: Paused"}</span>
+        </button>
       </div>
 
-      {/* Gateway Health Overview Banner — Apple Glass Surface */}
-      <div className="grid gap-4 sm:grid-cols-3 select-none">
-        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Disponibilité SLA Passerelle</span>
-            <ShieldCheck className="h-4 w-4 text-[#34C759]" />
-          </div>
-          <div className="mt-2 text-xl font-bold tracking-tight text-slate-900">99.98%</div>
-          <p className="mt-1 text-[11px] font-semibold text-[#34C759]">
-            0 webhook manqué cette semaine
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Messages Traités Aujourd&apos;hui</span>
-            <MessageSquare className="h-4 w-4 text-[#0071E3]" />
-          </div>
-          <div className="mt-2 text-xl font-bold tracking-tight text-slate-900">58 Messages</div>
-          <p className="mt-1 text-[11px] font-medium text-slate-500">
-            52 autonomes • 6 en attente humaine
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-slate-200/60 bg-white/85 p-5 backdrop-blur-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="tracking-tight">Latence Moyenne Passerelles</span>
-            <Radio className="h-4 w-4 text-[#5856D6]" />
-          </div>
-          <div className="mt-2 text-xl font-bold tracking-tight text-[#5856D6]">138 ms</div>
-          <p className="mt-1 text-[11px] font-medium text-slate-500">
-            Meta Cloud • TikTok • Telegram
-          </p>
-        </div>
-      </div>
-
-      {/* Channel Connection Cards Grid */}
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 select-none">
+      {/* Simple Account Cards Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((ch) => {
           const isAiActive = autoReplyMap[ch.id] ?? true;
+          const isConnected = ch.status === "connected";
 
           return (
             <div
               key={ch.id}
-              className="flex flex-col justify-between rounded-3xl border border-slate-200/60 bg-white/85 p-6 backdrop-blur-2xl shadow-[0_2px_16px_rgba(0,0,0,0.02)] transition-all hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
+              className="flex flex-col justify-between rounded-3xl border border-slate-200/70 bg-white p-5 shadow-2xs transition-all hover:border-slate-300 hover:shadow-sm"
             >
               <div>
-                {/* Card Top: Icon + Channel Status */}
                 <div className="flex items-start justify-between">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${ch.iconBg} ${ch.iconColor}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-2xl border ${ch.iconBg} ${ch.iconColor}`}
                   >
                     {ch.type === "instagram" ? (
-                      <InstagramIcon className="h-6 w-6" />
+                      <InstagramIcon className="h-5 w-5" />
                     ) : ch.type === "messenger" ? (
-                      <MessageCircle className="h-6 w-6" />
+                      <MessageCircle className="h-5 w-5" />
                     ) : ch.type === "tiktok" ? (
-                      <Video className="h-6 w-6 text-rose-400" />
+                      <Video className="h-5 w-5 text-rose-400" />
                     ) : (
-                      <Smartphone className="h-6 w-6" />
+                      <Smartphone className="h-5 w-5" />
                     )}
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
-                      <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Connected
-                    </span>
-                  </div>
-                </div>
-
-                {/* Title & Subtitle */}
-                <h3 className="mt-4 text-base font-bold text-slate-900">
-                  {ch.title}
-                </h3>
-                <p className="text-xs text-slate-500 mt-0.5">{ch.subtitle}</p>
-
-                {/* Handle & ID Badge */}
-                <div className="mt-3.5 inline-flex items-center rounded-xl bg-slate-50 border border-slate-200/80 px-3 py-1.5 text-xs font-mono font-semibold text-slate-800">
-                  {ch.handle}
-                </div>
-
-                {/* Metrics Breakdown */}
-                <div className="mt-4 rounded-2xl bg-slate-50/60 border border-slate-100 p-3.5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Overnight Traffic</span>
-                    <span className="font-bold text-slate-800">
-                      {ch.messagesCount} inbound msgs
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500">AI Automation Rate</span>
-                    <span className="font-bold text-emerald-700">
-                      {ch.automatedRate}% autonomous
-                    </span>
-                  </div>
-                </div>
-
-                {/* AI Auto-Reply Toggle Switch */}
-                <div className="mt-4 flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 bg-white">
-                  <div>
-                    <p className="text-xs font-bold text-slate-900">AI Auto-Replies</p>
-                    <p className="text-[11px] text-slate-500">
-                      {isAiActive ? "Responding automatically" : "Human review only"}
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleToggleAutoReply(ch.id)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      isAiActive ? "bg-blue-600" : "bg-slate-300"
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border ${
+                      isConnected
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : "bg-slate-50 text-slate-500 border-slate-200"
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        isAiActive ? "translate-x-6" : "translate-x-1"
+                      className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
+                        isConnected ? "bg-emerald-500" : "bg-slate-400"
+                      }`}
+                    />
+                    {isConnected ? "Connected" : "Not connected"}
+                  </span>
+                </div>
+
+                <h3 className="mt-4 text-base font-bold text-slate-900">
+                  {ch.title}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                  {ch.description}
+                </p>
+
+                {isConnected && (
+                  <div className="mt-3 inline-flex items-center rounded-xl bg-slate-50 border border-slate-200/70 px-2.5 py-1 text-xs font-medium text-slate-700">
+                    {ch.handle}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-5 space-y-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-slate-600">
+                    AI Auto-Reply
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleAutoReply(ch.id)}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer ${
+                      isAiActive ? "bg-[#0071E3]" : "bg-slate-300"
+                    }`}
+                    aria-label={`Toggle AI auto-reply for ${ch.title}`}
+                  >
+                    <span
+                      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
+                        isAiActive ? "translate-x-4.5" : "translate-x-1"
                       }`}
                     />
                   </button>
                 </div>
-              </div>
 
-              {/* Bottom Actions */}
-              <div className="mt-5 flex items-center space-x-2 pt-4 border-t border-slate-100">
                 <Button
                   type="button"
-                  variant="outline"
                   size="sm"
-                  onClick={() => openTestWebhook(ch.type)}
-                  className="flex-1 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  onClick={() => handleConnectClick(ch.type)}
+                  className={`w-full h-9 rounded-xl text-xs font-semibold shadow-2xs cursor-pointer ${ch.buttonClass}`}
                 >
-                  <Code2 className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-                  Test Webhook
+                  {isConnected ? `Manage ${ch.title}` : `Connect ${ch.title}`}
                 </Button>
-
-                {ch.type === "whatsapp" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setIsQrModalOpen(true)}
-                    className="flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs"
-                  >
-                    Link WhatsApp QR
-                  </Button>
-                )}
-
-                {ch.type === "telegram" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setIsTelegramModalOpen(true)}
-                    className="flex-1 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold shadow-xs"
-                  >
-                    Link Telegram QR
-                  </Button>
-                )}
-
-                {ch.type === "instagram" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => {
-                      setMetaChannelTarget("instagram");
-                      setIsMetaModalOpen(true);
-                    }}
-                    className="flex-1 rounded-xl bg-gradient-to-r from-purple-600 via-rose-600 to-amber-600 hover:opacity-95 text-white text-xs font-semibold shadow-xs"
-                  >
-                    Link Instagram
-                  </Button>
-                )}
-
-                {ch.type === "messenger" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => {
-                      setMetaChannelTarget("messenger");
-                      setIsMetaModalOpen(true);
-                    }}
-                    className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs"
-                  >
-                    Link Page (FB)
-                  </Button>
-                )}
-
-                {ch.type === "tiktok" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setIsTikTokModalOpen(true)}
-                    className="flex-1 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-semibold shadow-xs"
-                  >
-                    Link TikTok DMs
-                  </Button>
-                )}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Modals rendered safely post-hydration */}
+      {/* Modals rendered post-hydration */}
       {mounted && (
         <div id="channels-portal-container">
           <WhatsAppQRModal
             isOpen={isQrModalOpen}
             onClose={() => setIsQrModalOpen(false)}
             phoneNumber="+237 671 23 45 67"
-            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+            onConnected={(type, handle) => handleAccountConnected(type, handle)}
           />
 
           <TelegramTokenModal
             isOpen={isTelegramModalOpen}
             onClose={() => setIsTelegramModalOpen(false)}
-            botUsername="@MusaSalesAgentBot"
-            onConnected={(type, handle) => handleChannelConnected(type, handle)}
-          />
-
-          <WebhookTestModal
-            isOpen={isWebhookModalOpen}
-            onClose={() => setIsWebhookModalOpen(false)}
-            defaultChannel={webhookChannelTarget}
+            botUsername="@NissiExploits_bot"
+            onConnected={(type, handle) => handleAccountConnected(type, handle)}
           />
 
           <MetaOAuthModal
             isOpen={isMetaModalOpen}
             onClose={() => setIsMetaModalOpen(false)}
             channel={metaChannelTarget}
-            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+            onConnected={(type, handle) => handleAccountConnected(type, handle)}
           />
 
           <TikTokOAuthModal
             isOpen={isTikTokModalOpen}
             onClose={() => setIsTikTokModalOpen(false)}
-            onConnected={(type, handle) => handleChannelConnected(type, handle)}
+            onConnected={(type, handle) => handleAccountConnected(type, handle)}
           />
         </div>
       )}
