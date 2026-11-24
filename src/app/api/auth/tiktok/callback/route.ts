@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DEFAULT_WORKSPACE_ID } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
   const errorDescription = searchParams.get("error_description");
 
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_APP_URL || "https://omni-sales-ai.vercel.app";
 
   if (error || !code) {
     const errorRedirect = new URL("/dashboard/channels", appUrl);
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest) {
 
   let state: TikTokOAuthState = {
     channel: "tiktok",
-    workspaceId: "ws-fotso-douala",
+    workspaceId: DEFAULT_WORKSPACE_ID,
     timestamp: Date.now(),
   };
 
@@ -53,52 +54,66 @@ export async function GET(req: NextRequest) {
   const clientSecret = process.env.TIKTOK_CLIENT_SECRET;
   const redirectUri = `${appUrl}/api/auth/tiktok/callback`;
 
+  if (!clientKey || !clientSecret) {
+    const errorRedirect = new URL("/dashboard/channels", appUrl);
+    errorRedirect.searchParams.set("error", "tiktok_not_configured");
+    errorRedirect.searchParams.set(
+      "error_description",
+      "TIKTOK_CLIENT_KEY and TIKTOK_CLIENT_SECRET are not configured. Add them in Vercel environment variables."
+    );
+    return NextResponse.redirect(errorRedirect.toString());
+  }
+
   try {
-    let accessToken = `simulated_tt_token_${Date.now()}`;
-    let handle = "@musastore_deals";
-    let displayName = "Musa Deals Cameroon";
+    // 1. Exchange code for access token
+    const tokenRes = await fetch("https://open.tiktokapis.com/v2/oauth/token/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Cache-Control": "no-cache",
+      },
+      body: new URLSearchParams({
+        client_key: clientKey,
+        client_secret: clientSecret,
+        code,
+        grant_type: "authorization_code",
+        redirect_uri: redirectUri,
+      }),
+    });
 
-    if (clientKey && clientSecret) {
-      // 1. Exchange code for access token
-      const tokenRes = await fetch("https://open.tiktokapis.com/v2/oauth/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Cache-Control": "no-cache",
-        },
-        body: new URLSearchParams({
-          client_key: clientKey,
-          client_secret: clientSecret,
-          code,
-          grant_type: "authorization_code",
-          redirect_uri: redirectUri,
-        }),
-      });
+    const tokenData = await tokenRes.json();
 
-      const tokenData = await tokenRes.json();
+    if (!tokenData.data?.access_token) {
+      const errorRedirect = new URL("/dashboard/channels", appUrl);
+      errorRedirect.searchParams.set("error", "tiktok_token_exchange_failed");
+      errorRedirect.searchParams.set(
+        "error_description",
+        tokenData.error?.message || tokenData.message || "Could not exchange TikTok authorization code for access token."
+      );
+      return NextResponse.redirect(errorRedirect.toString());
+    }
 
-      if (tokenData.data?.access_token) {
-        accessToken = tokenData.data.access_token;
+    const accessToken = tokenData.data.access_token;
+    let handle = "@tiktok_user";
+    let displayName = "TikTok User";
 
-        // 2. Query basic user profile
-        try {
-          const userRes = await fetch(
-            "https://open.tiktokapis.com/v2/user/info/?fields=open_id,union_id,avatar_url,display_name",
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const userData = await userRes.json();
-          if (userData.data?.user?.display_name) {
-            displayName = userData.data.user.display_name;
-            handle = `@${displayName.toLowerCase().replace(/\s+/g, "_")}`;
-          }
-        } catch (uErr) {
-          console.warn("[TikTok User Info] Non-fatal fetch error:", uErr);
+    // 2. Query basic user profile
+    try {
+      const userRes = await fetch(
+        "https://open.tiktokapis.com/v2/user/info/?fields=open_id,union_id,avatar_url,display_name",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
+      );
+      const userData = await userRes.json();
+      if (userData.data?.user?.display_name) {
+        displayName = userData.data.user.display_name;
+        handle = `@${displayName.toLowerCase().replace(/\s+/g, "_")}`;
       }
+    } catch (uErr) {
+      console.warn("[TikTok User Info] Non-fatal fetch error:", uErr);
     }
 
     // Save authorized channel to Supabase
